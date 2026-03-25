@@ -34,14 +34,12 @@ export function PrintCashBook({ refreshKey }: { refreshKey?: number }) {
 
   return (
     <div style={{ fontFamily: 'Times New Roman, serif', fontSize: '13px', color: '#000', padding: '20px 30px' }}>
-      {/* Header */}
       <p style={{ fontWeight: 'bold', margin: 0, fontSize: '13px' }}>{settings.orgName.toUpperCase()}</p>
       <p style={{ fontWeight: 'bold', margin: '0 0 10px', fontSize: '13px' }}>{settings.orgSubName.toUpperCase()}</p>
 
       <h2 style={{ textAlign: 'center', fontSize: '20px', fontWeight: 'bold', margin: '10px 0 3px' }}>SỔ QUỸ TIỀN MẶT</h2>
       <p style={{ textAlign: 'right', fontSize: '11px', margin: '0 0 8px' }}>ĐVT: đồng</p>
 
-      {/* Table */}
       <table style={{ width: '100%', borderCollapse: 'collapse' }}>
         <thead>
           <tr>
@@ -88,12 +86,10 @@ export function PrintCashBook({ refreshKey }: { refreshKey?: number }) {
         </tbody>
       </table>
 
-      {/* Date line */}
       <p style={{ textAlign: 'right', fontStyle: 'italic', margin: '15px 0 5px', fontSize: '13px' }}>
         ngày........ tháng........ năm........
       </p>
 
-      {/* Signatures */}
       <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px', textAlign: 'center', fontSize: '13px' }}>
         <div style={{ width: '33%' }}>
           <p style={{ fontWeight: 'bold', margin: '0 0 3px' }}>Thủ Quỹ</p>

@@ -1,11 +1,10 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { addTransaction, getNextVoucherNo, numberToVietnameseWords, getOrgSettings } from '@/lib/finance-store';
-import { Transaction } from '@/types/finance';
 import { FileText, Save, Printer } from 'lucide-react';
 import { toast } from 'sonner';
 import { PrintVoucher } from './PrintVoucher';
@@ -65,7 +64,6 @@ export function VoucherForm({ type, onSaved }: VoucherFormProps) {
 
   return (
     <>
-      {/* Form UI - hidden when printing */}
       <Card className="max-w-3xl mx-auto border-border shadow-lg no-print">
         <CardHeader className="bg-primary/5 border-b border-border relative">
           <Button type="button" variant="outline" size="sm" className="absolute right-4 top-4" onClick={() => window.print()}>
@@ -154,7 +152,6 @@ export function VoucherForm({ type, onSaved }: VoucherFormProps) {
         </CardContent>
       </Card>
 
-      {/* Print template - only visible when printing */}
       <div className="print-only hidden">
         <PrintVoucher
           type={type}

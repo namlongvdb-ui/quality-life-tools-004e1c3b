@@ -27,7 +27,6 @@ export function getOrgSettings(): OrgSettings {
 
 export function saveOrgSettings(settings: OrgSettings) {
   localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
-  // Sync opening balance
   setOpeningBalance(settings.openingBalance);
 }
 

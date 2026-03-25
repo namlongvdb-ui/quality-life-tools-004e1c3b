@@ -22,7 +22,6 @@ export function DetailLedger({ refreshKey }: { refreshKey?: number }) {
 
   return (
     <>
-      {/* Screen UI */}
       <Card className="border-border shadow-lg no-print">
         <CardHeader className="bg-primary/5 border-b border-border text-center relative">
           <Button variant="outline" size="sm" className="absolute right-4 top-4" onClick={() => window.print()}>
@@ -92,7 +91,6 @@ export function DetailLedger({ refreshKey }: { refreshKey?: number }) {
         </CardContent>
       </Card>
 
-      {/* Print template */}
       <div className="print-only hidden">
         <PrintDetailLedger refreshKey={refreshKey} />
       </div>

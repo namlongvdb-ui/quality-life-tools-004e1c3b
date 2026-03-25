@@ -22,13 +22,11 @@ export function PrintDetailLedger({ refreshKey }: { refreshKey?: number }) {
 
   return (
     <div style={{ fontFamily: 'Times New Roman, serif', fontSize: '12px', color: '#000', padding: '15px 20px' }}>
-      {/* Header */}
       <p style={{ fontWeight: 'bold', margin: 0, fontSize: '12px' }}>{settings.orgName.toUpperCase()}</p>
       <p style={{ fontWeight: 'bold', margin: '0 0 10px', fontSize: '12px' }}>{settings.orgSubName.toUpperCase()}</p>
 
       <h2 style={{ textAlign: 'center', fontSize: '20px', fontWeight: 'bold', margin: '10px 0 15px' }}>SỔ CHI TIẾT</h2>
 
-      {/* Table */}
       <table style={{ width: '100%', borderCollapse: 'collapse' }}>
         <thead>
           <tr>

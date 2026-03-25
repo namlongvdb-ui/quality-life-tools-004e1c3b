@@ -3,7 +3,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { getTransactions, getOpeningBalance, getOrgSettings } from '@/lib/finance-store';
-import { Transaction } from '@/types/finance';
 import { BookOpen, Printer } from 'lucide-react';
 import { PrintCashBook } from './PrintCashBook';
 
@@ -39,7 +38,6 @@ export function CashBook({ refreshKey }: { refreshKey?: number }) {
 
   return (
     <>
-      {/* Screen UI */}
       <Card className="border-border shadow-lg no-print">
         <CardHeader className="bg-primary/5 border-b border-border text-center relative">
           <Button variant="outline" size="sm" className="absolute right-4 top-4" onClick={() => window.print()}>
@@ -117,7 +115,6 @@ export function CashBook({ refreshKey }: { refreshKey?: number }) {
         </CardContent>
       </Card>
 
-      {/* Print template */}
       <div className="print-only hidden">
         <PrintCashBook refreshKey={refreshKey} />
       </div>

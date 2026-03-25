@@ -1,4 +1,3 @@
-import { Transaction } from '@/types/finance';
 import { numberToVietnameseWords, getOrgSettings } from '@/lib/finance-store';
 
 interface PrintVoucherProps {
@@ -34,7 +33,6 @@ export function PrintVoucher({ type, data }: PrintVoucherProps) {
 
   return (
     <div className="print-voucher" style={{ fontFamily: 'Times New Roman, serif', fontSize: '13px', color: '#000', padding: '30px 40px', maxWidth: '700px', margin: '0 auto' }}>
-      {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
         <div>
           <p style={{ fontWeight: 'bold', fontSize: '13px', margin: 0 }}>{settings.orgName.toUpperCase()}</p>
@@ -46,7 +44,6 @@ export function PrintVoucher({ type, data }: PrintVoucherProps) {
         </div>
       </div>
 
-      {/* Title */}
       <div style={{ textAlign: 'center', margin: '15px 0 5px' }}>
         <h2 style={{ fontSize: '20px', fontWeight: 'bold', margin: 0 }}>{title}</h2>
         <p style={{ fontSize: '13px', margin: '3px 0', fontStyle: 'italic' }}>
@@ -55,13 +52,11 @@ export function PrintVoucher({ type, data }: PrintVoucherProps) {
         <p style={{ fontSize: '13px', margin: '2px 0' }}>Số CT: {data.voucherNo}</p>
       </div>
 
-      {/* Right side: Nợ/Có */}
       <div style={{ textAlign: 'right', fontSize: '12px', marginBottom: '10px' }}>
         <p style={{ margin: '1px 0' }}>Nợ:.................</p>
         <p style={{ margin: '1px 0' }}>Có:.................</p>
       </div>
 
-      {/* Body */}
       <div style={{ lineHeight: '1.8' }}>
         <p style={{ margin: '3px 0' }}>{personLabel}: <span style={{ borderBottom: '1px dotted #000', paddingBottom: '1px' }}>{data.personName || '...................................'}</span></p>
         <p style={{ margin: '3px 0' }}>Đơn vị: <span style={{ borderBottom: '1px dotted #000', paddingBottom: '1px' }}>{data.department || '...................................'}</span></p>
@@ -71,7 +66,6 @@ export function PrintVoucher({ type, data }: PrintVoucherProps) {
         <p style={{ margin: '3px 0' }}>Chứng từ kèm theo: ................ là chứng từ gốc</p>
       </div>
 
-      {/* Signatures - top */}
       <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px', textAlign: 'center', fontSize: '13px' }}>
         <div style={{ width: '33%' }}>
           <p style={{ fontWeight: 'bold', margin: '0 0 3px' }}>LÃNH ĐẠO ĐƠN VỊ</p>
@@ -90,10 +84,8 @@ export function PrintVoucher({ type, data }: PrintVoucherProps) {
         </div>
       </div>
 
-      {/* Separator line */}
       <hr style={{ border: 'none', borderTop: '1px dashed #999', margin: '25px 0' }} />
 
-      {/* Receipt section (bottom half) */}
       <p style={{ margin: '5px 0' }}>Đã nhận đủ số tiền: <span style={{ fontWeight: 'bold' }}>{data.amount > 0 ? `${formatCurrency(data.amount)} VNĐ` : '0 VNĐ'}</span></p>
       <p style={{ margin: '5px 0' }}>Viết bằng chữ: <span style={{ fontStyle: 'italic' }}>{amountWords}</span></p>
 
