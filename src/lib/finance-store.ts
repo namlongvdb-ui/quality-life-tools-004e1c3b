@@ -1,11 +1,39 @@
-import { Transaction } from '@/types/finance';
+import { Transaction, OrgSettings } from '@/types/finance';
 
 const STORAGE_KEY = 'union-finance-transactions';
 const BALANCE_KEY = 'union-finance-opening-balance';
+const SETTINGS_KEY = 'union-finance-settings';
+
+const defaultSettings: OrgSettings = {
+  orgName: 'Công đoàn NHPT Việt Nam',
+  orgSubName: 'CĐ NHPT Chi nhánh KV Bắc Đông Bắc',
+  leaderName: 'Phí Quang Chiến',
+  accountantName: 'Lê Thị Thu Hương',
+  chiefAccountantName: 'Lê Thị Thu Hương',
+  creatorName: 'Lê Thị Thu Hương',
+  treasurerName: 'Nguyễn Thị Yến',
+  unionLeaderName: 'Phí Quang Chiến',
+  defaultAccountCode: '111',
+  openingBalance: 50000000,
+};
+
+export function getOrgSettings(): OrgSettings {
+  const stored = localStorage.getItem(SETTINGS_KEY);
+  if (stored) {
+    return { ...defaultSettings, ...JSON.parse(stored) };
+  }
+  return defaultSettings;
+}
+
+export function saveOrgSettings(settings: OrgSettings) {
+  localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+  // Sync opening balance
+  setOpeningBalance(settings.openingBalance);
+}
 
 export function getOpeningBalance(): number {
-  const stored = localStorage.getItem(BALANCE_KEY);
-  return stored ? JSON.parse(stored) : 50000000;
+  const settings = getOrgSettings();
+  return settings.openingBalance;
 }
 
 export function setOpeningBalance(balance: number) {

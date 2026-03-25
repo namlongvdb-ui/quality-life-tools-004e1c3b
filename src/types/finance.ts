@@ -26,4 +26,17 @@ export interface DetailLedgerEntry extends Transaction {
   runningBalance: number;
 }
 
-export type ViewType = 'dashboard' | 'phieu-thu' | 'phieu-chi' | 'so-quy' | 'so-chi-tiet';
+export type ViewType = 'dashboard' | 'phieu-thu' | 'phieu-chi' | 'so-quy' | 'so-chi-tiet' | 'cai-dat';
+
+export interface OrgSettings {
+  orgName: string;
+  orgSubName: string;
+  leaderName: string;
+  accountantName: string;
+  chiefAccountantName: string;
+  creatorName: string;
+  treasurerName: string;
+  unionLeaderName: string;
+  defaultAccountCode: string;
+  openingBalance: number;
+}
