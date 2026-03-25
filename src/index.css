@@ -2,153 +2,87 @@
 @tailwind components;
 @tailwind utilities;
 
-/* 1. HỆ THỐNG BIẾN SỐ MÀU SẮC (Sử dụng HSL)
-  Giữ nguyên để đảm bảo giao diện web không bị lỗi hiển thị.
-*/
 @layer base {
   :root {
     --background: 210 20% 98%;
     --foreground: 220 25% 12%;
-
     --card: 0 0% 100%;
     --card-foreground: 220 25% 12%;
-
     --popover: 0 0% 100%;
     --popover-foreground: 220 25% 12%;
-
     --primary: 215 70% 42%;
     --primary-foreground: 0 0% 100%;
-
     --secondary: 210 25% 93%;
     --secondary-foreground: 220 25% 18%;
-
     --muted: 210 18% 95%;
     --muted-foreground: 215 12% 50%;
-
     --accent: 38 90% 50%;
     --accent-foreground: 0 0% 100%;
-
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
-
     --border: 214 20% 88%;
     --input: 214 20% 88%;
     --ring: 215 70% 42%;
-
     --radius: 0.5rem;
-
-    --sidebar-background: 220 25% 14%;
-    --sidebar-foreground: 210 15% 85%;
-    --sidebar-primary: 215 70% 55%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 220 20% 20%;
-    --sidebar-accent-foreground: 210 15% 90%;
-    --sidebar-border: 220 15% 22%;
-    --sidebar-ring: 215 70% 55%;
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
   }
 }
 
 @layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
+  * { @apply border-border; }
+  body { @apply bg-background text-foreground; }
 }
 
-/* 2. CẤU TRÌNH IN ẤN (PRINT STYLES)
-  Phần này đã được sửa lỗi để ẩn Form và xóa đường kẻ ngang.
-*/
+/* --- PHẦN SỬA LỖI IN ẤN --- */
+
 .print-only {
   display: none;
 }
 
 @media print {
-  /* Thiết lập khổ giấy A4 và lề chuẩn */
   @page {
     size: A4 portrait;
     margin: 10mm 15mm;
   }
 
-  /* Reset nền trắng và chữ đen tuyệt đối khi in */
-  html, body {
-    background: white !important;
-    color: #000 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    width: 100% !important;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
+  /* 1. Hiện vùng in */
+  .print-only, 
+  .print-only * {
+    display: block !important;
+    visibility: visible !important;
   }
 
-  /* ẨN TOÀN BỘ CÁC THÀNH PHẦN WEB (Sidebar, Form, Buttons, Toaster) */
-  #root > *:not(.print-only),
+  /* 2. ẨN CÁC VÙNG GIAO DIỆN (Dựa trên cấu trúc dự án của Long) */
+  /* Ẩn Sidebar, Header web và các thẻ Card chứa Form nhập liệu */
   aside, 
   nav, 
   header, 
-  footer, 
-  button, 
-  input, 
-  textarea,
-  select,
+  footer,
+  button,
   .no-print,
-  [role="dialog"],
+  .border.bg-card, /* Ẩn các ô Card trắng chứa Form */
   [role="navigation"],
-  .Toaster,
-  [data-radix-collection-item] {
+  .Toaster {
     display: none !important;
-  }
-
-  /* HIỂN THỊ VÙNG IN CHUYÊN BIỆT */
-  .print-only {
-    display: block !important;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100% !important;
+    height: 0 !important;
     margin: 0 !important;
     padding: 0 !important;
-    overflow: visible !important;
   }
 
-  /* XÓA BỎ MỌI ĐƯỜNG KẺ, KHUNG HÌNH (Bao gồm đường kẻ ngang bạn gặp lỗi) */
+  /* 3. Reset nền */
+  html, body {
+    background: white !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+  }
+
+  /* 4. XÓA ĐƯỜNG KẺ NGANG (QUAN TRỌNG) */
+  /* Xóa sạch border của vùng in để không bị dính đường kẻ */
   .print-voucher, 
-  .print-voucher *,
-  .print-only * {
+  .print-voucher * {
     border: none !important;
     border-top: 0 !important;
-    border-bottom: 0 !important;
     box-shadow: none !important;
     outline: none !important;
-    background: transparent !important;
-  }
-
-  /* Đảm bảo nội dung không bị cắt ngang trang một cách bất hợp lý */
-  .print-voucher {
-    page-break-inside: avoid;
-    display: block !important;
   }
 }
