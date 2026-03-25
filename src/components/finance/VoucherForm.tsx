@@ -8,13 +8,15 @@ import { addTransaction, getNextVoucherNo, numberToVietnameseWords, getOrgSettin
 import { FileText, Save, Printer } from 'lucide-react';
 import { toast } from 'sonner';
 import { PrintVoucher } from './PrintVoucher';
+import { VoucherList } from './VoucherList';
 
 interface VoucherFormProps {
   type: 'thu' | 'chi';
   onSaved?: () => void;
+  refreshKey?: number;
 }
 
-export function VoucherForm({ type, onSaved }: VoucherFormProps) {
+export function VoucherForm({ type, onSaved, refreshKey }: VoucherFormProps) {
   const title = type === 'thu' ? 'PHIẾU THU' : 'PHIẾU CHI';
   const settings = getOrgSettings();
   const [form, setForm] = useState({
@@ -170,6 +172,8 @@ export function VoucherForm({ type, onSaved }: VoucherFormProps) {
           }}
         />
       </div>
+
+      <VoucherList type={type} onChanged={onSaved} refreshKey={refreshKey} />
     </>
   );
 }
