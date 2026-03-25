@@ -21,7 +21,15 @@ const defaultSettings: OrgSettings = {
 export function getOrgSettings(): OrgSettings {
   const stored = localStorage.getItem(SETTINGS_KEY);
   if (stored) {
-    return { ...defaultSettings, ...JSON.parse(stored) };
+    const parsed = JSON.parse(stored);
+    // Backward compatibility: migrate old unionLeaderName to unionGroups
+    if (!parsed.unionGroups && parsed.unionLeaderName) {
+      parsed.unionGroups = [{ name: 'Tổ CĐ', leaderName: parsed.unionLeaderName }];
+      delete parsed.unionLeaderName;
+    }
+    // Remove deprecated field
+    delete parsed.chiefAccountantName;
+    return { ...defaultSettings, ...parsed };
   }
   return defaultSettings;
 }
