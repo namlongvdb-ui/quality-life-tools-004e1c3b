@@ -90,7 +90,9 @@ export function VoucherForm({ type, onSaved }: VoucherFormProps) {
                 <Input value={form.voucherNo} onChange={e => setForm({ ...form, voucherNo: e.target.value })} />
               </div>
               <div>
-                <Label className="text-muted-foreground text-xs">Mã TK</Label>
+                <Label className="text-muted-foreground text-xs">
+                  Mã TK ({type === 'thu' ? 'Có' : 'Nợ'})
+                </Label>
                 <Input value={form.accountCode} onChange={e => setForm({ ...form, accountCode: e.target.value })} placeholder={settings.defaultAccountCode} />
               </div>
             </div>
