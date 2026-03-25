@@ -65,9 +65,10 @@ export function deleteTransaction(id: string) {
   saveTransactions(transactions);
 }
 
-export function getNextVoucherNo(type: 'thu' | 'chi'): string {
+export function getNextVoucherNo(type: 'thu' | 'chi' | 'tham-hoi' | 'de-nghi'): string {
   const transactions = getTransactions();
-  const prefix = type === 'thu' ? 'PT' : 'PC';
+  const prefixMap = { thu: 'PT', chi: 'PC', 'tham-hoi': 'TH', 'de-nghi': 'DN' };
+  const prefix = prefixMap[type];
   const existing = transactions.filter(t => t.type === type);
   const nextNum = existing.length + 1;
   return `${prefix}${String(nextNum).padStart(3, '0')}`;

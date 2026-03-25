@@ -2,7 +2,7 @@ export interface Transaction {
   id: string;
   date: string;
   voucherNo: string;
-  type: 'thu' | 'chi';
+  type: 'thu' | 'chi' | 'tham-hoi' | 'de-nghi';
   amount: number;
   description: string;
   personName: string;
@@ -11,6 +11,14 @@ export interface Transaction {
   approver: string;
   attachments: number;
   createdAt: string;
+  // Extra fields for tham-hoi
+  recipientName?: string;
+  reason?: string;
+  // Extra fields for de-nghi
+  bankAccount?: string;
+  bankAccountName?: string;
+  bankName?: string;
+  times?: string;
 }
 
 export interface CashBookEntry {
