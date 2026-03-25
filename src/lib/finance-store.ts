@@ -9,10 +9,11 @@ const defaultSettings: OrgSettings = {
   orgSubName: 'CĐ NHPT Chi nhánh KV Bắc Đông Bắc',
   leaderName: 'Phí Quang Chiến',
   accountantName: 'Lê Thị Thu Hương',
-  chiefAccountantName: 'Lê Thị Thu Hương',
   creatorName: 'Lê Thị Thu Hương',
   treasurerName: 'Nguyễn Thị Yến',
-  unionLeaderName: 'Phí Quang Chiến',
+  unionGroups: [
+    { name: 'Tổ CĐ BP Kế toán – Hành chính', leaderName: 'Phí Quang Chiến' },
+  ],
   defaultAccountCode: '111',
   openingBalance: 50000000,
 };
