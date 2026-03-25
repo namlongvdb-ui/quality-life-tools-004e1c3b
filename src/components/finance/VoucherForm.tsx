@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { addTransaction, getNextVoucherNo, numberToVietnameseWords } from '@/lib/finance-store';
+import { addTransaction, getNextVoucherNo, numberToVietnameseWords, getOrgSettings } from '@/lib/finance-store';
 import { Transaction } from '@/types/finance';
 import { FileText, Save, Printer } from 'lucide-react';
 import { toast } from 'sonner';
@@ -16,6 +16,7 @@ interface VoucherFormProps {
 
 export function VoucherForm({ type, onSaved }: VoucherFormProps) {
   const title = type === 'thu' ? 'PHIẾU THU' : 'PHIẾU CHI';
+  const settings = getOrgSettings();
   const [form, setForm] = useState({
     date: new Date().toISOString().split('T')[0],
     voucherNo: getNextVoucherNo(type),
@@ -23,8 +24,8 @@ export function VoucherForm({ type, onSaved }: VoucherFormProps) {
     description: '',
     personName: '',
     department: '',
-    accountCode: '',
-    approver: 'Phí Quang Chiến',
+    accountCode: settings.defaultAccountCode,
+    approver: settings.leaderName,
     attachments: 1,
   });
 
@@ -68,8 +69,8 @@ export function VoucherForm({ type, onSaved }: VoucherFormProps) {
           <Printer className="h-4 w-4 mr-1" /> In phiếu
         </Button>
         <div className="text-center">
-          <p className="text-xs text-muted-foreground tracking-wider uppercase">Công đoàn NHPT Việt Nam</p>
-          <p className="text-xs text-muted-foreground">CĐ NHPT Chi nhánh KV Bắc Đông Bắc</p>
+          <p className="text-xs text-muted-foreground tracking-wider uppercase">{settings.orgName}</p>
+          <p className="text-xs text-muted-foreground">{settings.orgSubName}</p>
           <CardTitle className="text-2xl font-bold text-primary mt-3 flex items-center justify-center gap-2">
             <FileText className="h-6 w-6" />
             {title}
@@ -89,7 +90,7 @@ export function VoucherForm({ type, onSaved }: VoucherFormProps) {
             </div>
             <div>
               <Label className="text-muted-foreground text-xs">Mã TK</Label>
-              <Input value={form.accountCode} onChange={e => setForm({ ...form, accountCode: e.target.value })} placeholder="111" />
+              <Input value={form.accountCode} onChange={e => setForm({ ...form, accountCode: e.target.value })} placeholder={settings.defaultAccountCode} />
             </div>
           </div>
 
@@ -135,11 +136,11 @@ export function VoucherForm({ type, onSaved }: VoucherFormProps) {
             </div>
             <div>
               <p className="font-semibold uppercase mb-1">Phụ trách kế toán</p>
-              <p>Lê Thị Thu Hương</p>
+              <p>{settings.accountantName}</p>
             </div>
             <div>
               <p className="font-semibold uppercase mb-1">Người lập</p>
-              <p>Lê Thị Thu Hương</p>
+              <p>{settings.creatorName}</p>
             </div>
           </div>
 

@@ -5,6 +5,7 @@ import { Dashboard } from '@/components/finance/Dashboard';
 import { VoucherForm } from '@/components/finance/VoucherForm';
 import { CashBook } from '@/components/finance/CashBook';
 import { DetailLedger } from '@/components/finance/DetailLedger';
+import { SettingsForm } from '@/components/finance/SettingsForm';
 
 const Index = () => {
   const [currentView, setCurrentView] = useState<ViewType>('dashboard');
@@ -23,6 +24,7 @@ const Index = () => {
         {currentView === 'phieu-chi' && <VoucherForm type="chi" onSaved={handleSaved} />}
         {currentView === 'so-quy' && <CashBook refreshKey={refreshKey} />}
         {currentView === 'so-chi-tiet' && <DetailLedger refreshKey={refreshKey} />}
+        {currentView === 'cai-dat' && <SettingsForm onSaved={handleSaved} />}
       </main>
     </div>
   );

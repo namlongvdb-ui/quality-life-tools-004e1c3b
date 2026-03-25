@@ -1,5 +1,5 @@
 import { ViewType } from '@/types/finance';
-import { LayoutDashboard, FileInput, FileOutput, BookOpen, ClipboardList } from 'lucide-react';
+import { LayoutDashboard, FileInput, FileOutput, BookOpen, ClipboardList, Settings } from 'lucide-react';
 
 interface AppSidebarProps {
   currentView: ViewType;
@@ -12,6 +12,7 @@ const menuItems: { view: ViewType; label: string; icon: React.ElementType }[] = 
   { view: 'phieu-chi', label: 'Phiếu Chi', icon: FileOutput },
   { view: 'so-quy', label: 'Sổ Quỹ', icon: BookOpen },
   { view: 'so-chi-tiet', label: 'Sổ Chi Tiết', icon: ClipboardList },
+  { view: 'cai-dat', label: 'Cài đặt', icon: Settings },
 ];
 
 export function AppSidebar({ currentView, onViewChange }: AppSidebarProps) {

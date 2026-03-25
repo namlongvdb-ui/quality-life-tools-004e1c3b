@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import { getTransactions, getOpeningBalance } from '@/lib/finance-store';
+import { getTransactions, getOpeningBalance, getOrgSettings } from '@/lib/finance-store';
 import { Transaction } from '@/types/finance';
 import { BookOpen, Printer } from 'lucide-react';
 
@@ -15,6 +15,7 @@ function formatDate(d: string) {
 }
 
 export function CashBook({ refreshKey }: { refreshKey?: number }) {
+  const settings = getOrgSettings();
   const data = useMemo(() => {
     const txs = getTransactions();
     const opening = getOpeningBalance();
@@ -41,7 +42,7 @@ export function CashBook({ refreshKey }: { refreshKey?: number }) {
         <Button variant="outline" size="sm" className="absolute right-4 top-4 no-print" onClick={() => window.print()}>
           <Printer className="h-4 w-4 mr-1" /> In sổ
         </Button>
-        <p className="text-xs text-muted-foreground tracking-wider uppercase">Công đoàn NHPT Việt Nam - CĐ NHPT Chi nhánh KV Bắc Đông Bắc</p>
+        <p className="text-xs text-muted-foreground tracking-wider uppercase">{settings.orgName} - {settings.orgSubName}</p>
         <CardTitle className="text-2xl font-bold text-primary flex items-center justify-center gap-2">
           <BookOpen className="h-6 w-6" /> SỔ QUỸ TIỀN MẶT
         </CardTitle>
@@ -99,15 +100,15 @@ export function CashBook({ refreshKey }: { refreshKey?: number }) {
         <div className="grid grid-cols-3 text-center text-xs text-muted-foreground p-6 border-t border-border">
           <div>
             <p className="font-semibold uppercase mb-1">Thủ quỹ</p>
-            <p>Nguyễn Thị Yến</p>
+            <p>{settings.treasurerName}</p>
           </div>
           <div>
             <p className="font-semibold uppercase mb-1">Kế toán trưởng</p>
-            <p>Lê Thị Thu Hương</p>
+            <p>{settings.chiefAccountantName}</p>
           </div>
           <div>
             <p className="font-semibold uppercase mb-1">Lãnh đạo</p>
-            <p>Phí Quang Chiến</p>
+            <p>{settings.leaderName}</p>
           </div>
         </div>
       </CardContent>
