@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import { getTransactions } from '@/lib/finance-store';
+import { getTransactions, getOrgSettings } from '@/lib/finance-store';
 import { ClipboardList, Printer } from 'lucide-react';
 
 function formatCurrency(n: number) {
@@ -14,6 +14,7 @@ function formatDate(d: string) {
 }
 
 export function DetailLedger({ refreshKey }: { refreshKey?: number }) {
+  const settings = getOrgSettings();
   const rows = useMemo(() => {
     return getTransactions().sort((a, b) => a.date.localeCompare(b.date));
   }, [refreshKey]);
@@ -24,7 +25,7 @@ export function DetailLedger({ refreshKey }: { refreshKey?: number }) {
         <Button variant="outline" size="sm" className="absolute right-4 top-4 no-print" onClick={() => window.print()}>
           <Printer className="h-4 w-4 mr-1" /> In sổ
         </Button>
-        <p className="text-xs text-muted-foreground tracking-wider uppercase">Công đoàn NHPT Việt Nam - CĐ NHPT Chi nhánh KV Bắc Đông Bắc</p>
+        <p className="text-xs text-muted-foreground tracking-wider uppercase">{settings.orgName} - {settings.orgSubName}</p>
         <CardTitle className="text-2xl font-bold text-primary flex items-center justify-center gap-2">
           <ClipboardList className="h-6 w-6" /> SỔ CHI TIẾT
         </CardTitle>

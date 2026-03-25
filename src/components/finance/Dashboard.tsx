@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { getTransactions, getOpeningBalance } from '@/lib/finance-store';
+import { getTransactions, getOpeningBalance, getOrgSettings } from '@/lib/finance-store';
 import { Wallet, TrendingUp, TrendingDown, Banknote } from 'lucide-react';
 
 function formatCurrency(n: number) {
@@ -8,6 +8,7 @@ function formatCurrency(n: number) {
 }
 
 export function Dashboard({ refreshKey }: { refreshKey?: number }) {
+  const settings = getOrgSettings();
   const stats = useMemo(() => {
     const txs = getTransactions();
     const opening = getOpeningBalance();
@@ -28,7 +29,7 @@ export function Dashboard({ refreshKey }: { refreshKey?: number }) {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-foreground">Tổng quan tài chính</h1>
-        <p className="text-muted-foreground text-sm">Công đoàn NHPT Chi nhánh KV Bắc Đông Bắc</p>
+        <p className="text-muted-foreground text-sm">{settings.orgSubName}</p>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {cards.map(card => (
