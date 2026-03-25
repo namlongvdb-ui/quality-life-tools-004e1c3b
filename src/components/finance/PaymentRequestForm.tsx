@@ -1,36 +1,66 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { addTransaction, getNextVoucherNo, numberToVietnameseWords, getOrgSettings } from '@/lib/finance-store';
-import { FileText, Printer, Save } from 'lucide-react';
+import { addTransaction, updateTransaction, getNextVoucherNo, numberToVietnameseWords, getOrgSettings } from '@/lib/finance-store';
+import { Transaction } from '@/types/finance';
+import { FileText, Printer, Save, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { PrintPaymentRequest } from './PrintPaymentRequest';
+import { TransactionList } from './TransactionList';
 
 interface PaymentRequestFormProps {
   onSaved?: () => void;
+  refreshKey?: number;
 }
 
-export function PaymentRequestForm({ onSaved }: PaymentRequestFormProps) {
+const emptyForm = (settings: ReturnType<typeof getOrgSettings>) => ({
+  date: new Date().toISOString().split('T')[0],
+  voucherNo: getNextVoucherNo('de-nghi'),
+  requestNo: '',
+  requesterName: '',
+  department: 'Tổ công đoàn bộ phận KT – HC, Phòng GD Cao Bằng.',
+  content: '',
+  amount: '',
+  times: '1',
+  bankAccount: '',
+  bankAccountName: '',
+  bankName: 'BIDV – Chi nhánh Cao Bằng',
+  attachments: '',
+});
+
+export function PaymentRequestForm({ onSaved, refreshKey }: PaymentRequestFormProps) {
   const settings = getOrgSettings();
-  const [form, setForm] = useState({
-    date: new Date().toISOString().split('T')[0],
-    voucherNo: getNextVoucherNo('de-nghi'),
-    requestNo: '',
-    requesterName: '',
-    department: 'Tổ công đoàn bộ phận KT – HC, Phòng GD Cao Bằng.',
-    content: '',
-    amount: '',
-    times: '1',
-    bankAccount: '',
-    bankAccountName: '',
-    bankName: 'BIDV – Chi nhánh Cao Bằng',
-    attachments: '',
-  });
+  const [form, setForm] = useState(() => emptyForm(settings));
+  const [editingTx, setEditingTx] = useState<Transaction | null>(null);
 
   const amount = parseInt(form.amount) || 0;
+
+  const handleSelectForEdit = (tx: Transaction) => {
+    setEditingTx(tx);
+    setForm({
+      date: tx.date,
+      voucherNo: tx.voucherNo,
+      requestNo: '',
+      requesterName: tx.personName,
+      department: tx.department,
+      content: tx.description,
+      amount: tx.amount.toString(),
+      times: tx.times || '1',
+      bankAccount: tx.bankAccount || '',
+      bankAccountName: tx.bankAccountName || '',
+      bankName: tx.bankName || 'BIDV – Chi nhánh Cao Bằng',
+      attachments: tx.attachments?.toString() || '',
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleCancelEdit = () => {
+    setEditingTx(null);
+    setForm(emptyForm(settings));
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,51 +68,74 @@ export function PaymentRequestForm({ onSaved }: PaymentRequestFormProps) {
       toast.error('Vui lòng điền đầy đủ thông tin');
       return;
     }
-    addTransaction({
-      date: form.date,
-      voucherNo: form.voucherNo,
-      type: 'de-nghi',
-      amount,
-      description: form.content,
-      personName: form.requesterName,
-      department: form.department,
-      accountCode: '',
-      approver: settings.unionGroups[0]?.leaderName || '',
-      attachments: parseInt(form.attachments) || 0,
-      bankAccount: form.bankAccount,
-      bankAccountName: form.bankAccountName,
-      bankName: form.bankName,
-      times: form.times,
-    });
-    toast.success(`Đề nghị thanh toán ${form.voucherNo} đã được lưu`);
-    setForm({
-      ...form,
-      voucherNo: getNextVoucherNo('de-nghi'),
-      requestNo: '',
-      requesterName: '',
-      content: '',
-      amount: '',
-      bankAccount: '',
-      bankAccountName: '',
-      attachments: '',
-    });
+
+    if (editingTx) {
+      updateTransaction(editingTx.id, {
+        date: form.date,
+        voucherNo: form.voucherNo,
+        type: 'de-nghi',
+        amount,
+        description: form.content,
+        personName: form.requesterName,
+        department: form.department,
+        attachments: parseInt(form.attachments) || 0,
+        bankAccount: form.bankAccount,
+        bankAccountName: form.bankAccountName,
+        bankName: form.bankName,
+        times: form.times,
+      });
+      toast.success(`Đề nghị thanh toán ${form.voucherNo} đã được cập nhật`);
+      setEditingTx(null);
+    } else {
+      addTransaction({
+        date: form.date,
+        voucherNo: form.voucherNo,
+        type: 'de-nghi',
+        amount,
+        description: form.content,
+        personName: form.requesterName,
+        department: form.department,
+        accountCode: '',
+        approver: settings.unionGroups[0]?.leaderName || '',
+        attachments: parseInt(form.attachments) || 0,
+        bankAccount: form.bankAccount,
+        bankAccountName: form.bankAccountName,
+        bankName: form.bankName,
+        times: form.times,
+      });
+      toast.success(`Đề nghị thanh toán ${form.voucherNo} đã được lưu`);
+    }
+
+    setForm(emptyForm(settings));
     onSaved?.();
   };
 
   return (
     <>
       <Card className="max-w-3xl mx-auto border-border shadow-lg no-print">
-        <CardHeader className="bg-primary/5 border-b border-border relative">
-          <Button type="button" variant="outline" size="sm" className="absolute right-4 top-4" onClick={() => window.print()}>
-            <Printer className="h-4 w-4 mr-1" /> In giấy
-          </Button>
+        <CardHeader className={`border-b border-border relative ${editingTx ? 'bg-amber-50 dark:bg-amber-950/30' : 'bg-primary/5'}`}>
+          <div className="flex items-center gap-2 absolute right-4 top-4">
+            {editingTx && (
+              <Button type="button" variant="outline" size="sm" onClick={handleCancelEdit}>
+                <X className="h-4 w-4 mr-1" /> Hủy sửa
+              </Button>
+            )}
+            <Button type="button" variant="outline" size="sm" onClick={() => window.print()}>
+              <Printer className="h-4 w-4 mr-1" /> In giấy
+            </Button>
+          </div>
           <div className="text-center">
             <p className="text-xs text-muted-foreground tracking-wider uppercase">{settings.orgName}</p>
             <p className="text-xs text-muted-foreground">{settings.orgSubName}</p>
             <CardTitle className="text-2xl font-bold text-primary mt-3 flex items-center justify-center gap-2">
               <FileText className="h-6 w-6" />
-              GIẤY ĐỀ NGHỊ THANH TOÁN
+              {editingTx ? 'SỬA GIẤY ĐỀ NGHỊ THANH TOÁN' : 'GIẤY ĐỀ NGHỊ THANH TOÁN'}
             </CardTitle>
+            {editingTx && (
+              <p className="text-sm text-amber-600 dark:text-amber-400 mt-1 font-medium">
+                Đang sửa phiếu {editingTx.voucherNo}
+              </p>
+            )}
           </div>
         </CardHeader>
         <CardContent className="p-6">
@@ -154,8 +207,8 @@ export function PaymentRequestForm({ onSaved }: PaymentRequestFormProps) {
               <Input value={form.attachments} onChange={e => setForm({ ...form, attachments: e.target.value })} placeholder="Số chứng từ gốc..." />
             </div>
 
-            <Button type="submit" className="w-full" size="lg">
-              <Save className="h-4 w-4 mr-2" /> Lưu Đề Nghị Thanh Toán
+            <Button type="submit" className={`w-full ${editingTx ? 'bg-amber-600 hover:bg-amber-700' : ''}`} size="lg">
+              <Save className="h-4 w-4 mr-2" /> {editingTx ? 'Cập nhật Đề Nghị Thanh Toán' : 'Lưu Đề Nghị Thanh Toán'}
             </Button>
           </form>
         </CardContent>
@@ -176,6 +229,15 @@ export function PaymentRequestForm({ onSaved }: PaymentRequestFormProps) {
           attachments: form.attachments,
         }} />
       </div>
+
+      <TransactionList
+        type="de-nghi"
+        title="GIẤY ĐỀ NGHỊ THANH TOÁN"
+        personLabel="Người đề nghị"
+        onChanged={onSaved}
+        refreshKey={refreshKey}
+        onSelectForEdit={handleSelectForEdit}
+      />
     </>
   );
 }
