@@ -65,7 +65,7 @@ export function PrintPaymentRequest({ data }: PrintPaymentRequestProps) {
 
       {/* 3. Kính gửi */}
       <div style={{ textAlign: 'center', margin: '15px 0', fontWeight: 'bold', fontSize: '14px' }}>
-        <p style={{ margin: 0 }}>Kính gửi: BCH Công đoàn NHPT CN KV Bắc Đông Bắc</p>
+        <p style={{ margin: 0 }}>Kính gửi: BCH Công đoàn NHPT Chi nhánh KV Bắc Đông Bắc</p>
       </div>
 
       {/* 4. Nội dung chính */}
