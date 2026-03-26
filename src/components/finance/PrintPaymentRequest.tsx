@@ -37,7 +37,7 @@ export function PrintPaymentRequest({ data }: PrintPaymentRequestProps) {
         <div>
           <p style={{ fontWeight: 'bold', fontSize: '13px', margin: 0 }}>CĐ NHPT CHI NHÁNH KV BẮC ĐÔNG BẮC</p>
           <p style={{ fontWeight: 'bold', fontSize: '13px', margin: 0 }}>TỔ CĐ BỘ PHẬN KẾ TOÁN – HÀNH CHÍNH</p>
-          <p style={{ fontWeight: 'bold', fontSize: '13px', margin: 0 }}>PHÒNG GD CAO BẰNG</p>
+          <p style={{ fontWeight: 'bold', fontSize: '13px', margin: 0 }}>      PHÒNG GD CAO BẰNG           </p>
         </div>
         <div style={{ textAlign: 'right', fontSize: '12px' }}>
           <p style={{ margin: 0 }}>Mẫu số C37- HĐ</p>
@@ -48,9 +48,9 @@ export function PrintPaymentRequest({ data }: PrintPaymentRequestProps) {
       <div style={{ textAlign: 'center', margin: '22px 0 8px' }}>
         <h2 style={{ fontSize: '22px', fontWeight: 'bold', margin: 0, letterSpacing: '1px' }}>GIẤY ĐỀ NGHỊ THANH TOÁN</h2>
         <p style={{ fontStyle: 'italic', fontSize: '13px', margin: '6px 0' }}>
-          Ngày {day} tháng {month} năm {year}
+          Ngày ..... tháng ..... năm...... 
         </p>
-        <p style={{ fontSize: '13px', margin: '3px 0' }}>Số: {data.requestNo || '...............'}</p>
+        <p style={{ fontSize: '13px', margin: '3px 0' }}>Số:{data.requestNo || '...............'}</p>
       </div>
 
       {/* Kính gửi */}
@@ -71,7 +71,7 @@ export function PrintPaymentRequest({ data }: PrintPaymentRequestProps) {
 
       {/* Bank info */}
       {(data.bankAccount || data.bankAccountName || data.bankName) && (
-        <div style={{ fontStyle: 'italic', textAlign: 'center', lineHeight: '1.7', margin: '14px 0' }}>
+        <div style={{ fontStyle: 'italic', textAlign: 'left', lineHeight: '1.7', margin: '14px 0' }}>
           <p style={{ margin: '3px 0' }}>Thông tin Chuyển khoản: Số TK: {data.bankAccount || '...............'}</p>
           <p style={{ margin: '3px 0' }}>Tên TK: {data.bankAccountName || '...............'}</p>
           <p style={{ margin: '3px 0' }}>Tại NH: {data.bankName || '...............'}</p>
