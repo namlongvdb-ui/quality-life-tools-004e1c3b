@@ -69,28 +69,34 @@ export function PrintPaymentRequest({ data }: PrintPaymentRequestProps) {
         </p>
       </div>
 
-      {/* Bank info - Hiển thị đúng theo mẫu tt.bmp */}
+     {/* Bank info - Căn lề thẳng hàng tuyệt đối không cần sửa index.css */}
 {(data.bankAccount || data.bankAccountName || data.bankName) && (
   <div style={{ 
-    fontStyle: 'italic', 
-    lineHeight: '1.6', 
-    margin: '15px 0',
-    fontSize: '14px',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'flex-end', // Đẩy toàn bộ khối sang bên phải
-    paddingRight: '15%'     // Điều chỉnh khoảng cách này để khớp với vị trí trong tờ in
+    display: 'flex', 
+    justifyContent: 'flex-end', 
+    marginTop: '15px',
+    fontFamily: '"Times New Roman", Times, serif' 
   }}>
-    <div style={{ textAlign: 'left', minWidth: '300px' }}>
-      <p style={{ margin: '2px 0' }}>
-        Thông tin Chuyển khoản: Số TK: {data.bankAccount || '...............'}
-      </p>
-      <p style={{ margin: '2px 0', paddingLeft: '85px' }}>
-        Tên TK: {data.bankAccountName || '...............'}
-      </p>
-      <p style={{ margin: '2px 0', paddingLeft: '85px' }}>
-        Tại NH: {data.bankName || '...............'}
-      </p>
+    <div style={{
+      display: 'grid',
+      gridTemplateColumns: 'auto auto', // Chia làm 2 cột: Cột nhãn và Cột nội dung
+      columnGap: '4px',
+      rowGap: '2px',
+      fontStyle: 'italic',
+      fontSize: '14px',
+      lineHeight: '1.4'
+    }}>
+      {/* Hàng 1 */}
+      <div style={{ textAlign: 'right' }}>Thông tin Chuyển khoản:</div>
+      <div>Số TK: {data.bankAccount || '...............'}</div>
+
+      {/* Hàng 2 - Cột đầu để trống để đẩy nội dung sang cột 2 */}
+      <div></div>
+      <div>Tên TK: {data.bankAccountName || '...............'}</div>
+
+      {/* Hàng 3 */}
+      <div></div>
+      <div>Tại NH: {data.bankName || '...............'}</div>
     </div>
   </div>
 )}
