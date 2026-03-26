@@ -28,6 +28,7 @@ export function StaffList() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [showPrint, setShowPrint] = useState(false);
 
   useEffect(() => { setList(getStaffList()); }, []);
 
