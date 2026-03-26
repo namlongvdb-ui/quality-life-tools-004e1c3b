@@ -37,30 +37,37 @@ export function PrintPaymentRequest({ data }: PrintPaymentRequestProps) {
       margin: '0 auto',
       backgroundColor: '#fff' 
     }}>
-      
-      {/* 1. Header: Đã sửa lỗi dàn hàng ngang & Thừa thẻ đóng */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
-        <div style={{ 
-          display: 'flex', 
-          flexDirection: 'column', 
-          alignItems: 'center', 
-          width: 'fit-content' 
-        }}>
-          <p style={{ fontWeight: 'bold', fontSize: '13px', margin: '0 0 2px 0', whiteSpace: 'nowrap' }}>
-            CĐ NHPT CHI NHÁNH KV BẮC ĐÔNG BẮC
-          </p>
-          <p style={{ fontWeight: 'bold', fontSize: '12px', margin: '0 0 2px 0', whiteSpace: 'nowrap' }}>
-            TỔ CĐ BỘ PHẬN KẾ TOÁN – HÀNH CHÍNH
-          </p>
-          <p style={{ fontWeight: 'bold', fontSize: '12px', margin: 0, whiteSpace: 'nowrap' }}>
-            PHÒNG GD CAO BẰNG
-          </p>
-        </div>
-        
-        <div style={{ textAlign: 'right', fontSize: '12px' }}>
-          <p style={{ margin: 0 }}>Mẫu số C37- HĐ</p>
-        </div>
-      </div>
+     {/* 1. Header: Sửa lỗi dàn hàng ngang và căn chỉnh vị trí tuyệt đối */}
+<div style={{ 
+  display: 'flex', 
+  justifyContent: 'space-between', 
+  alignItems: 'flex-start', 
+  marginBottom: '15px', // Tăng khoảng cách để thoáng hơn
+  width: '100%' 
+}}>
+  {/* Khối bên trái: Tên đơn vị (Chiếm khoảng 45% chiều rộng) */}
+  <div style={{ 
+    width: '45%', 
+    display: 'flex', 
+    flexDirection: 'column', 
+    alignItems: 'center' // Căn giữa nội bộ 3 dòng để tạo hình tháp
+  }}>
+    <p style={{ fontWeight: 'bold', fontSize: '12px', margin: '0 0 2px 0', textAlign: 'center', width: '100%' }}>
+      CĐ NHPT CHI NHÁNH KV BẮC ĐÔNG BẮC
+    </p>
+    <p style={{ fontWeight: 'bold', fontSize: '11px', margin: '0 0 2px 0', textAlign: 'center', width: '100%' }}>
+      TỔ CĐ BỘ PHẬN KẾ TOÁN – HÀNH CHÍNH
+    </p>
+    <p style={{ fontWeight: 'bold', fontSize: '11px', margin: 0, textAlign: 'center', width: '100%' }}>
+      PHÒNG GD CAO BẰNG
+    </p>
+  </div>
+
+  {/* Khối bên phải: Mẫu số (Chiếm khoảng 30% chiều rộng) */}
+  <div style={{ width: '30%', textAlign: 'right', fontSize: '12px', fontWeight: 'bold' }}>
+    <p style={{ margin: 0 }}>Mẫu số C37- HĐ</p>
+  </div>
+</div>
 
       {/* 2. Tiêu đề phiếu */}
       <div style={{ textAlign: 'center', margin: '22px 0 8px' }}>
