@@ -60,10 +60,10 @@ export function PrintDetailLedger({ refreshKey }: { refreshKey?: number }) {
               <td style={centerCell}>{typeLabels[row.type] || row.type}</td>
               <td style={rightCell}>{row.type === 'thu' ? formatCurrency(row.amount) : ''}</td>
               <td style={rightCell}>{row.type === 'chi' ? formatCurrency(row.amount) : ''}</td>
-              <td style={centerCell}>{row.accountCode}</td>
+              <td style={centerCell}>{row.type === 'thu' ? '111' : (row.accountCode || '')}</td>
+              <td style={centerCell}>{row.type === 'chi' ? '111' : (row.accountCode || '')}</td>
               <td style={cellStyle}>{row.personName}</td>
               <td style={cellStyle}>{row.department}</td>
-              <td style={cellStyle}>{row.approver}</td>
             </tr>
           ))}
           {rows.length === 0 && (
