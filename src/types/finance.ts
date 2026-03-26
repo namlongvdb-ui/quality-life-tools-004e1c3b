@@ -39,6 +39,7 @@ export type ViewType = 'dashboard' | 'phieu-thu' | 'phieu-chi' | 'phieu-tham-hoi
 export interface OrgSettings {
   orgName: string;
   orgSubName: string;
+  orgLine3: string;
   leaderName: string;
   accountantName: string;
   creatorName: string;

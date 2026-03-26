@@ -51,14 +51,16 @@ export function PrintPaymentRequest({ data }: PrintPaymentRequestProps) {
                 maxWidth: '280px' // Khóa độ rộng để ép chữ xuống dòng nếu quá dài
               }}>
                 <p style={{ fontWeight: 'bold', fontSize: '12px', margin: '0 0 2px 0', lineHeight: '1.2' }}>
-                  CĐ NHPT CHI NHÁNH KV BẮC ĐÔNG BẮC
+                  {settings.orgName.toUpperCase()}
                 </p>
                 <p style={{ fontWeight: 'bold', fontSize: '11px', margin: '0 0 2px 0', lineHeight: '1.2' }}>
-                  TỔ CĐ BỘ PHẬN KẾ TOÁN – HÀNH CHÍNH
+                  {settings.orgSubName.toUpperCase()}
                 </p>
-                <p style={{ fontWeight: 'bold', fontSize: '11px', margin: 0, lineHeight: '1.2' }}>
-                  PHÒNG GD CAO BẰNG
-                </p>
+                {settings.orgLine3 && (
+                  <p style={{ fontWeight: 'bold', fontSize: '11px', margin: 0, lineHeight: '1.2' }}>
+                    {settings.orgLine3.toUpperCase()}
+                  </p>
+                )}
               </div>
             </td>
             <td style={{ width: '35%', verticalAlign: 'top', textAlign: 'right' }}>
