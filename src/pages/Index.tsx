@@ -8,6 +8,7 @@ import { PaymentRequestForm } from '@/components/finance/PaymentRequestForm';
 import { CashBook } from '@/components/finance/CashBook';
 import { DetailLedger } from '@/components/finance/DetailLedger';
 import { SettingsForm } from '@/components/finance/SettingsForm';
+import { StaffList } from '@/components/finance/StaffList';
 
 const Index = () => {
   const [currentView, setCurrentView] = useState<ViewType>('dashboard');
