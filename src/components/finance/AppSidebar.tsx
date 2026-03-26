@@ -30,11 +30,10 @@ export function AppSidebar({ currentView, onViewChange }: AppSidebarProps) {
       {/* Header */}
       <div className="p-5 border-b border-white/10" style={{ backgroundColor: 'rgba(0,0,0,0.1)' }}>
         <h1 className="text-lg font-bold text-white tracking-tight flex items-center gap-2">
-          <div className="w-2 h-6 bg-yellow-400 rounded-full"></div> {/* Điểm nhấn màu vàng nhận diện */}
           Quản Lý Tài Chính
         </h1>
         <p className="text-[10px] uppercase tracking-widest text-blue-200 mt-1 font-semibold opacity-80">
-          Công Đoàn Cơ Sở
+          Công Đoàn NHPT Chi nhánh
         </p>
       </div>
 
