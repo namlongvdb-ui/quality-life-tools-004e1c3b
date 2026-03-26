@@ -34,11 +34,22 @@ export function PrintPaymentRequest({ data }: PrintPaymentRequestProps) {
     <div className="print-voucher" style={{ fontFamily: 'Times New Roman, serif', fontSize: '14px', color: '#000', padding: '30px 45px', maxWidth: '720px', margin: '0 auto' }}>
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
-        <div>
-          <p style={{ fontWeight: 'bold', fontSize: '13px', margin: 0 }}>CĐ NHPT CHI NHÁNH KV BẮC ĐÔNG BẮC</p>
-          <p style={{ fontWeight: 'bold', fontSize: '13px', margin: 0 }}>TỔ CĐ BỘ PHẬN KẾ TOÁN – HÀNH CHÍNH</p>
-          <p style={{ fontWeight: 'bold', fontSize: '13px', margin: 0 }}>PHÒNG GD CAO BẰNG</p>
-        </div>
+        <div style={{ 
+  display: 'flex', 
+  flexDirection: 'column', 
+  alignItems: 'center', // Căn giữa tất cả các dòng con theo trục dọc
+  width: 'fit-content' // Đảm bảo khối này chỉ rộng bằng nội dung dài nhất
+}}>
+  <p style={{ fontWeight: 'bold', fontSize: '13px', margin: 0, whiteSpace: 'nowrap' }}>
+    CĐ NHPT CHI NHÁNH KV BẮC ĐÔNG BẮC
+  </p>
+  <p style={{ fontWeight: 'bold', fontSize: '13px', margin: 0, whiteSpace: 'nowrap' }}>
+    TỔ CĐ BỘ PHẬN KẾ TOÁN – HÀNH CHÍNH
+  </p>
+  <p style={{ fontWeight: 'bold', fontSize: '13px', margin: 0, whiteSpace: 'nowrap' }}>
+    PHÒNG GD CAO BẰNG
+  </p>
+</div>
         <div style={{ textAlign: 'right', fontSize: '12px' }}>
           <p style={{ margin: 0 }}>Mẫu số C37- HĐ</p>
         </div>
