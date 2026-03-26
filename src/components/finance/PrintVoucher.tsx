@@ -55,7 +55,7 @@ export function PrintVoucher({ type, data }: PrintVoucherProps) {
         <p style={{ fontSize: '13px', margin: '4px 0', fontStyle: 'italic' }}>
           Ngày.......tháng.......năm.......
         </p>
-        <p style={{ fontSize: '13px', margin: '2px 0' }}>Số CT: {data.voucherNo}</p>
+        <p style={{ fontSize: '13px', margin: '2px 0' }}>Số CT:........{/* {data.voucherNo}*/}</p>
       </div>
 
       {/* Nợ / Có */}
@@ -104,7 +104,7 @@ export function PrintVoucher({ type, data }: PrintVoucherProps) {
       <p style={{ margin: '6px 0' }}>Viết bằng chữ: <span style={{ fontStyle: 'italic', fontWeight: 'bold' }}>{amountWords}</span></p>
 
       <div style={{ textAlign: 'right', margin: '18px 0', fontStyle: 'italic', fontSize: '13px' }}>
-        Ngày.....tháng......năm.......
+        .............,Ngày.....tháng......năm.......
       </div>
 
       {/* Signatures - Bottom */}
