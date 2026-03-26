@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -7,7 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { addTransaction, updateTransaction, getNextVoucherNo, numberToVietnameseWords, getOrgSettings } from '@/lib/finance-store';
 import { Transaction } from '@/types/finance';
-import { Heart, Printer, Save, X } from 'lucide-react';
+import { Heart, Printer, Save, X, DollarSign, User, Users } from 'lucide-react';
 import { toast } from 'sonner';
 import { PrintVisitVoucher } from './PrintVisitVoucher';
 import { TransactionList } from './TransactionList';
@@ -98,22 +98,25 @@ export function VisitVoucherForm({ onSaved, refreshKey }: VisitVoucherFormProps)
 
   return (
     <>
-      <Card className="max-w-3xl mx-auto border-border shadow-lg no-print">
-        <CardHeader className={`border-b border-border relative ${editingTx ? 'bg-amber-50 dark:bg-amber-950/30' : 'bg-primary/5'}`}>
+      <Card className="max-w-3xl mx-auto shadow-lg no-print overflow-hidden border-0 ring-1 ring-border">
+        {/* Header */}
+        <CardHeader className={`relative py-5 ${editingTx ? 'bg-amber-50 dark:bg-amber-950/30 border-b-2 border-amber-300 dark:border-amber-700' : 'bg-gradient-to-r from-rose-50 to-pink-50 dark:from-rose-950/30 dark:to-pink-950/30 border-b-2 border-rose-200 dark:border-rose-800'}`}>
           <div className="flex items-center gap-2 absolute right-4 top-4">
             {editingTx && (
-              <Button type="button" variant="outline" size="sm" onClick={handleCancelEdit}>
+              <Button type="button" variant="outline" size="sm" onClick={handleCancelEdit} className="bg-background/80 backdrop-blur-sm">
                 <X className="h-4 w-4 mr-1" /> Hủy sửa
               </Button>
             )}
-            <Button type="button" variant="outline" size="sm" onClick={() => window.print()}>
+            <Button type="button" variant="outline" size="sm" onClick={() => window.print()} className="bg-background/80 backdrop-blur-sm">
               <Printer className="h-4 w-4 mr-1" /> In phiếu
             </Button>
           </div>
           <div className="text-center">
-            <CardTitle className="text-2xl font-bold text-primary flex items-center justify-center gap-2">
-              <Heart className="h-6 w-6" />
-              {editingTx ? 'SỬA PHIẾU THĂM HỎI' : 'PHIẾU THĂM HỎI'}
+            <div className="inline-flex items-center justify-center h-12 w-12 rounded-xl mb-2 bg-rose-100 dark:bg-rose-900/50">
+              <Heart className="h-6 w-6 text-rose-600 dark:text-rose-400" />
+            </div>
+            <CardTitle className="text-xl font-bold text-foreground">
+              {editingTx ? 'Sửa phiếu thăm hỏi' : 'PHIẾU THĂM HỎI'}
             </CardTitle>
             {editingTx && (
               <p className="text-sm text-amber-600 dark:text-amber-400 mt-1 font-medium">
@@ -122,23 +125,29 @@ export function VisitVoucherForm({ onSaved, refreshKey }: VisitVoucherFormProps)
             )}
           </div>
         </CardHeader>
+
         <CardContent className="p-6">
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label className="text-muted-foreground text-xs">Ngày</Label>
-                <Input type="date" value={form.date} onChange={e => setForm({ ...form, date: e.target.value })} />
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Row 1: Date & Voucher No */}
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <Label className="text-muted-foreground text-xs font-medium">Ngày</Label>
+                <Input type="date" value={form.date} onChange={e => setForm({ ...form, date: e.target.value })} className="h-10" />
               </div>
-              <div>
-                <Label className="text-muted-foreground text-xs">Số CT</Label>
-                <Input value={form.voucherNo} onChange={e => setForm({ ...form, voucherNo: e.target.value })} />
+              <div className="space-y-1.5">
+                <Label className="text-muted-foreground text-xs font-medium">Số CT</Label>
+                <Input value={form.voucherNo} onChange={e => setForm({ ...form, voucherNo: e.target.value })} className="h-10 font-mono" />
               </div>
             </div>
 
-            <div>
-              <Label className="text-muted-foreground text-xs">Tổ công đoàn</Label>
+            {/* Union group */}
+            <div className="space-y-1.5">
+              <Label className="text-muted-foreground text-xs font-medium flex items-center gap-1.5">
+                <Users className="h-3.5 w-3.5" />
+                Tổ công đoàn
+              </Label>
               <Select value={form.unionGroupName} onValueChange={val => setForm({ ...form, unionGroupName: val, visitorDepartment: val })}>
-                <SelectTrigger>
+                <SelectTrigger className="h-10">
                   <SelectValue placeholder="Chọn tổ công đoàn..." />
                 </SelectTrigger>
                 <SelectContent>
@@ -149,29 +158,38 @@ export function VisitVoucherForm({ onSaved, refreshKey }: VisitVoucherFormProps)
               </Select>
             </div>
 
-            <div>
-              <Label className="text-muted-foreground text-xs">Họ và tên người được thăm hỏi</Label>
-              <Input value={form.recipientName} onChange={e => setForm({ ...form, recipientName: e.target.value })} placeholder="Con trai đ/c Trần Nam Long" />
+            {/* Recipient name */}
+            <div className="space-y-1.5">
+              <Label className="text-muted-foreground text-xs font-medium flex items-center gap-1.5">
+                <User className="h-3.5 w-3.5" />
+                Họ và tên người được thăm hỏi
+              </Label>
+              <Input value={form.recipientName} onChange={e => setForm({ ...form, recipientName: e.target.value })} placeholder="Nhập họ tên..." className="h-10" />
             </div>
 
-            <div>
-              <Label className="text-muted-foreground text-xs">Lý do thăm hỏi</Label>
-              <Textarea value={form.reason} onChange={e => setForm({ ...form, reason: e.target.value })} placeholder="Lý do thăm hỏi..." rows={3} />
+            {/* Reason */}
+            <div className="space-y-1.5">
+              <Label className="text-muted-foreground text-xs font-medium">Lý do thăm hỏi</Label>
+              <Textarea value={form.reason} onChange={e => setForm({ ...form, reason: e.target.value })} placeholder="Lý do thăm hỏi..." rows={2} className="resize-none" />
             </div>
 
-            <div>
-              <Label className="text-muted-foreground text-xs">Số tiền (VNĐ)</Label>
-              <Input type="number" value={form.amount} onChange={e => setForm({ ...form, amount: e.target.value })} placeholder="0" className="text-lg font-semibold" />
+            {/* Amount */}
+            <div className="space-y-1.5">
+              <Label className="text-muted-foreground text-xs font-medium flex items-center gap-1.5">
+                <DollarSign className="h-3.5 w-3.5" />
+                Số tiền (VNĐ)
+              </Label>
+              <Input type="number" value={form.amount} onChange={e => setForm({ ...form, amount: e.target.value })} placeholder="0" className="h-12 text-xl font-bold tracking-wide" />
             </div>
 
             {amount > 0 && (
-              <div className="bg-muted/50 rounded-md p-3 border border-border">
-                <p className="text-sm text-muted-foreground">Bằng chữ:</p>
-                <p className="font-medium text-foreground italic">{numberToVietnameseWords(amount)}</p>
+              <div className="rounded-lg p-3.5 bg-rose-50 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-800">
+                <p className="text-xs text-muted-foreground mb-0.5">Bằng chữ:</p>
+                <p className="font-medium text-foreground italic text-sm">{numberToVietnameseWords(amount)}</p>
               </div>
             )}
 
-            <Button type="submit" className={`w-full ${editingTx ? 'bg-amber-600 hover:bg-amber-700' : ''}`} size="lg">
+            <Button type="submit" className={`w-full h-11 text-base font-semibold ${editingTx ? 'bg-amber-600 hover:bg-amber-700' : ''}`} size="lg">
               <Save className="h-4 w-4 mr-2" /> {editingTx ? 'Cập nhật Phiếu Thăm Hỏi' : 'Lưu Phiếu Thăm Hỏi'}
             </Button>
           </form>
