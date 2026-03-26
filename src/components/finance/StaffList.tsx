@@ -83,7 +83,7 @@ export function StaffList() {
           <Users className="h-6 w-6" /> Danh sách cán bộ
         </h2>
         <div className="flex gap-2">
-          <Button variant="outline" size="sm" onClick={() => { setShowPrint(true); setTimeout(() => window.print(), 300); }}>
+          <Button variant="outline" size="sm" onClick={() => window.print()}>
             <Printer className="h-4 w-4 mr-1" /> In danh sách
           </Button>
           {/* Settings dialog */}
