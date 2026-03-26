@@ -230,6 +230,13 @@ export function StaffList() {
           <p>• Trần đoàn phí hiện tại: {fmt(Math.round(settings.baseSalary * 0.1))} ₫/tháng</p>
         </CardContent>
       </Card>
+
+      {/* Print view */}
+      {showPrint && (
+        <div className="hidden print:block">
+          <PrintStaffList />
+        </div>
+      )}
     </div>
   );
 }
