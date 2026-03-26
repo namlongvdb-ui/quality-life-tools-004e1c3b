@@ -27,9 +27,9 @@ export function PrintVisitVoucher({ data }: PrintVisitVoucherProps) {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
         <div>
-          <p style={{ fontWeight: 'bold', fontSize: '13px', margin: 0 }}>CĐ NHPT CHI NHÁNH KV BẮC ĐÔNG BẮC</p>
-          <p style={{ fontWeight: 'bold', fontSize: '13px', margin: 0 }}>TỔ CÔNG ĐOÀN KẾ TOÁN – HÀNH CHÍNH</p>
-          <p style={{ fontWeight: 'bold', fontSize: '13px', margin: 0 }}>PGD CAO BẰNG</p>
+          <p style={{ fontWeight: 'bold', fontSize: '13px', margin: 0 }}>{settings.orgName.toUpperCase()}</p>
+          <p style={{ fontWeight: 'bold', fontSize: '13px', margin: 0 }}>{settings.orgSubName.toUpperCase()}</p>
+          {settings.orgLine3 && <p style={{ fontWeight: 'bold', fontSize: '13px', margin: 0 }}>{settings.orgLine3.toUpperCase()}</p>}
         </div>
         <div style={{ textAlign: 'right', fontSize: '12px' }}>
           <p style={{ margin: 0 }}>Mẫu: C11-TLĐ</p>

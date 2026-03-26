@@ -30,7 +30,8 @@ export function PrintDetailLedger({ refreshKey }: { refreshKey?: number }) {
   return (
     <div style={{ fontFamily: 'Times New Roman, serif', fontSize: '12px', color: '#000', padding: '20px 25px' }}>
       <p style={{ fontWeight: 'bold', margin: 0, fontSize: '12px' }}>{settings.orgName.toUpperCase()}</p>
-      <p style={{ fontWeight: 'bold', margin: '0 0 12px', fontSize: '12px' }}>{settings.orgSubName.toUpperCase()}</p>
+      <p style={{ fontWeight: 'bold', margin: 0, fontSize: '12px' }}>{settings.orgSubName.toUpperCase()}</p>
+      {settings.orgLine3 && <p style={{ fontWeight: 'bold', margin: '0 0 12px', fontSize: '12px' }}>{settings.orgLine3.toUpperCase()}</p>}
 
       <h2 style={{ textAlign: 'center', fontSize: '22px', fontWeight: 'bold', margin: '12px 0 16px', letterSpacing: '1px' }}>SỔ CHI TIẾT</h2>
 
