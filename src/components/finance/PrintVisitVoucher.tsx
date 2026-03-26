@@ -18,22 +18,30 @@ function formatCurrency(n: number) {
 export function PrintVisitVoucher({ data }: PrintVisitVoucherProps) {
   const settings = getOrgSettings();
   const d = new Date(data.date);
-  const year = d.getFullYear();
   const amountWords = data.amount > 0 ? numberToVietnameseWords(data.amount) : 'Không đồng';
 
-  // Find the leader name for the selected union group
+  // Logic tìm tên Tổ trưởng
   const selectedGroup = settings.unionGroups.find(g => g.name === data.unionGroupName);
   const groupLeaderName = selectedGroup?.leaderName || settings.unionGroups[0]?.leaderName || '';
+
+  // --- LOGIC ĐIỀU KIỆN CHO PHẦN KÝ TÊN BÊN TRÁI ---
+  const isKeHoachTinDung = data.unionGroupName === "Tổ Công đoàn BP Kế Hoạch - Tín dụng";
+  const leftSignatureTitle = isKeHoachTinDung ? "Ủy viên BCH CĐ" : "Chủ Tịch";
+  const leftSignatureName = isKeHoachTinDung ? "Trần Nam Long" : (settings.leaderName || '');
+  // ----------------------------------------------
 
   const labelStyle: React.CSSProperties = { margin: '8px 0', lineHeight: '1.7' };
 
   return (
-    <div className="print-voucher" style={{ fontFamily: 'Times New Roman, serif', fontSize: '14px', color: '#000', padding: '30px 45px', maxWidth: '720px', margin: '0 auto' }}>
+    <div className="print-voucher" style={{ fontFamily: 'Times New Roman, serif', fontSize: '14px', color: '#000', padding: '30px 45px', maxWidth: '720px', margin: '0 auto', backgroundColor: '#fff' }}>
+      
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
         <div style={{ textAlign: 'center', width: '60%' }}>
           <p style={{ fontWeight: 'bold', fontSize: '13px', margin: 0 }}>{settings.orgSubName.toUpperCase()}</p>
-          <p style={{ fontWeight: 'bold', fontSize: '13px', margin: '2px 0 0', textDecoration: 'underline' }}>{(data.unionGroupName || settings.unionGroups[0]?.name || '').toUpperCase()}</p>
+          <p style={{ fontWeight: 'bold', fontSize: '13px', margin: '2px 0 0', textDecoration: 'underline' }}>
+            {(data.unionGroupName || settings.unionGroups[0]?.name || '').toUpperCase()}
+          </p>
         </div>
         <div style={{ textAlign: 'center', width: '40%', fontSize: '12px' }}>
           <p style={{ margin: 0 }}>Mẫu: C11-TLĐ</p>
@@ -58,7 +66,7 @@ export function PrintVisitVoucher({ data }: PrintVisitVoucherProps) {
 
       {/* Date */}
       <div style={{ textAlign: 'right', margin: '24px 0 8px', fontStyle: 'italic', fontSize: '13px' }}>
-        <p style={{ margin: 0 }}>..............,Ngày......tháng......năm......</p>
+        <p style={{ margin: 0 }}>.............., Ngày......tháng......năm......</p>
       </div>
 
       {/* Signatures */}
