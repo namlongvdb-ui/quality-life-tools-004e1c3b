@@ -1,15 +1,47 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
+
 import { addTransaction, updateTransaction, getNextVoucherNo, numberToVietnameseWords, getOrgSettings } from '@/lib/finance-store';
 import { Transaction } from '@/types/finance';
 import { FileText, Save, Printer, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { PrintVoucher } from './PrintVoucher';
 import { VoucherList } from './VoucherList';
+
+
+function DepartmentCombobox({ value, onChange, options }: { value: string; onChange: (v: string) => void; options: string[] }) {
+  const [open, setOpen] = useState(false);
+  const filtered = options.filter(o => o.toLowerCase().includes(value.toLowerCase()));
+
+  return (
+    <div className="relative">
+      <Input
+        value={value}
+        onChange={e => { onChange(e.target.value); setOpen(true); }}
+        onFocus={() => setOpen(true)}
+        onBlur={() => setTimeout(() => setOpen(false), 150)}
+        placeholder="Chọn hoặc nhập đơn vị..."
+      />
+      {open && filtered.length > 0 && (
+        <div className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-md shadow-md max-h-40 overflow-auto">
+          {filtered.map(opt => (
+            <div
+              key={opt}
+              className="px-3 py-2 text-sm cursor-pointer hover:bg-accent"
+              onMouseDown={() => { onChange(opt); setOpen(false); }}
+            >
+              {opt}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 interface VoucherFormProps {
   type: 'thu' | 'chi';
@@ -162,9 +194,13 @@ export function VoucherForm({ type, onSaved, refreshKey }: VoucherFormProps) {
               <Input value={form.personName} onChange={e => setForm({ ...form, personName: e.target.value })} placeholder="Nhập họ tên..." />
             </div>
 
-            <div>
+            <div className="relative">
               <Label className="text-muted-foreground text-xs">Đơn vị</Label>
-              <Input value={form.department} onChange={e => setForm({ ...form, department: e.target.value })} placeholder="Tổ CĐ BP..." />
+              <DepartmentCombobox
+                value={form.department}
+                onChange={(val) => setForm({ ...form, department: val })}
+                options={settings.unionGroups.map(g => g.name)}
+              />
             </div>
 
             <div>
@@ -172,15 +208,9 @@ export function VoucherForm({ type, onSaved, refreshKey }: VoucherFormProps) {
               <Textarea value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} placeholder="Nội dung chi tiết..." rows={3} />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label className="text-muted-foreground text-xs">Số tiền (VNĐ)</Label>
-                <Input type="number" value={form.amount} onChange={e => setForm({ ...form, amount: e.target.value })} placeholder="0" className="text-lg font-semibold" />
-              </div>
-              <div>
-                <Label className="text-muted-foreground text-xs">Người duyệt</Label>
-                <Input value={form.approver} onChange={e => setForm({ ...form, approver: e.target.value })} />
-              </div>
+            <div>
+              <Label className="text-muted-foreground text-xs">Số tiền (VNĐ)</Label>
+              <Input type="number" value={form.amount} onChange={e => setForm({ ...form, amount: e.target.value })} placeholder="0" className="text-lg font-semibold" />
             </div>
 
             {amount > 0 && (
