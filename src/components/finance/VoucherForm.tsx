@@ -188,7 +188,11 @@ export function VoucherForm({ type, onSaved, refreshKey }: VoucherFormProps) {
               </div>
               <div className="space-y-1.5">
                 <Label className="text-muted-foreground text-xs font-medium">TK {type === 'chi' ? 'Nợ' : 'Có'}</Label>
-                <Input value={form.accountCode} onChange={e => setForm({ ...form, accountCode: e.target.value })} placeholder={settings.defaultAccountCode} className="h-10 font-mono" />
+                <AccountCodeInput
+                  value={form.accountCode}
+                  onChange={code => setForm({ ...form, accountCode: code })}
+                  placeholder={settings.defaultAccountCode || 'Chọn TK...'}
+                />
               </div>
             </div>
 
