@@ -29,11 +29,18 @@ export function PrintDetailLedger({ refreshKey }: { refreshKey?: number }) {
 
   return (
     <div style={{ fontFamily: 'Times New Roman, serif', fontSize: '12px', color: '#000', padding: '20px 25px' }}>
-      <p style={{ fontWeight: 'bold', margin: 0, fontSize: '12px' }}>{settings.orgName.toUpperCase()}</p>
-      <p style={{ fontWeight: 'bold', margin: '0 0 12px', fontSize: '12px' }}>{settings.orgSubName.toUpperCase()}</p>
+      {/* Header */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
+        <div style={{ textAlign: 'center', width: '60%' }}>
+          <p style={{ fontWeight: 'bold', fontSize: '13px', margin: 0 }}>{settings.orgName.toUpperCase()}</p>
+          <p style={{ fontWeight: 'bold', fontSize: '13px', margin: '2px 0 0', textDecoration: 'underline' }}>{settings.orgSubName.toUpperCase()}</p>
+        </div>
+        <div style={{ textAlign: 'right', width: '40%', fontSize: '12px' }}>
+          <p style={{ margin: 0 }}>Mẫu số: C41-BB</p>
+        </div>
+      </div>
 
       <div style={{ height: '16px' }}></div>
-
       <h2 style={{ textAlign: 'center', fontSize: '22px', fontWeight: 'bold', margin: '12px 0 16px', letterSpacing: '1px' }}>SỔ CHI TIẾT</h2>
 
       <table style={{ width: '100%', borderCollapse: 'collapse' }}>
