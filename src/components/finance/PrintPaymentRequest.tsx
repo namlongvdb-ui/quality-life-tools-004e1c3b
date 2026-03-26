@@ -58,9 +58,9 @@ export function PrintPaymentRequest({ data }: PrintPaymentRequestProps) {
       <div style={{ textAlign: 'center', margin: '22px 0 8px' }}>
         <h2 style={{ fontSize: '20px', fontWeight: 'bold', margin: 0, letterSpacing: '0.5px' }}>GIẤY ĐỀ NGHỊ THANH TOÁN</h2>
         <p style={{ fontStyle: 'italic', fontSize: '13px', margin: '6px 0' }}>
-          Ngày {d.getDate() || '...'} tháng {(d.getMonth() + 1) || '...'} năm {d.getFullYear() || '202...'} 
+          Ngày.....tháng......năm....... 
         </p>
-        <p style={{ fontSize: '13px', margin: '3px 0' }}>Số: {data.requestNo || '...............'}</p>
+        <p style={{ fontSize: '13px', margin: '3px 0' }}>Số:...............</p>
       </div>
 
       {/* 3. Kính gửi */}
