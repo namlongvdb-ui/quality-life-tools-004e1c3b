@@ -12,8 +12,9 @@ import {
   getStaffSettings, saveStaffSettings,
   calculateInsuranceSalary, calculateUnionFee,
 } from '@/lib/staff-store';
-import { Users, Plus, Trash2, Pencil, Save, Settings2 } from 'lucide-react';
+import { Users, Plus, Trash2, Pencil, Save, Settings2, Printer } from 'lucide-react';
 import { toast } from 'sonner';
+import { PrintStaffList } from './PrintStaffList';
 
 const emptyStaff: Omit<StaffMember, 'id'> = {
   fullName: '', department: '', position: '', birthDate: '', gender: 'nam',
@@ -82,6 +83,9 @@ export function StaffList() {
           <Users className="h-6 w-6" /> Danh sách cán bộ
         </h2>
         <div className="flex gap-2">
+          <Button variant="outline" size="sm" onClick={() => window.print()}>
+            <Printer className="h-4 w-4 mr-1" /> In danh sách
+          </Button>
           {/* Settings dialog */}
           <Dialog open={settingsOpen} onOpenChange={setSettingsOpen}>
             <DialogTrigger asChild>
@@ -225,6 +229,11 @@ export function StaffList() {
           <p>• Trần đoàn phí hiện tại: {fmt(Math.round(settings.baseSalary * 0.1))} ₫/tháng</p>
         </CardContent>
       </Card>
+
+      {/* Print view */}
+      <div className="print-only">
+        <PrintStaffList />
+      </div>
     </div>
   );
 }
