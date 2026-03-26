@@ -99,7 +99,12 @@ export function DetailLedger({ refreshKey, onSaved }: DetailLedgerProps) {
                       <TableCell className="text-center">
                         <span className={`inline-block px-2 py-0.5 rounded text-xs font-semibold ${t.class}`}>{t.label}</span>
                       </TableCell>
-                      <TableCell className="text-center font-mono text-sm">{row.accountCode}</TableCell>
+                      <TableCell className="text-center font-mono text-sm">
+                        {row.type === 'thu' ? '111' : (row.accountCode || '')}
+                      </TableCell>
+                      <TableCell className="text-center font-mono text-sm">
+                        {row.type === 'chi' ? '111' : (row.accountCode || '')}
+                      </TableCell>
                       <TableCell className="text-sm">{row.personName}</TableCell>
                       <TableCell className="text-sm truncate max-w-[10rem]">{row.department}</TableCell>
                       <TableCell>
