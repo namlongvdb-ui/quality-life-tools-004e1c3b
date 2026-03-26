@@ -1,5 +1,5 @@
 import { ViewType } from '@/types/finance';
-import { LayoutDashboard, FileInput, FileOutput, Heart, FileText, BookOpen, ClipboardList, Settings } from 'lucide-react';
+import { LayoutDashboard, FileInput, FileOutput, Heart, FileText, BookOpen, ClipboardList, Users, Settings } from 'lucide-react';
 
 interface AppSidebarProps {
   currentView: ViewType;
