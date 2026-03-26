@@ -44,10 +44,10 @@ export function PrintDetailLedger({ refreshKey }: { refreshKey?: number }) {
             <th style={headerCellStyle}>Loại</th>
             <th style={headerCellStyle}>Thu</th>
             <th style={headerCellStyle}>Chi</th>
-            <th style={headerCellStyle}>TK</th>
+            <th style={headerCellStyle}>TK Nợ</th>
+            <th style={headerCellStyle}>TK Có</th>
             <th style={headerCellStyle}>Họ tên</th>
             <th style={headerCellStyle}>Đơn vị</th>
-            <th style={headerCellStyle}>Lãnh đạo</th>
           </tr>
         </thead>
         <tbody>
@@ -60,10 +60,10 @@ export function PrintDetailLedger({ refreshKey }: { refreshKey?: number }) {
               <td style={centerCell}>{typeLabels[row.type] || row.type}</td>
               <td style={rightCell}>{row.type === 'thu' ? formatCurrency(row.amount) : ''}</td>
               <td style={rightCell}>{row.type === 'chi' ? formatCurrency(row.amount) : ''}</td>
-              <td style={centerCell}>{row.accountCode}</td>
+              <td style={centerCell}>{row.type === 'thu' ? '111' : (row.accountCode || '')}</td>
+              <td style={centerCell}>{row.type === 'chi' ? '111' : (row.accountCode || '')}</td>
               <td style={cellStyle}>{row.personName}</td>
               <td style={cellStyle}>{row.department}</td>
-              <td style={cellStyle}>{row.approver}</td>
             </tr>
           ))}
           {rows.length === 0 && (

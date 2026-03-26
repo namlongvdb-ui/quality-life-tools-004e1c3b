@@ -74,13 +74,14 @@ export function DetailLedger({ refreshKey, onSaved }: DetailLedgerProps) {
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
-                <TableRow className="bg-muted/50">
+                 <TableRow className="bg-muted/50">
                   <TableHead className="text-center w-28">Ngày CT</TableHead>
                   <TableHead className="text-center w-20">Số CT</TableHead>
                   <TableHead className="text-right w-28">Số tiền</TableHead>
                   <TableHead className="max-w-xs">Nội dung</TableHead>
                   <TableHead className="text-center w-16">Loại</TableHead>
-                  <TableHead className="text-center w-16">TK</TableHead>
+                  <TableHead className="text-center w-20">TK Nợ</TableHead>
+                  <TableHead className="text-center w-20">TK Có</TableHead>
                   <TableHead className="w-28">Họ tên</TableHead>
                   <TableHead className="w-40">Đơn vị</TableHead>
                   <TableHead className="text-center w-24">Thao tác</TableHead>
@@ -98,7 +99,12 @@ export function DetailLedger({ refreshKey, onSaved }: DetailLedgerProps) {
                       <TableCell className="text-center">
                         <span className={`inline-block px-2 py-0.5 rounded text-xs font-semibold ${t.class}`}>{t.label}</span>
                       </TableCell>
-                      <TableCell className="text-center font-mono text-sm">{row.accountCode}</TableCell>
+                      <TableCell className="text-center font-mono text-sm">
+                        {row.type === 'thu' ? '111' : (row.accountCode || '')}
+                      </TableCell>
+                      <TableCell className="text-center font-mono text-sm">
+                        {row.type === 'chi' ? '111' : (row.accountCode || '')}
+                      </TableCell>
                       <TableCell className="text-sm">{row.personName}</TableCell>
                       <TableCell className="text-sm truncate max-w-[10rem]">{row.department}</TableCell>
                       <TableCell>
@@ -116,7 +122,7 @@ export function DetailLedger({ refreshKey, onSaved }: DetailLedgerProps) {
                 })}
                 {rows.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={9} className="text-center text-muted-foreground py-10">
+                    <TableCell colSpan={10} className="text-center text-muted-foreground py-10">
                       Chưa có dữ liệu
                     </TableCell>
                   </TableRow>
