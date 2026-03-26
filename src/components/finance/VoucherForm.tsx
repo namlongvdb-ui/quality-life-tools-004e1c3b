@@ -170,7 +170,7 @@ export function VoucherForm({ type, onSaved, refreshKey }: VoucherFormProps) {
         </CardHeader>
         <CardContent className="p-6">
           <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-4 gap-4">
               <div>
                 <Label className="text-muted-foreground text-xs">Ngày</Label>
                 <Input type="date" value={form.date} onChange={e => setForm({ ...form, date: e.target.value })} />
@@ -178,6 +178,12 @@ export function VoucherForm({ type, onSaved, refreshKey }: VoucherFormProps) {
               <div>
                 <Label className="text-muted-foreground text-xs">Số CT</Label>
                 <Input value={form.voucherNo} onChange={e => setForm({ ...form, voucherNo: e.target.value })} />
+              </div>
+              <div>
+                <Label className="text-muted-foreground text-xs">
+                  TK tiền mặt ({type === 'chi' ? 'Có' : 'Nợ'})
+                </Label>
+                <Input value="111" disabled className="bg-muted font-semibold" />
               </div>
               <div>
                 <Label className="text-muted-foreground text-xs">
