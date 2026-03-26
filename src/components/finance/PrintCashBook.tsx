@@ -37,6 +37,8 @@ export function PrintCashBook({ refreshKey }: { refreshKey?: number }) {
       <p style={{ fontWeight: 'bold', margin: 0, fontSize: '13px' }}>{settings.orgName.toUpperCase()}</p>
       <p style={{ fontWeight: 'bold', margin: '0 0 12px', fontSize: '13px' }}>{settings.orgSubName.toUpperCase()}</p>
 
+      <div style={{ height: '16px' }}></div>
+
       <h2 style={{ textAlign: 'center', fontSize: '22px', fontWeight: 'bold', margin: '12px 0 4px', letterSpacing: '1px' }}>SỔ QUỸ TIỀN MẶT</h2>
       <p style={{ textAlign: 'right', fontSize: '11px', margin: '0 0 10px' }}>ĐVT: đồng</p>
 

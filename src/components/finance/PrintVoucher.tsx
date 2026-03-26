@@ -48,6 +48,8 @@ export function PrintVoucher({ type, data }: PrintVoucherProps) {
         </div>
       </div>
 
+      <div style={{ height: '16px' }}></div>
+
       {/* Title */}
       <div style={{ textAlign: 'center', margin: '18px 0 8px' }}>
         <h2 style={{ fontSize: '22px', fontWeight: 'bold', margin: 0, letterSpacing: '1px' }}>{title}</h2>

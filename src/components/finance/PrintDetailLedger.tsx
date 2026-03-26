@@ -32,6 +32,8 @@ export function PrintDetailLedger({ refreshKey }: { refreshKey?: number }) {
       <p style={{ fontWeight: 'bold', margin: 0, fontSize: '12px' }}>{settings.orgName.toUpperCase()}</p>
       <p style={{ fontWeight: 'bold', margin: '0 0 12px', fontSize: '12px' }}>{settings.orgSubName.toUpperCase()}</p>
 
+      <div style={{ height: '16px' }}></div>
+
       <h2 style={{ textAlign: 'center', fontSize: '22px', fontWeight: 'bold', margin: '12px 0 16px', letterSpacing: '1px' }}>SỔ CHI TIẾT</h2>
 
       <table style={{ width: '100%', borderCollapse: 'collapse' }}>

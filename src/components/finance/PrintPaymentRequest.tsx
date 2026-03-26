@@ -56,9 +56,6 @@ export function PrintPaymentRequest({ data }: PrintPaymentRequestProps) {
                 <p style={{ fontWeight: 'bold', fontSize: '11px', margin: '0 0 2px 0', lineHeight: '1.2' }}>
                   {settings.orgSubName.toUpperCase()}
                 </p>
-                <p style={{ fontWeight: 'bold', fontSize: '11px', margin: 0, lineHeight: '1.2' }}>
-                  PHÒNG GD CAO BẰNG
-                </p>
               </div>
             </td>
             <td style={{ width: '35%', verticalAlign: 'top', textAlign: 'right', border: 'none', padding: 0 }}>
@@ -67,6 +64,8 @@ export function PrintPaymentRequest({ data }: PrintPaymentRequestProps) {
           </tr>
         </tbody>
       </table>
+
+      <div style={{ height: '16px' }}></div>
 
       {/* 2. Tiêu đề phiếu */}
       <div style={{ textAlign: 'center', margin: '22px 0 8px' }}>
