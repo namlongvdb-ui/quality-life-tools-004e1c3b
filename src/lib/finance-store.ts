@@ -7,7 +7,6 @@ const SETTINGS_KEY = 'union-finance-settings';
 const defaultSettings: OrgSettings = {
   orgName: 'CĐ NHPT Chi nhánh KV Bắc Đông Bắc',
   orgSubName: 'Tổ CĐ Bộ phận Kế toán – Hành chính',
-  orgLine3: 'Phòng GD Cao Bằng',
   leaderName: 'Phí Quang Chiến',
   accountantName: 'Lê Thị Thu Hương',
   creatorName: 'Lê Thị Thu Hương',
