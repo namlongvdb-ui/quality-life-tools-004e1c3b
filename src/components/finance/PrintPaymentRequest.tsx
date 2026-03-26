@@ -47,11 +47,8 @@ export function PrintPaymentRequest({ data }: PrintPaymentRequestProps) {
             <td style={{ width: '35%', verticalAlign: 'top', textAlign: 'right' }}>
               <p style={{ fontWeight: 'bold', fontSize: '12px', margin: 0 }}>Mẫu số C37- HĐ</p>
             </td>
-          </tr>
-        </tbody>
-      </table>
-
-      {/* 2. Tiêu đề phiếu */}
+       </div>
+       {/* 2. Tiêu đề phiếu */}
       <div style={{ textAlign: 'center', margin: '20px 0 10px' }}>
         <h2 style={{ fontSize: '20px', fontWeight: 'bold', margin: 0 }}>GIẤY ĐỀ NGHỊ THANH TOÁN</h2>
         <p style={{ fontStyle: 'italic', fontSize: '13px', margin: '5px 0' }}>
