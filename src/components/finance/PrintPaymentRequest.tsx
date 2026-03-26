@@ -91,4 +91,62 @@ export function PrintPaymentRequest({ data }: PrintPaymentRequestProps) {
         <p style={labelStyle}>Họ và tên người đề nghị thanh toán: <span style={{ fontWeight: 500 }}>{data.requesterName || '...................................'}</span></p>
         <p style={labelStyle}>Bộ phận: <span style={{ fontWeight: 500 }}>{data.department || '...................................'}</span></p>
         <p style={labelStyle}>Nội dung thanh toán: <span style={{ fontWeight: 500 }}>{data.content || '...................................'}</span>{data.times ? ` (Lần ${data.times}).` : ''}</p>
-        <p
+        <p style={labelStyle}>
+          Số tiền: <span style={{ fontWeight: 'bold' }}>{data.amount > 0 ? `${formatCurrency(data.amount)} đ` : '.................'}</span>
+          {' '}Viết bằng chữ: <span style={{ fontStyle: 'italic', fontWeight: 'bold' }}>{amountWords}./.</span>
+        </p>
+      </div>
+
+      {/* 5. Thông tin chuyển khoản */}
+      {(data.bankAccount || data.bankAccountName || data.bankName) && (
+        <div style={{ marginTop: '15px', display: 'flex' }}>
+          <div style={{
+            marginLeft: 'auto', 
+            marginRight: '5%',
+            display: 'grid',
+            gridTemplateColumns: 'auto auto',
+            columnGap: '4px',
+            rowGap: '2px',
+            fontStyle: 'italic',
+            fontSize: '14px',
+            lineHeight: '1.5'
+          }}>
+            <div style={{ whiteSpace: 'nowrap' }}>Thông tin Chuyển khoản:</div>
+            <div style={{ whiteSpace: 'nowrap' }}>Số TK: {data.bankAccount || '...............'}</div>
+            <div></div>
+            <div style={{ whiteSpace: 'nowrap' }}>Tên TK: {data.bankAccountName || '...............'}</div>
+            <div></div>
+            <div style={{ whiteSpace: 'nowrap' }}>Tại NH: {data.bankName || '...............'}</div>
+          </div>
+        </div>
+      )}
+
+      {/* 6. Chứng từ kèm theo */}
+      <div style={{ fontStyle: 'italic', margin: '12px 0' }}>
+        <p style={{ margin: '4px 0' }}>(Kèm theo {data.attachments || '.....'} chứng từ gốc)</p>
+      </div>
+
+      {/* 7. Chữ ký */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '24px', textAlign: 'center', fontSize: '13px' }}>
+        <div style={{ width: '33%' }}>
+          <p style={{ fontWeight: 'bold', margin: '0 0 4px' }}>Người đề nghị thanh toán</p>
+          <p style={{ fontSize: '11px', fontStyle: 'italic', margin: '0 0 2px', color: '#666' }}>(Ký, họ tên)</p>
+          <p style={{ minHeight: '60px' }}></p>
+          <p style={{ fontWeight: 'bold', margin: 0 }}>{data.requesterName}</p>
+        </div>
+        <div style={{ width: '33%' }}>
+          <p style={{ fontWeight: 'bold', margin: '0 0 4px' }}>Phụ trách kế toán</p>
+          <p style={{ fontSize: '11px', fontStyle: 'italic', margin: '0 0 2px', color: '#666' }}>(Ký, họ tên)</p>
+          <p style={{ minHeight: '60px' }}></p>
+          <p style={{ fontWeight: 'bold', margin: 0 }}>{settings.accountantName}</p>
+        </div>
+        <div style={{ width: '33%' }}>
+          <p style={{ fontWeight: 'bold', margin: '0 0 4px' }}>Chủ tịch Công đoàn</p>
+          <p style={{ fontSize: '11px', fontStyle: 'italic', margin: '0 0 2px', color: '#666' }}>(Ký, họ tên)</p>
+          <p style={{ minHeight: '60px' }}></p>
+          <p style={{ fontWeight: 'bold', margin: 0 }}>{settings.unionGroups[0]?.leaderName || ''}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
