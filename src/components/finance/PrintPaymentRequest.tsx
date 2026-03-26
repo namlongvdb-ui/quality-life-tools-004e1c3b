@@ -37,32 +37,39 @@ export function PrintPaymentRequest({ data }: PrintPaymentRequestProps) {
       margin: '0 auto',
       backgroundColor: '#fff' 
     }}>
-     {/* 1. Header: Sửa lỗi dàn hàng ngang và căn chỉnh vị trí tuyệt đối */}
-<div style={{ 
-  display: 'flex', 
-  justifyContent: 'space-between', 
-  alignItems: 'flex-start', 
-  marginBottom: '15px', // Tăng khoảng cách để thoáng hơn
-  width: '100%' 
-}}>
-  {/* Khối bên trái: Tên đơn vị (Chiếm khoảng 45% chiều rộng) */}
-  <div style={{ 
-    width: '45%', 
-    display: 'flex', 
-    flexDirection: 'column', 
-    alignItems: 'center' // Căn giữa nội bộ 3 dòng để tạo hình tháp
-  }}>
-    <p style={{ fontWeight: 'bold', fontSize: '12px', margin: '0 0 2px 0', textAlign: 'center', width: '100%' }}>
-      CĐ NHPT CHI NHÁNH KV BẮC ĐÔNG BẮC
-    </p>
-    <p style={{ fontWeight: 'bold', fontSize: '11px', margin: '0 0 2px 0', textAlign: 'center', width: '100%' }}>
-      TỔ CĐ BỘ PHẬN KẾ TOÁN – HÀNH CHÍNH
-    </p>
-    <p style={{ fontWeight: 'bold', fontSize: '11px', margin: 0, textAlign: 'center', width: '100%' }}>
-      PHÒNG GD CAO BẰNG
-    </p>
-  </div>
+   {/* 1. Header: Sửa lỗi dàn hàng ngang bằng cách dùng Table để cố định vị trí */}
+<div style={{ width: '100%', marginBottom: '20px' }}>
+  <table style={{ width: '100%', borderCollapse: 'collapse', border: 'none' }}>
+    <tbody>
+      <tr>
+        {/* Cụm tên đơn vị bên trái - Chiếm 50% chiều rộng */}
+        <td style={{ width: '50%', verticalAlign: 'top', border: 'none', padding: 0 }}>
+          <div style={{ 
+            display: 'flex', 
+            flexDirection: 'column', 
+            alignItems: 'center', 
+            width: 'fit-content' 
+          }}>
+            <p style={{ fontWeight: 'bold', fontSize: '12px', margin: '0 0 2px 0', whiteSpace: 'nowrap' }}>
+              CĐ NHPT CHI NHÁNH KV BẮC ĐÔNG BẮC
+            </p>
+            <p style={{ fontWeight: 'bold', fontSize: '11px', margin: '0 0 2px 0', whiteSpace: 'nowrap' }}>
+              TỔ CĐ BỘ PHẬN KẾ TOÁN – HÀNH CHÍNH
+            </p>
+            <p style={{ fontWeight: 'bold', fontSize: '11px', margin: 0, whiteSpace: 'nowrap' }}>
+              PHÒNG GD CAO BẰNG
+            </p>
+          </div>
+        </td>
 
+        {/* Cụm mẫu số bên phải - Chiếm 50% chiều rộng */}
+        <td style={{ width: '50%', verticalAlign: 'top', textAlign: 'right', border: 'none', padding: 0 }}>
+          <p style={{ fontWeight: 'bold', fontSize: '12px', margin: 0 }}>Mẫu số C37- HĐ</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
   {/* Khối bên phải: Mẫu số (Chiếm khoảng 30% chiều rộng) */}
   <div style={{ width: '30%', textAlign: 'right', fontSize: '12px', fontWeight: 'bold' }}>
     <p style={{ margin: 0 }}>Mẫu số C37- HĐ</p>
