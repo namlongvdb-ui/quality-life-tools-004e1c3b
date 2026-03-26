@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { addTransaction, updateTransaction, getNextVoucherNo, numberToVietnameseWords, getOrgSettings } from '@/lib/finance-store';
 import { Transaction } from '@/types/finance';
 import { Heart, Printer, Save, X } from 'lucide-react';
@@ -19,10 +20,11 @@ interface VisitVoucherFormProps {
 const emptyForm = (settings: ReturnType<typeof getOrgSettings>) => ({
   date: new Date().toISOString().split('T')[0],
   voucherNo: getNextVoucherNo('tham-hoi'),
-  visitorDepartment: 'Tổ CĐ Kế toán – Hành chính',
+  visitorDepartment: settings.unionGroups[0]?.name || '',
   recipientName: '',
   reason: '',
   amount: '',
+  unionGroupName: settings.unionGroups[0]?.name || '',
 });
 
 export function VisitVoucherForm({ onSaved, refreshKey }: VisitVoucherFormProps) {
@@ -41,6 +43,7 @@ export function VisitVoucherForm({ onSaved, refreshKey }: VisitVoucherFormProps)
       recipientName: tx.recipientName || tx.personName,
       reason: tx.reason || tx.description,
       amount: tx.amount.toString(),
+      unionGroupName: tx.department || settings.unionGroups[0]?.name || '',
     });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -65,7 +68,7 @@ export function VisitVoucherForm({ onSaved, refreshKey }: VisitVoucherFormProps)
         amount,
         description: form.reason,
         personName: form.recipientName,
-        department: form.visitorDepartment,
+        department: form.unionGroupName,
         recipientName: form.recipientName,
         reason: form.reason,
       });
@@ -79,7 +82,7 @@ export function VisitVoucherForm({ onSaved, refreshKey }: VisitVoucherFormProps)
         amount,
         description: form.reason,
         personName: form.recipientName,
-        department: form.visitorDepartment,
+        department: form.unionGroupName,
         accountCode: '',
         approver: settings.unionGroups[0]?.leaderName || '',
         attachments: 0,
@@ -133,8 +136,17 @@ export function VisitVoucherForm({ onSaved, refreshKey }: VisitVoucherFormProps)
             </div>
 
             <div>
-              <Label className="text-muted-foreground text-xs">Họ và tên người thăm hỏi (đơn vị)</Label>
-              <Input value={form.visitorDepartment} onChange={e => setForm({ ...form, visitorDepartment: e.target.value })} placeholder="Tổ CĐ Kế toán – Hành chính" />
+              <Label className="text-muted-foreground text-xs">Tổ công đoàn</Label>
+              <Select value={form.unionGroupName} onValueChange={val => setForm({ ...form, unionGroupName: val, visitorDepartment: val })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Chọn tổ công đoàn..." />
+                </SelectTrigger>
+                <SelectContent>
+                  {settings.unionGroups.map(g => (
+                    <SelectItem key={g.name} value={g.name}>{g.name}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
             <div>
@@ -173,6 +185,7 @@ export function VisitVoucherForm({ onSaved, refreshKey }: VisitVoucherFormProps)
           recipientName: form.recipientName,
           reason: form.reason,
           amount,
+          unionGroupName: form.unionGroupName,
         }} />
       </div>
 

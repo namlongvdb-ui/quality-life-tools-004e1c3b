@@ -7,6 +7,7 @@ interface PrintVisitVoucherProps {
     recipientName: string;
     reason: string;
     amount: number;
+    unionGroupName?: string;
   };
 }
 
@@ -20,6 +21,10 @@ export function PrintVisitVoucher({ data }: PrintVisitVoucherProps) {
   const year = d.getFullYear();
   const amountWords = data.amount > 0 ? numberToVietnameseWords(data.amount) : 'Không đồng';
 
+  // Find the leader name for the selected union group
+  const selectedGroup = settings.unionGroups.find(g => g.name === data.unionGroupName);
+  const groupLeaderName = selectedGroup?.leaderName || settings.unionGroups[0]?.leaderName || '';
+
   const labelStyle: React.CSSProperties = { margin: '8px 0', lineHeight: '1.7' };
 
   return (
@@ -27,8 +32,8 @@ export function PrintVisitVoucher({ data }: PrintVisitVoucherProps) {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
         <div>
-          <p style={{ fontWeight: 'bold', fontSize: '13px', margin: 0 }}>{settings.orgName.toUpperCase()}</p>
           <p style={{ fontWeight: 'bold', fontSize: '13px', margin: 0 }}>{settings.orgSubName.toUpperCase()}</p>
+          <p style={{ fontWeight: 'bold', fontSize: '13px', margin: 0 }}>{(data.unionGroupName || settings.unionGroups[0]?.name || '').toUpperCase()}</p>
         </div>
         <div style={{ textAlign: 'right', fontSize: '12px' }}>
           <p style={{ margin: 0 }}>Mẫu: C11-TLĐ</p>
@@ -70,7 +75,7 @@ export function PrintVisitVoucher({ data }: PrintVisitVoucherProps) {
           <p style={{ fontWeight: 'bold', margin: '0 0 2px' }}>Tổ trưởng</p>
           <p style={{ fontSize: '11px', fontStyle: 'italic', margin: '0 0 2px', color: '#666' }}>(Ký, họ tên)</p>
           <p style={{ minHeight: '60px' }}></p>
-          <p style={{ fontWeight: 'bold', margin: 0 }}></p>
+          <p style={{ fontWeight: 'bold', margin: 0 }}>{groupLeaderName}</p>
         </div>
       </div>
     </div>
