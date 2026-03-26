@@ -85,7 +85,6 @@ export function exportFullReportExcel() {
   const opening = getOpeningBalance();
   const wb = XLSX.utils.book_new();
 
-  // Sheet 1: Tổng quan
   const totalThu = txs.filter(t => t.type === 'thu').reduce((s, t) => s + t.amount, 0);
   const totalChi = txs.filter(t => t.type === 'chi').reduce((s, t) => s + t.amount, 0);
   const totalTH = txs.filter(t => t.type === 'tham-hoi').reduce((s, t) => s + t.amount, 0);
@@ -115,7 +114,6 @@ export function exportFullReportExcel() {
   ws1['!cols'] = [{ wch: 30 }, { wch: 20 }];
   XLSX.utils.book_append_sheet(wb, ws1, 'Tổng quan');
 
-  // Sheet 2: Sổ quỹ
   let balance = opening;
   const cashRows: (string | number)[][] = [
     ['Ngày CT', 'Số CT', 'Nội dung', 'Thu', 'Chi', 'Tồn'],
@@ -132,7 +130,6 @@ export function exportFullReportExcel() {
   ws2['!cols'] = [{ wch: 14 }, { wch: 10 }, { wch: 50 }, { wch: 18 }, { wch: 18 }, { wch: 18 }];
   XLSX.utils.book_append_sheet(wb, ws2, 'Sổ Quỹ');
 
-  // Sheet 3: Chi tiết
   const detailRows: (string | number)[][] = [
     ['Ngày CT', 'Số CT', 'Loại', 'Số tiền', 'Nội dung', 'Họ tên', 'Đơn vị', 'TK', 'Lãnh đạo'],
   ];
