@@ -31,7 +31,7 @@ function formatCurrency(n: number) {
   return n.toLocaleString('vi-VN');
 }
 
-export function PrintVoucher({ type, data }: PrintVoucherProps) {
+export function PrintVoucher({ type, data, signatures = [] }: PrintVoucherProps) {
   const settings = getOrgSettings();
   const title = type === 'thu' ? 'PHIẾU THU' : 'PHIẾU CHI';
   const personLabel = type === 'thu' ? 'Họ và tên người nộp tiền' : 'Họ và tên người nhận tiền';
