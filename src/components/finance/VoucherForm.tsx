@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -11,6 +11,7 @@ import { AccountCodeInput } from './AccountCodeInput';
 import { toast } from 'sonner';
 import { PrintVoucher } from './PrintVoucher';
 import { VoucherList } from './VoucherList';
+import { supabase } from '@/integrations/supabase/client';
 
 function DepartmentCombobox({ value, onChange, options }: { value: string; onChange: (v: string) => void; options: string[] }) {
   const [open, setOpen] = useState(false);
@@ -67,8 +68,38 @@ export function VoucherForm({ type, onSaved, refreshKey }: VoucherFormProps) {
 
   const [form, setForm] = useState(() => emptyForm(type, settings));
   const [editingTx, setEditingTx] = useState<Transaction | null>(null);
+  const [printSignatures, setPrintSignatures] = useState<{ signer_name: string; role: string; signed_at: string }[]>([]);
 
   const amount = parseInt(form.amount) || 0;
+
+  const fetchSignaturesForPrint = useCallback(async (voucherNo: string) => {
+    const { data: sigs } = await supabase
+      .from('voucher_signatures')
+      .select('signer_id, signed_at')
+      .eq('voucher_id', voucherNo)
+      .eq('voucher_type', type);
+
+    if (!sigs || sigs.length === 0) {
+      setPrintSignatures([]);
+      return;
+    }
+
+    const signerIds = sigs.map(s => s.signer_id);
+    const [profilesRes, rolesRes] = await Promise.all([
+      supabase.from('profiles').select('user_id, full_name').in('user_id', signerIds),
+      supabase.from('user_roles').select('user_id, role').in('user_id', signerIds),
+    ]);
+
+    setPrintSignatures(sigs.map(s => {
+      const profile = profilesRes.data?.find(p => p.user_id === s.signer_id);
+      const role = rolesRes.data?.find(r => r.user_id === s.signer_id);
+      return {
+        signer_name: profile?.full_name || 'Unknown',
+        role: role?.role || '',
+        signed_at: s.signed_at,
+      };
+    }));
+  }, [type]);
 
   useEffect(() => {
     setForm(emptyForm(type, settings));
@@ -151,7 +182,10 @@ export function VoucherForm({ type, onSaved, refreshKey }: VoucherFormProps) {
                 <X className="h-4 w-4 mr-1" /> Hủy sửa
               </Button>
             )}
-            <Button type="button" variant="outline" size="sm" onClick={() => window.print()} className="bg-background/80 backdrop-blur-sm">
+            <Button type="button" variant="outline" size="sm" onClick={async () => {
+              await fetchSignaturesForPrint(form.voucherNo);
+              setTimeout(() => window.print(), 200);
+            }} className="bg-background/80 backdrop-blur-sm">
               <Printer className="h-4 w-4 mr-1" /> In phiếu
             </Button>
           </div>
@@ -261,6 +295,7 @@ export function VoucherForm({ type, onSaved, refreshKey }: VoucherFormProps) {
             approver: form.approver,
             attachments: form.attachments,
           }}
+          signatures={printSignatures}
         />
       </div>
 

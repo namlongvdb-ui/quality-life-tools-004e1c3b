@@ -1,5 +1,11 @@
 import { numberToVietnameseWords, getOrgSettings } from '@/lib/finance-store';
 
+interface SignatureDisplay {
+  signer_name: string;
+  role: string;
+  signed_at: string;
+}
+
 interface PrintVoucherProps {
   type: 'thu' | 'chi';
   data: {
@@ -13,6 +19,7 @@ interface PrintVoucherProps {
     approver: string;
     attachments: number;
   };
+  signatures?: SignatureDisplay[];
 }
 
 function formatDateParts(dateStr: string) {
@@ -24,7 +31,7 @@ function formatCurrency(n: number) {
   return n.toLocaleString('vi-VN');
 }
 
-export function PrintVoucher({ type, data }: PrintVoucherProps) {
+export function PrintVoucher({ type, data, signatures = [] }: PrintVoucherProps) {
   const settings = getOrgSettings();
   const title = type === 'thu' ? 'PHIẾU THU' : 'PHIẾU CHI';
   const personLabel = type === 'thu' ? 'Họ và tên người nộp tiền' : 'Họ và tên người nhận tiền';
@@ -74,6 +81,24 @@ export function PrintVoucher({ type, data }: PrintVoucherProps) {
         <p style={labelStyle}>Viết bằng chữ: <span style={{ fontStyle: 'italic', fontWeight: 'bold' }}>{amountWords}</span></p>
         <p style={labelStyle}>Chứng từ kèm theo: ................ là chứng từ gốc</p>
       </div>
+
+      {/* Digital Signature Status */}
+      {signatures.length > 0 && (
+        <div style={{ margin: '16px 0 8px', padding: '8px 12px', border: '1px solid #ccc', borderRadius: '4px', fontSize: '12px' }}>
+          <p style={{ fontWeight: 'bold', margin: '0 0 6px', fontSize: '13px' }}>🔏 Trạng thái chữ ký số:</p>
+          {signatures.map((sig, idx) => (
+            <p key={idx} style={{ margin: '3px 0', paddingLeft: '8px' }}>
+              ✅ <strong>{sig.signer_name}</strong>
+              {' - '}
+              {sig.role === 'lanh_dao' ? 'Lãnh đạo' : sig.role === 'ke_toan_truong' ? 'Phụ trách kế toán' : sig.role}
+              {' - '}
+              <span style={{ fontStyle: 'italic', color: '#555' }}>
+                {new Date(sig.signed_at).toLocaleString('vi-VN')}
+              </span>
+            </p>
+          ))}
+        </div>
+      )}
 
       {/* Signatures - Top */}
       <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '24px', textAlign: 'center', fontSize: '13px' }}>

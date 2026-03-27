@@ -1,5 +1,5 @@
 import { ViewType } from '@/types/finance';
-import { LayoutDashboard, FileInput, FileOutput, Heart, FileText, BookOpen, ClipboardList, Users, Settings, BookOpenCheck, Shield, LogOut } from 'lucide-react';
+import { LayoutDashboard, FileInput, FileOutput, Heart, FileText, BookOpen, ClipboardList, Users, Settings, BookOpenCheck, Shield, LogOut, KeyRound } from 'lucide-react';
 import { getActiveYear, isYearClosed } from '@/lib/finance-store';
 import { useAuth } from '@/hooks/useAuth';
 
@@ -20,6 +20,7 @@ const menuItems: { view: ViewType; label: string; icon: React.ElementType; admin
   { view: 'danh-sach-can-bo', label: 'Danh Sách Cán Bộ', icon: Users },
   { view: 'khoa-so', label: 'Khóa Sổ & Kết Chuyển', icon: BookOpenCheck },
   { view: 'cai-dat', label: 'Cài đặt', icon: Settings },
+  { view: 'doi-mat-khau', label: 'Đổi mật khẩu', icon: KeyRound },
   { view: 'quan-tri', label: 'Quản trị hệ thống', icon: Shield, adminOnly: true },
 ];
 
