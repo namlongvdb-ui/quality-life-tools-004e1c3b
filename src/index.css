@@ -108,6 +108,17 @@
 
   main > *:has(.print-only) {
     display: block !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    gap: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+  }
+
+  /* Remove space-y gaps in print wrapper */
+  main > *:has(.print-only) > * {
+    margin-top: 0 !important;
   }
 
   main > *:has(.print-only) > *:not(.print-only) {
@@ -117,6 +128,7 @@
   main {
     padding: 0 !important;
     margin: 0 !important;
+    overflow: visible !important;
   }
 
   .print-only {
@@ -124,6 +136,8 @@
     position: static !important;
     width: 100% !important;
     background: white !important;
+    padding: 0 !important;
+    margin: 0 !important;
   }
 
   /* Landscape mode for staff list and fee list */
