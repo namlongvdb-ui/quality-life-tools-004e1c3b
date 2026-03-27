@@ -169,8 +169,8 @@ export function AdminPanel() {
                 <Input value={newFullName} onChange={e => setNewFullName(e.target.value)} placeholder="Nguyễn Văn A" />
               </div>
               <div className="space-y-2">
-                <Label>Email</Label>
-                <Input type="email" value={newEmail} onChange={e => setNewEmail(e.target.value)} placeholder="user@example.com" />
+                <Label>Tên đăng nhập</Label>
+                <Input value={newUsername} onChange={e => setNewUsername(e.target.value)} placeholder="nguyenvana" />
               </div>
               <div className="space-y-2">
                 <Label>Mật khẩu</Label>
