@@ -41,6 +41,10 @@ export function AppSidebar({ currentView, onViewChange, refreshKey }: AppSidebar
         <p className="text-[10px] uppercase tracking-widest text-blue-200 mt-1 font-semibold opacity-80">
           Công Đoàn NHPT Chi nhánh
         </p>
+        <div className="mt-2 flex items-center gap-1.5 text-xs">
+          <span className={`inline-block w-2 h-2 rounded-full ${closed ? 'bg-red-400' : 'bg-green-400'}`}></span>
+          <span className="text-blue-100">Năm {activeYear} {closed ? '(Đã khóa)' : ''}</span>
+        </div>
       </div>
 
       {/* Navigation */}
