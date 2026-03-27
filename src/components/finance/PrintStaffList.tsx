@@ -189,11 +189,20 @@ export function PrintMonthlyFee({ month, year }: PrintMonthlyFeeProps) {
 
   return (
     <div className="print-content" style={{ fontFamily: "'Times New Roman', Times, serif", fontSize: '12px', color: '#000' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
+        <div style={{ textAlign: 'center', width: '45%' }}>
+          <p style={{ fontSize: '12px', fontWeight: 'bold', textTransform: 'uppercase' }}>{orgSettings.orgName}</p>
+          <p style={{ fontSize: '12px', fontWeight: 'bold', textTransform: 'uppercase' }}>{orgSettings.orgSubName}</p>
+          <div style={{ width: '60px', borderBottom: '2px solid #000', margin: '6px auto' }}></div>
+        </div>
+        <div style={{ textAlign: 'center', width: '45%' }}>
+          <p style={{ fontSize: '12px', fontWeight: 'bold', textTransform: 'uppercase' }}>CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</p>
+          <p style={{ fontSize: '12px', fontWeight: 'bold' }}>Độc lập - Tự do - Hạnh phúc</p>
+          <div style={{ width: '120px', borderBottom: '2px solid #000', margin: '6px auto' }}></div>
+        </div>
+      </div>
       <div style={{ textAlign: 'center', marginBottom: '16px' }}>
-        <p style={{ fontSize: '12px', fontWeight: 'bold', textTransform: 'uppercase' }}>{orgSettings.orgName}</p>
-        <p style={{ fontSize: '12px', fontWeight: 'bold', textTransform: 'uppercase' }}>{orgSettings.orgSubName}</p>
-        <div style={{ width: '60px', borderBottom: '2px solid #000', margin: '6px auto' }}></div>
-        <p style={{ fontSize: '14px', fontWeight: 'bold', textTransform: 'uppercase', marginTop: '12px' }}>
+        <p style={{ fontSize: '14px', fontWeight: 'bold', textTransform: 'uppercase' }}>
           DANH SÁCH THU ĐOÀN PHÍ CÔNG ĐOÀN
         </p>
         <p style={{ fontSize: '12px', fontWeight: 'bold', marginTop: '4px' }}>
