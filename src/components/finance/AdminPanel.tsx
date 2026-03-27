@@ -88,12 +88,12 @@ export function AdminPanel() {
   useEffect(() => { fetchUsers(); }, []);
 
   const handleCreateUser = async () => {
-    if (!newEmail || !newPassword || !newFullName || !newRole) return;
+    if (!newUsername || !newPassword || !newFullName || !newRole) return;
     setCreating(true);
 
     try {
       const { data, error } = await supabase.functions.invoke('admin-create-user', {
-        body: { email: newEmail, password: newPassword, full_name: newFullName, role: newRole }
+        body: { username: newUsername, password: newPassword, full_name: newFullName, role: newRole }
       });
 
       if (error) throw error;
