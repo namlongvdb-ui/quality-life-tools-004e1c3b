@@ -1,6 +1,7 @@
 import { ViewType } from '@/types/finance';
-import { LayoutDashboard, FileInput, FileOutput, Heart, FileText, BookOpen, ClipboardList, Users, Settings, BookOpenCheck } from 'lucide-react';
+import { LayoutDashboard, FileInput, FileOutput, Heart, FileText, BookOpen, ClipboardList, Users, Settings, BookOpenCheck, Shield, LogOut } from 'lucide-react';
 import { getActiveYear, isYearClosed } from '@/lib/finance-store';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface AppSidebarProps {
   currentView: ViewType;
@@ -8,7 +9,7 @@ interface AppSidebarProps {
   refreshKey?: number;
 }
 
-const menuItems: { view: ViewType; label: string; icon: React.ElementType }[] = [
+const menuItems: { view: ViewType; label: string; icon: React.ElementType; adminOnly?: boolean }[] = [
   { view: 'dashboard', label: 'Tổng quan', icon: LayoutDashboard },
   { view: 'phieu-tham-hoi', label: 'Phiếu Thăm Hỏi', icon: Heart },
   { view: 'de-nghi-thanh-toan', label: 'Đề Nghị Thanh Toán', icon: FileText },
@@ -18,6 +19,7 @@ const menuItems: { view: ViewType; label: string; icon: React.ElementType }[] = 
   { view: 'so-chi-tiet', label: 'Sổ Chi Tiết', icon: ClipboardList },
   { view: 'danh-sach-can-bo', label: 'Danh Sách Cán Bộ', icon: Users },
   { view: 'khoa-so', label: 'Khóa Sổ & Kết Chuyển', icon: BookOpenCheck },
+  { view: 'quan-tri', label: 'Quản Trị Người Dùng', icon: Shield, adminOnly: true },
   { view: 'cai-dat', label: 'Cài đặt', icon: Settings },
 ];
 
