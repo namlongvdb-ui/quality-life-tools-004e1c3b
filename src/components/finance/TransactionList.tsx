@@ -176,6 +176,20 @@ export function TransactionList({ type, title, personLabel, onChanged, refreshKe
                             {formatCurrency(tx.amount)} ₫
                           </span>
                         </TableCell>
+                        {isVoucher && (
+                          <TableCell onClick={e => e.stopPropagation()}>
+                            <VoucherSignatureStatus transaction={tx} voucherType={type as 'thu' | 'chi'} key={`sig-${tx.id}-${sigRefreshKey}`} />
+                          </TableCell>
+                        )}
+                        {isVoucher && (
+                          <TableCell onClick={e => e.stopPropagation()}>
+                            <SignVoucherButton
+                              transaction={tx}
+                              voucherType={type as 'thu' | 'chi'}
+                              onSigned={() => setSigRefreshKey(k => k + 1)}
+                            />
+                          </TableCell>
+                        )}
                         <TableCell>
                           <div className="flex gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
                             <Button
