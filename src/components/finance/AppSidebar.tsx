@@ -21,7 +21,9 @@ const menuItems: { view: ViewType; label: string; icon: React.ElementType }[] = 
   { view: 'cai-dat', label: 'Cài đặt', icon: Settings },
 ];
 
-export function AppSidebar({ currentView, onViewChange }: AppSidebarProps) {
+export function AppSidebar({ currentView, onViewChange, refreshKey }: AppSidebarProps) {
+  const activeYear = getActiveYear();
+  const closed = isYearClosed(activeYear);
   // Mã màu xanh BIDV (Thường là #0056a2 hoặc tương đương trong hệ thống nhận diện)
   const bidvBlue = "#005BA1"; 
   const bidvLightBlue = "#0071C5";
