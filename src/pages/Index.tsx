@@ -9,6 +9,7 @@ import { CashBook } from '@/components/finance/CashBook';
 import { DetailLedger } from '@/components/finance/DetailLedger';
 import { SettingsForm } from '@/components/finance/SettingsForm';
 import { StaffList } from '@/components/finance/StaffList';
+import { YearClosing } from '@/components/finance/YearClosing';
 
 const Index = () => {
   const [currentView, setCurrentView] = useState<ViewType>('dashboard');
@@ -20,7 +21,7 @@ const Index = () => {
 
   return (
     <div className="flex min-h-screen bg-background">
-      <AppSidebar currentView={currentView} onViewChange={setCurrentView} />
+      <AppSidebar currentView={currentView} onViewChange={setCurrentView} refreshKey={refreshKey} />
       <main className="flex-1 p-6 overflow-auto">
         {currentView === 'dashboard' && <Dashboard refreshKey={refreshKey} />}
         {currentView === 'phieu-tham-hoi' && <VisitVoucherForm onSaved={handleSaved} refreshKey={refreshKey} />}
@@ -30,6 +31,7 @@ const Index = () => {
         {currentView === 'so-quy' && <CashBook refreshKey={refreshKey} />}
         {currentView === 'so-chi-tiet' && <DetailLedger refreshKey={refreshKey} onSaved={handleSaved} />}
         {currentView === 'danh-sach-can-bo' && <StaffList />}
+        {currentView === 'khoa-so' && <YearClosing onYearChanged={handleSaved} />}
         {currentView === 'cai-dat' && <SettingsForm onSaved={handleSaved} />}
       </main>
     </div>

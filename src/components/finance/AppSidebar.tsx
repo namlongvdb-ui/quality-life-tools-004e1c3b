@@ -1,9 +1,11 @@
 import { ViewType } from '@/types/finance';
-import { LayoutDashboard, FileInput, FileOutput, Heart, FileText, BookOpen, ClipboardList, Users, Settings } from 'lucide-react';
+import { LayoutDashboard, FileInput, FileOutput, Heart, FileText, BookOpen, ClipboardList, Users, Settings, BookOpenCheck } from 'lucide-react';
+import { getActiveYear, isYearClosed } from '@/lib/finance-store';
 
 interface AppSidebarProps {
   currentView: ViewType;
   onViewChange: (view: ViewType) => void;
+  refreshKey?: number;
 }
 
 const menuItems: { view: ViewType; label: string; icon: React.ElementType }[] = [
@@ -15,10 +17,13 @@ const menuItems: { view: ViewType; label: string; icon: React.ElementType }[] = 
   { view: 'so-quy', label: 'Sổ Quỹ', icon: BookOpen },
   { view: 'so-chi-tiet', label: 'Sổ Chi Tiết', icon: ClipboardList },
   { view: 'danh-sach-can-bo', label: 'Danh Sách Cán Bộ', icon: Users },
+  { view: 'khoa-so', label: 'Khóa Sổ & Kết Chuyển', icon: BookOpenCheck },
   { view: 'cai-dat', label: 'Cài đặt', icon: Settings },
 ];
 
-export function AppSidebar({ currentView, onViewChange }: AppSidebarProps) {
+export function AppSidebar({ currentView, onViewChange, refreshKey }: AppSidebarProps) {
+  const activeYear = getActiveYear();
+  const closed = isYearClosed(activeYear);
   // Mã màu xanh BIDV (Thường là #0056a2 hoặc tương đương trong hệ thống nhận diện)
   const bidvBlue = "#005BA1"; 
   const bidvLightBlue = "#0071C5";
@@ -36,6 +41,10 @@ export function AppSidebar({ currentView, onViewChange }: AppSidebarProps) {
         <p className="text-[10px] uppercase tracking-widest text-blue-200 mt-1 font-semibold opacity-80">
           Công Đoàn NHPT Chi nhánh
         </p>
+        <div className="mt-2 flex items-center gap-1.5 text-xs">
+          <span className={`inline-block w-2 h-2 rounded-full ${closed ? 'bg-red-400' : 'bg-green-400'}`}></span>
+          <span className="text-blue-100">Năm {activeYear} {closed ? '(Đã khóa)' : ''}</span>
+        </div>
       </div>
 
       {/* Navigation */}
