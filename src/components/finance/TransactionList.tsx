@@ -9,6 +9,7 @@ import { getTransactions, deleteTransaction } from '@/lib/finance-store';
 import { Transaction } from '@/types/finance';
 import { Search, Trash2, Pencil, FileText, X, ChevronDown, ChevronUp, List } from 'lucide-react';
 import { toast } from 'sonner';
+import { VoucherSignatureStatus, SignVoucherButton } from './VoucherSignature';
 
 interface TransactionListProps {
   type: 'thu' | 'chi' | 'tham-hoi' | 'de-nghi';
@@ -31,6 +32,9 @@ function formatDate(dateStr: string) {
 export function TransactionList({ type, title, personLabel, onChanged, refreshKey, onSelectForEdit }: TransactionListProps) {
   const [search, setSearch] = useState('');
   const [isOpen, setIsOpen] = useState(false);
+  const [sigRefreshKey, setSigRefreshKey] = useState(0);
+
+  const isVoucher = type === 'thu' || type === 'chi';
 
   const transactions = useMemo(() => {
     return getTransactions().filter(t => t.type === type);
@@ -141,6 +145,8 @@ export function TransactionList({ type, title, personLabel, onChanged, refreshKe
                       <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Nội dung</TableHead>
                       <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">{personLabel || 'Họ tên'}</TableHead>
                       <TableHead className="text-right text-xs font-semibold text-muted-foreground uppercase tracking-wider pr-4">Số tiền</TableHead>
+                      {isVoucher && <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Chữ ký</TableHead>}
+                      {isVoucher && <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Ký duyệt</TableHead>}
                       <TableHead className="w-[80px]"></TableHead>
                     </TableRow>
                   </TableHeader>
@@ -170,6 +176,20 @@ export function TransactionList({ type, title, personLabel, onChanged, refreshKe
                             {formatCurrency(tx.amount)} ₫
                           </span>
                         </TableCell>
+                        {isVoucher && (
+                          <TableCell onClick={e => e.stopPropagation()}>
+                            <VoucherSignatureStatus transaction={tx} voucherType={type as 'thu' | 'chi'} key={`sig-${tx.id}-${sigRefreshKey}`} />
+                          </TableCell>
+                        )}
+                        {isVoucher && (
+                          <TableCell onClick={e => e.stopPropagation()}>
+                            <SignVoucherButton
+                              transaction={tx}
+                              voucherType={type as 'thu' | 'chi'}
+                              onSigned={() => setSigRefreshKey(k => k + 1)}
+                            />
+                          </TableCell>
+                        )}
                         <TableCell>
                           <div className="flex gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
                             <Button
