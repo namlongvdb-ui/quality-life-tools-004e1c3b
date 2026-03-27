@@ -1,5 +1,11 @@
 import { numberToVietnameseWords, getOrgSettings } from '@/lib/finance-store';
 
+interface SignatureDisplay {
+  signer_name: string;
+  role: string;
+  signed_at: string;
+}
+
 interface PrintVoucherProps {
   type: 'thu' | 'chi';
   data: {
@@ -13,6 +19,7 @@ interface PrintVoucherProps {
     approver: string;
     attachments: number;
   };
+  signatures?: SignatureDisplay[];
 }
 
 function formatDateParts(dateStr: string) {
