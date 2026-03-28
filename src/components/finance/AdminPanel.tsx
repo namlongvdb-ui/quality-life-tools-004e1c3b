@@ -75,6 +75,7 @@ export function AdminPanel() {
           username: p.username,
           roles: [],
           has_signature: false,
+          is_banned: false,
         });
       });
 
