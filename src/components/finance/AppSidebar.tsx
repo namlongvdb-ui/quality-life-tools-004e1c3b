@@ -21,6 +21,7 @@ const menuItems: { view: ViewType; label: string; icon: React.ElementType; admin
   { view: 'khoa-so', label: 'Khóa Sổ & Kết Chuyển', icon: BookOpenCheck },
   { view: 'cai-dat', label: 'Cài đặt', icon: Settings },
   { view: 'doi-mat-khau', label: 'Đổi mật khẩu', icon: KeyRound },
+  { view: 'lich-su-ky', label: 'Lịch sử ký duyệt', icon: History },
   { view: 'quan-tri', label: 'Quản trị hệ thống', icon: Shield, adminOnly: true },
 ];
 
