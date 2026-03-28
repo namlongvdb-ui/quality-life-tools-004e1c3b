@@ -264,16 +264,26 @@ export function AdminPanel() {
                       )}
                     </TableCell>
                     <TableCell>
-                      {(u.roles.includes('lanh_dao') || u.roles.includes('ke_toan_truong')) && (
+                      <div className="flex gap-1 flex-wrap">
+                        {(u.roles.includes('lanh_dao') || u.roles.includes('ke_toan_truong')) && (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => handleGenerateSignature(u.user_id, u.full_name)}
+                          >
+                            <Key className="w-3 h-3 mr-1" />
+                            {u.has_signature ? 'Tạo lại khóa' : 'Tạo chữ ký số'}
+                          </Button>
+                        )}
                         <Button
                           size="sm"
                           variant="outline"
-                          onClick={() => handleGenerateSignature(u.user_id, u.full_name)}
+                          onClick={() => { setResetTarget({ user_id: u.user_id, full_name: u.full_name }); setResetDialogOpen(true); }}
                         >
-                          <Key className="w-3 h-3 mr-1" />
-                          {u.has_signature ? 'Tạo lại khóa' : 'Tạo chữ ký số'}
+                          <RotateCcw className="w-3 h-3 mr-1" />
+                          Reset MK
                         </Button>
-                      )}
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -282,6 +292,31 @@ export function AdminPanel() {
           )}
         </CardContent>
       </Card>
+
+      <Dialog open={resetDialogOpen} onOpenChange={setResetDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Đặt lại mật khẩu</DialogTitle>
+            <DialogDescription>
+              Đặt mật khẩu mới cho: <strong>{resetTarget?.full_name}</strong>
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label>Mật khẩu mới</Label>
+              <Input
+                type="password"
+                value={resetPassword}
+                onChange={e => setResetPassword(e.target.value)}
+                placeholder="Tối thiểu 6 ký tự"
+              />
+            </div>
+            <Button onClick={handleResetPassword} disabled={resetting || resetPassword.length < 6} className="w-full">
+              {resetting ? 'Đang xử lý...' : 'Đặt lại mật khẩu'}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
