@@ -23,6 +23,7 @@ interface UserWithRole {
   username: string | null;
   roles: AppRole[];
   has_signature: boolean;
+  is_banned: boolean;
 }
 
 const ROLE_LABELS: Record<AppRole, string> = {
