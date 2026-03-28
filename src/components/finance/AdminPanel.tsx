@@ -11,7 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
 import { generateRSAKeyPair, storePrivateKey } from '@/lib/crypto-utils';
-import { UserPlus, Key, Shield, Users } from 'lucide-react';
+import { UserPlus, Key, Shield, Users, RotateCcw } from 'lucide-react';
 import type { Database } from '@/integrations/supabase/types';
 
 type AppRole = Database['public']['Enums']['app_role'];
@@ -44,6 +44,10 @@ export function AdminPanel() {
   const [users, setUsers] = useState<UserWithRole[]>([]);
   const [loading, setLoading] = useState(true);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
+  const [resetDialogOpen, setResetDialogOpen] = useState(false);
+  const [resetTarget, setResetTarget] = useState<{ user_id: string; full_name: string } | null>(null);
+  const [resetPassword, setResetPassword] = useState('');
+  const [resetting, setResetting] = useState(false);
   const [newUsername, setNewUsername] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [newFullName, setNewFullName] = useState('');
@@ -112,11 +116,29 @@ export function AdminPanel() {
     setCreating(false);
   };
 
+  const handleResetPassword = async () => {
+    if (!resetTarget || !resetPassword) return;
+    setResetting(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('admin-reset-password', {
+        body: { user_id: resetTarget.user_id, new_password: resetPassword }
+      });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      toast({ title: 'Thành công', description: `Đã đặt lại mật khẩu cho ${resetTarget.full_name}` });
+      setResetDialogOpen(false);
+      setResetPassword('');
+      setResetTarget(null);
+    } catch (err: any) {
+      toast({ title: 'Lỗi', description: err.message, variant: 'destructive' });
+    }
+    setResetting(false);
+  };
+
   const handleGenerateSignature = async (targetUserId: string, targetName: string) => {
     try {
       const { publicKey, privateKey } = await generateRSAKeyPair();
 
-      // Save public key to database
       const { error } = await supabase.from('digital_signatures').upsert({
         user_id: targetUserId,
         public_key: publicKey,
@@ -126,13 +148,11 @@ export function AdminPanel() {
 
       if (error) throw error;
 
-      // Store private key in localStorage temporarily for the admin to deliver
-      // In production, this should be delivered securely to the user
       storePrivateKey(targetUserId, privateKey);
 
       toast({
         title: 'Đã tạo chữ ký số',
-        description: `Cặp khóa RSA đã được tạo cho ${targetName}. Khóa bí mật đã được lưu tạm trong trình duyệt. Khi ${targetName} đăng nhập trên máy này, khóa sẽ được chuyển sang tài khoản của họ.`,
+        description: `Cặp khóa RSA đã được tạo cho ${targetName}. Khóa bí mật đã được lưu tạm trong trình duyệt.`,
       });
 
       fetchUsers();
@@ -244,16 +264,26 @@ export function AdminPanel() {
                       )}
                     </TableCell>
                     <TableCell>
-                      {(u.roles.includes('lanh_dao') || u.roles.includes('ke_toan_truong')) && (
+                      <div className="flex gap-1 flex-wrap">
+                        {(u.roles.includes('lanh_dao') || u.roles.includes('ke_toan_truong')) && (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => handleGenerateSignature(u.user_id, u.full_name)}
+                          >
+                            <Key className="w-3 h-3 mr-1" />
+                            {u.has_signature ? 'Tạo lại khóa' : 'Tạo chữ ký số'}
+                          </Button>
+                        )}
                         <Button
                           size="sm"
                           variant="outline"
-                          onClick={() => handleGenerateSignature(u.user_id, u.full_name)}
+                          onClick={() => { setResetTarget({ user_id: u.user_id, full_name: u.full_name }); setResetDialogOpen(true); }}
                         >
-                          <Key className="w-3 h-3 mr-1" />
-                          {u.has_signature ? 'Tạo lại khóa' : 'Tạo chữ ký số'}
+                          <RotateCcw className="w-3 h-3 mr-1" />
+                          Reset MK
                         </Button>
-                      )}
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -262,6 +292,31 @@ export function AdminPanel() {
           )}
         </CardContent>
       </Card>
+
+      <Dialog open={resetDialogOpen} onOpenChange={setResetDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Đặt lại mật khẩu</DialogTitle>
+            <DialogDescription>
+              Đặt mật khẩu mới cho: <strong>{resetTarget?.full_name}</strong>
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label>Mật khẩu mới</Label>
+              <Input
+                type="password"
+                value={resetPassword}
+                onChange={e => setResetPassword(e.target.value)}
+                placeholder="Tối thiểu 6 ký tự"
+              />
+            </div>
+            <Button onClick={handleResetPassword} disabled={resetting || resetPassword.length < 6} className="w-full">
+              {resetting ? 'Đang xử lý...' : 'Đặt lại mật khẩu'}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
