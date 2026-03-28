@@ -12,6 +12,7 @@ import { StaffList } from '@/components/finance/StaffList';
 import { YearClosing } from '@/components/finance/YearClosing';
 import { AdminPanel } from '@/components/finance/AdminPanel';
 import { ChangePasswordForm } from '@/components/finance/ChangePasswordForm';
+import { SignatureHistory } from '@/components/finance/SignatureHistory';
 import { useAuth } from '@/hooks/useAuth';
 
 const Index = () => {
@@ -38,6 +39,7 @@ const Index = () => {
         {currentView === 'khoa-so' && <YearClosing onYearChanged={handleSaved} />}
         {currentView === 'cai-dat' && <SettingsForm onSaved={handleSaved} />}
         {currentView === 'doi-mat-khau' && <ChangePasswordForm />}
+        {currentView === 'lich-su-ky' && <SignatureHistory />}
         {currentView === 'quan-tri' && isAdmin && <AdminPanel />}
       </main>
     </div>
