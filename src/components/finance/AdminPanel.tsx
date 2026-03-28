@@ -140,6 +140,24 @@ export function AdminPanel() {
     setResetting(false);
   };
 
+  const handleManageUser = async (targetUserId: string, targetName: string, action: 'disable' | 'enable' | 'delete') => {
+    setManaging(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('admin-manage-user', {
+        body: { user_id: targetUserId, action }
+      });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      const msgs: Record<string, string> = { disable: 'Đã vô hiệu hoá', enable: 'Đã kích hoạt lại', delete: 'Đã xoá' };
+      toast({ title: 'Thành công', description: `${msgs[action]} tài khoản ${targetName}` });
+      setDeleteTarget(null);
+      fetchUsers();
+    } catch (err: any) {
+      toast({ title: 'Lỗi', description: err.message, variant: 'destructive' });
+    }
+    setManaging(false);
+  };
+
   const handleGenerateSignature = async (targetUserId: string, targetName: string) => {
     try {
       const { publicKey, privateKey } = await generateRSAKeyPair();
