@@ -1,7 +1,7 @@
 import { supabase } from '@/integrations/supabase/client';
 
 // Get user IDs by role
-export async function getUserIdsByRole(role: 'admin' | 'lanh_dao' | 'nguoi_lap'): Promise<string[]> {
+export async function getUserIdsByRole(role: 'admin' | 'lanh_dao' | 'ke_toan' | 'nguoi_lap'): Promise<string[]> {
   const { data } = await supabase
     .from('user_roles')
     .select('user_id')
@@ -25,10 +25,14 @@ export async function notifyLeader(
   voucherLabel: string,
   creatorName: string
 ) {
-  const leaderIds = await getUserIdsByRole('lanh_dao');
-  if (leaderIds.length === 0) return;
+  const [leaderIds, accountantIds] = await Promise.all([
+    getUserIdsByRole('lanh_dao'),
+    getUserIdsByRole('ke_toan'),
+  ]);
+  const signerIds = [...new Set([...leaderIds, ...accountantIds])];
+  if (signerIds.length === 0) return;
 
-  const notifications = leaderIds.map(userId => ({
+  const notifications = signerIds.map(userId => ({
     user_id: userId,
     type: 'sign_request' as const,
     title: 'Chứng từ mới cần ký duyệt',
@@ -92,11 +96,15 @@ export async function getSigningStep(voucherId: string): Promise<'pending' | 'fu
 
   if (!sigs || sigs.length === 0) return 'pending';
 
-  const signerIds = new Set(sigs.map(s => s.signer_id));
-  const leaderIds = await getUserIdsByRole('lanh_dao');
-  const leaderSigned = leaderIds.some(id => signerIds.has(id));
+  const signerIdsSet = new Set(sigs.map(s => s.signer_id));
+  const [leaderIds, accountantIds] = await Promise.all([
+    getUserIdsByRole('lanh_dao'),
+    getUserIdsByRole('ke_toan'),
+  ]);
+  const allSignerRoleIds = [...leaderIds, ...accountantIds];
+  const signerSigned = allSignerRoleIds.some(id => signerIdsSet.has(id));
 
-  if (leaderSigned) return 'fully_signed';
+  if (signerSigned) return 'fully_signed';
   return 'pending';
 }
 

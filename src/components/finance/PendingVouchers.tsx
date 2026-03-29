@@ -34,7 +34,7 @@ export function PendingVouchers() {
   const [password, setPassword] = useState('');
   const [signing, setSigning] = useState(false);
 
-  const isLeader = hasRole('lanh_dao');
+  const isLeader = hasRole('lanh_dao') || hasRole('ke_toan');
 
   const fetchPending = useCallback(async () => {
     setLoading(true);

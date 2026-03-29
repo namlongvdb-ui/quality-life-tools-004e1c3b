@@ -23,6 +23,7 @@ const TYPE_LABELS: Record<string, string> = {
 
 const ROLE_LABELS: Record<string, string> = {
   lanh_dao: 'Lãnh đạo',
+  ke_toan: 'Kế toán',
   nguoi_lap: 'Người lập',
   admin: 'Quản trị viên',
 };
@@ -48,7 +49,7 @@ export function SignatureHistory() {
       const roleMap = new Map<string, string>();
       rolesRes.data?.forEach(r => {
         // Keep highest-priority role
-        if (!roleMap.has(r.user_id) || r.role === 'lanh_dao') {
+        if (!roleMap.has(r.user_id) || r.role === 'lanh_dao' || r.role === 'ke_toan') {
           roleMap.set(r.user_id, r.role);
         }
       });

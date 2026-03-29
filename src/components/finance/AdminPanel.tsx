@@ -29,12 +29,14 @@ interface UserWithRole {
 const ROLE_LABELS: Record<AppRole, string> = {
   admin: 'Quản trị viên',
   lanh_dao: 'Lãnh đạo',
+  ke_toan: 'Kế toán',
   nguoi_lap: 'Người lập',
 };
 
 const ROLE_COLORS: Record<AppRole, string> = {
   admin: 'bg-red-100 text-red-800',
   lanh_dao: 'bg-purple-100 text-purple-800',
+  ke_toan: 'bg-blue-100 text-blue-800',
   nguoi_lap: 'bg-green-100 text-green-800',
 };
 
@@ -249,6 +251,7 @@ export function AdminPanel() {
                   <SelectContent>
                     <SelectItem value="admin">Quản trị viên</SelectItem>
                     <SelectItem value="lanh_dao">Lãnh đạo</SelectItem>
+                    <SelectItem value="ke_toan">Kế toán</SelectItem>
                     <SelectItem value="nguoi_lap">Người lập</SelectItem>
                   </SelectContent>
                 </Select>
@@ -308,7 +311,7 @@ export function AdminPanel() {
                     </TableCell>
                     <TableCell>
                       <div className="flex gap-1 flex-wrap">
-                        {u.roles.includes('lanh_dao') && (
+                        {(u.roles.includes('lanh_dao') || u.roles.includes('ke_toan')) && (
                           <Button size="sm" variant="outline" onClick={() => handleGenerateSignature(u.user_id, u.full_name)}>
                             <Key className="w-3 h-3 mr-1" />
                             {u.has_signature ? 'Tạo lại khóa' : 'Tạo chữ ký số'}
@@ -422,6 +425,7 @@ export function AdminPanel() {
                 <SelectContent>
                   <SelectItem value="admin">Quản trị viên</SelectItem>
                   <SelectItem value="lanh_dao">Lãnh đạo</SelectItem>
+                  <SelectItem value="ke_toan">Kế toán</SelectItem>
                   <SelectItem value="nguoi_lap">Người lập</SelectItem>
                 </SelectContent>
               </Select>
