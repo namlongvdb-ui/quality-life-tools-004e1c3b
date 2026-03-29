@@ -42,14 +42,14 @@ export function VoucherSignatureStatus({ transaction, voucherType }: VoucherSign
 
   useEffect(() => {
     fetchSignatures();
-  }, [transaction.id]);
+  }, [transaction.voucherNo]);
 
   const fetchSignatures = async () => {
     setLoading(true);
     const { data: sigs } = await supabase
       .from('voucher_signatures')
       .select('signer_id, signed_at')
-      .eq('voucher_id', transaction.id)
+      .eq('voucher_id', transaction.voucherNo)
       .eq('voucher_type', voucherType);
 
     if (sigs && sigs.length > 0) {
@@ -119,14 +119,14 @@ export function SignVoucherButton({ transaction, voucherType, onSigned }: Vouche
     if (user && canSign) {
       checkIfSigned();
     }
-  }, [user, transaction.id]);
+  }, [user, transaction.voucherNo]);
 
   const checkIfSigned = async () => {
     if (!user) return;
     const { data } = await supabase
       .from('voucher_signatures')
       .select('id')
-      .eq('voucher_id', transaction.id)
+      .eq('voucher_id', transaction.voucherNo)
       .eq('voucher_type', voucherType)
       .eq('signer_id', user.id)
       .maybeSingle();
@@ -150,7 +150,7 @@ export function SignVoucherButton({ transaction, voucherType, onSigned }: Vouche
       const signature = await signData(privateKey, dataString);
 
       const { error } = await supabase.from('voucher_signatures').insert({
-        voucher_id: transaction.id,
+        voucher_id: transaction.voucherNo,
         voucher_type: voucherType,
         signer_id: user.id,
         signature,
@@ -181,7 +181,7 @@ export function SignVoucherButton({ transaction, voucherType, onSigned }: Vouche
       const { data: sigs } = await supabase
         .from('voucher_signatures')
         .select('signer_id, signature, data_hash')
-        .eq('voucher_id', transaction.id)
+        .eq('voucher_id', transaction.voucherNo)
         .eq('voucher_type', voucherType);
 
       if (!sigs || sigs.length === 0) {
