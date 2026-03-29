@@ -90,13 +90,11 @@
     background: white !important;
   }
 
-  /* Hide everything that's not print content */
   aside, nav, header, footer, .no-print, .Toaster,
   [data-sidebar], [data-sonner-toaster] {
     display: none !important;
   }
 
-  /* Hide all non-print UI inside main */
   .no-print,
   button {
     display: none !important;
@@ -116,7 +114,6 @@
     overflow: visible !important;
   }
 
-  /* Remove space-y gaps in print wrapper */
   main > *:has(.print-only) > * {
     margin-top: 0 !important;
   }
@@ -140,7 +137,6 @@
     margin: 0 !important;
   }
 
-  /* Landscape mode for staff list and fee list */
   .print-landscape {
     page: landscape;
   }
