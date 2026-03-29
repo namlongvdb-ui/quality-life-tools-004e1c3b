@@ -44,7 +44,8 @@ Deno.serve(async (req) => {
       })
     }
 
-    const { user_id, action } = await req.json()
+    const body = await req.json()
+    const { user_id, action, new_role } = body
 
     if (!user_id || !action) {
       return new Response(JSON.stringify({ error: 'Missing user_id or action' }), {
@@ -59,7 +60,7 @@ Deno.serve(async (req) => {
       .eq('user_id', user_id)
       .single()
 
-    if (targetProfile?.username === 'admin') {
+    if (targetProfile?.username === 'admin' && action !== 'change_role') {
       return new Response(JSON.stringify({ error: 'Không thể thao tác trên tài khoản admin mặc định' }), {
         status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       })
@@ -67,7 +68,7 @@ Deno.serve(async (req) => {
 
     if (action === 'disable') {
       const { error } = await supabaseAdmin.auth.admin.updateUserById(user_id, {
-        ban_duration: '876000h', // ~100 years
+        ban_duration: '876000h',
       })
       if (error) throw error
       return new Response(JSON.stringify({ success: true, message: 'User disabled' }), {
@@ -86,12 +87,30 @@ Deno.serve(async (req) => {
     }
 
     if (action === 'change_role') {
-      const { new_role } = await req.json().catch(() => ({}))
-      // Parse new_role from original body - re-read won't work, get from initial parse
+      if (!new_role) {
+        return new Response(JSON.stringify({ error: 'Missing new_role' }), {
+          status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        })
+      }
+
+      // Prevent changing admin's role away from admin
+      if (targetProfile?.username === 'admin' && new_role !== 'admin') {
+        return new Response(JSON.stringify({ error: 'Không thể thay đổi vai trò của tài khoản admin mặc định' }), {
+          status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        })
+      }
+
+      // Delete existing roles and insert the new one
+      await supabaseAdmin.from('user_roles').delete().eq('user_id', user_id)
+      const { error } = await supabaseAdmin.from('user_roles').insert({ user_id, role: new_role })
+      if (error) throw error
+
+      return new Response(JSON.stringify({ success: true, message: 'Role updated' }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      })
     }
 
     if (action === 'delete') {
-      // Delete related data first
       await supabaseAdmin.from('digital_signatures').delete().eq('user_id', user_id)
       await supabaseAdmin.from('user_roles').delete().eq('user_id', user_id)
       await supabaseAdmin.from('profiles').delete().eq('user_id', user_id)
