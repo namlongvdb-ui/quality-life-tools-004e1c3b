@@ -12,7 +12,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { useToast } from '@/hooks/use-toast';
 import { generateRSAKeyPair, storePrivateKey } from '@/lib/crypto-utils';
-import { UserPlus, Key, Shield, Users, RotateCcw, Ban, Trash2, UserCheck } from 'lucide-react';
+import { UserPlus, Key, Shield, Users, RotateCcw, Ban, Trash2, UserCheck, RefreshCw } from 'lucide-react';
 import type { Database } from '@/integrations/supabase/types';
 
 type AppRole = Database['public']['Enums']['app_role'];
