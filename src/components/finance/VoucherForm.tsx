@@ -65,6 +65,7 @@ const emptyForm = (type: 'thu' | 'chi', settings: ReturnType<typeof getOrgSettin
 });
 
 export function VoucherForm({ type, onSaved, refreshKey }: VoucherFormProps) {
+  const { user, profile } = useAuth();
   const title = type === 'thu' ? 'PHIẾU THU' : 'PHIẾU CHI';
   const settings = getOrgSettings();
 

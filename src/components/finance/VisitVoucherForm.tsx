@@ -11,6 +11,8 @@ import { Heart, Printer, Save, X, DollarSign, User, Users } from 'lucide-react';
 import { toast } from 'sonner';
 import { PrintVisitVoucher } from './PrintVisitVoucher';
 import { TransactionList } from './TransactionList';
+import { useAuth } from '@/hooks/useAuth';
+import { submitVoucherForSigning, notifySigners, getVoucherLabel } from '@/lib/notification-utils';
 
 interface VisitVoucherFormProps {
   onSaved?: () => void;
