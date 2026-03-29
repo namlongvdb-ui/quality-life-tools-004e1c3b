@@ -96,11 +96,15 @@ export async function getSigningStep(voucherId: string): Promise<'pending' | 'fu
 
   if (!sigs || sigs.length === 0) return 'pending';
 
-  const signerIds = new Set(sigs.map(s => s.signer_id));
-  const leaderIds = await getUserIdsByRole('lanh_dao');
-  const leaderSigned = leaderIds.some(id => signerIds.has(id));
+  const signerIdsSet = new Set(sigs.map(s => s.signer_id));
+  const [leaderIds, accountantIds] = await Promise.all([
+    getUserIdsByRole('lanh_dao'),
+    getUserIdsByRole('ke_toan'),
+  ]);
+  const allSignerRoleIds = [...leaderIds, ...accountantIds];
+  const signerSigned = allSignerRoleIds.some(id => signerIdsSet.has(id));
 
-  if (leaderSigned) return 'fully_signed';
+  if (signerSigned) return 'fully_signed';
   return 'pending';
 }
 
