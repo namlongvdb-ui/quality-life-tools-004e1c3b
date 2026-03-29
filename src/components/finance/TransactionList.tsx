@@ -277,14 +277,9 @@ export function TransactionList({ type, title, personLabel, onChanged, refreshKe
                       </TableRow>
                       );
                     })}
-                                </AlertDialogFooter>
-                              </AlertDialogContent>
-                            </AlertDialog>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
                   </TableBody>
+                </Table>
+              </div>
                 </Table>
               </div>
 
