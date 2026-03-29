@@ -35,8 +35,28 @@ export function TransactionList({ type, title, personLabel, onChanged, refreshKe
   const [search, setSearch] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const [sigRefreshKey, setSigRefreshKey] = useState(0);
+  const [approvedVoucherIds, setApprovedVoucherIds] = useState<Set<string>>(new Set());
 
   const isVoucher = type === 'thu' || type === 'chi';
+
+  // Fetch approved/signed voucher IDs to prevent editing
+  const fetchApprovedIds = useCallback(async () => {
+    const { data } = await supabase
+      .from('pending_vouchers')
+      .select('voucher_id')
+      .eq('voucher_type', type)
+      .in('status', ['signed', 'printed']);
+    
+    if (data) {
+      setApprovedVoucherIds(new Set(data.map(v => v.voucher_id)));
+    }
+  }, [type]);
+
+  useEffect(() => {
+    fetchApprovedIds();
+  }, [fetchApprovedIds, refreshKey, sigRefreshKey]);
+
+  const isApproved = (voucherNo: string) => approvedVoucherIds.has(voucherNo);
 
   const transactions = useMemo(() => {
     return getTransactions().filter(t => t.type === type);
