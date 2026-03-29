@@ -1,7 +1,7 @@
 import { supabase } from '@/integrations/supabase/client';
 
 // Get user IDs by role
-export async function getUserIdsByRole(role: 'admin' | 'lanh_dao' | 'nguoi_lap'): Promise<string[]> {
+export async function getUserIdsByRole(role: 'admin' | 'lanh_dao' | 'ke_toan' | 'nguoi_lap'): Promise<string[]> {
   const { data } = await supabase
     .from('user_roles')
     .select('user_id')
