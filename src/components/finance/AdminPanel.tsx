@@ -406,6 +406,36 @@ export function AdminPanel() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <Dialog open={roleDialogOpen} onOpenChange={setRoleDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Đổi vai trò</DialogTitle>
+            <DialogDescription>
+              Thay đổi vai trò cho: <strong>{roleTarget?.full_name}</strong>
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label>Vai trò mới</Label>
+              <Select value={selectedRole} onValueChange={v => setSelectedRole(v as AppRole)}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="admin">Quản trị viên</SelectItem>
+                  <SelectItem value="lanh_dao">Lãnh đạo</SelectItem>
+                  <SelectItem value="ke_toan_truong">Kế toán trưởng</SelectItem>
+                  <SelectItem value="ke_toan">Kế toán</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <Button onClick={handleChangeRole} disabled={changingRole} className="w-full">
+              {changingRole ? 'Đang xử lý...' : 'Xác nhận đổi vai trò'}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
