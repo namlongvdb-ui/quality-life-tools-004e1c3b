@@ -279,9 +279,8 @@ export function TransactionList({ type, title, personLabel, onChanged, refreshKe
                     })}
                   </TableBody>
                 </Table>
-              </div>
-                </Table>
-              </div>
+
+
 
               {/* Footer summary */}
               <div className="flex items-center justify-between px-6 py-3 bg-muted/20 border-t border-border">
