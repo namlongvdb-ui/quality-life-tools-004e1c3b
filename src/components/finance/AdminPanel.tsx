@@ -311,7 +311,7 @@ export function AdminPanel() {
                     </TableCell>
                     <TableCell>
                       <div className="flex gap-1 flex-wrap">
-                        {u.roles.includes('lanh_dao') && (
+                        {(u.roles.includes('lanh_dao') || u.roles.includes('ke_toan')) && (
                           <Button size="sm" variant="outline" onClick={() => handleGenerateSignature(u.user_id, u.full_name)}>
                             <Key className="w-3 h-3 mr-1" />
                             {u.has_signature ? 'Tạo lại khóa' : 'Tạo chữ ký số'}
