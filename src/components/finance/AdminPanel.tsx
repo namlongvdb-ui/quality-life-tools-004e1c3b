@@ -57,6 +57,10 @@ export function AdminPanel() {
   const [creating, setCreating] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<{ user_id: string; full_name: string } | null>(null);
   const [managing, setManaging] = useState(false);
+  const [roleDialogOpen, setRoleDialogOpen] = useState(false);
+  const [roleTarget, setRoleTarget] = useState<{ user_id: string; full_name: string; currentRole: AppRole } | null>(null);
+  const [selectedRole, setSelectedRole] = useState<AppRole>('ke_toan');
+  const [changingRole, setChangingRole] = useState(false);
 
   const fetchUsers = async () => {
     setLoading(true);
