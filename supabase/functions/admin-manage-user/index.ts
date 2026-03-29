@@ -85,6 +85,11 @@ Deno.serve(async (req) => {
       })
     }
 
+    if (action === 'change_role') {
+      const { new_role } = await req.json().catch(() => ({}))
+      // Parse new_role from original body - re-read won't work, get from initial parse
+    }
+
     if (action === 'delete') {
       // Delete related data first
       await supabaseAdmin.from('digital_signatures').delete().eq('user_id', user_id)
