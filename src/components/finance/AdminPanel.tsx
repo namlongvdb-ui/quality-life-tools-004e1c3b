@@ -57,7 +57,7 @@ export function AdminPanel() {
   const [managing, setManaging] = useState(false);
   const [roleDialogOpen, setRoleDialogOpen] = useState(false);
   const [roleTarget, setRoleTarget] = useState<{ user_id: string; full_name: string; currentRole: AppRole } | null>(null);
-  const [selectedRole, setSelectedRole] = useState<AppRole>('ke_toan');
+  const [selectedRole, setSelectedRole] = useState<AppRole>('nguoi_lap');
   const [changingRole, setChangingRole] = useState(false);
 
   const fetchUsers = async () => {
