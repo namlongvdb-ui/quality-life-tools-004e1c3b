@@ -102,14 +102,29 @@ export function SignatureHistory() {
             Danh sách chữ ký ({filtered.length})
           </CardTitle>
           <CardDescription>
-            <div className="relative mt-2 max-w-sm">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Tìm theo số phiếu hoặc người ký..."
-                value={search}
-                onChange={e => setSearch(e.target.value)}
-                className="pl-9"
-              />
+            <div className="flex flex-wrap gap-3 mt-2">
+              <div className="relative max-w-sm flex-1">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Tìm theo số phiếu hoặc người ký..."
+                  value={search}
+                  onChange={e => setSearch(e.target.value)}
+                  className="pl-9"
+                />
+              </div>
+              <Select value={roleFilter} onValueChange={setRoleFilter}>
+                <SelectTrigger className="w-[180px]">
+                  <Filter className="h-4 w-4 mr-2" />
+                  <SelectValue placeholder="Lọc theo chức vụ" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Tất cả chức vụ</SelectItem>
+                  <SelectItem value="lanh_dao">Lãnh đạo</SelectItem>
+                  <SelectItem value="ke_toan">Kế toán</SelectItem>
+                  <SelectItem value="nguoi_lap">Người lập</SelectItem>
+                  <SelectItem value="admin">Quản trị viên</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </CardDescription>
         </CardHeader>
