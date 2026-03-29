@@ -31,9 +31,15 @@ const ROLE_LABELS: Record<string, string> = {
 };
 
 export function SignatureHistory() {
+  const { hasRole } = useAuth();
   const [records, setRecords] = useState<SignatureRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
+  const [roleFilter, setRoleFilter] = useState<string>('all');
+
+  const isKeHoan = hasRole('ke_toan');
+  const isLanhDao = hasRole('lanh_dao');
+  const isAdmin = hasRole('admin');
 
   useEffect(() => {
     const fetchHistory = async () => {
@@ -50,7 +56,6 @@ export function SignatureHistory() {
 
       const roleMap = new Map<string, string>();
       rolesRes.data?.forEach(r => {
-        // Keep highest-priority role
         if (!roleMap.has(r.user_id) || r.role === 'lanh_dao' || r.role === 'ke_toan') {
           roleMap.set(r.user_id, r.role);
         }
@@ -72,11 +77,13 @@ export function SignatureHistory() {
     fetchHistory();
   }, []);
 
-  const filtered = records.filter(r =>
-    !search ||
-    r.voucher_id.toLowerCase().includes(search.toLowerCase()) ||
-    r.signer_name.toLowerCase().includes(search.toLowerCase())
-  );
+  const filtered = records.filter(r => {
+    const matchSearch = !search ||
+      r.voucher_id.toLowerCase().includes(search.toLowerCase()) ||
+      r.signer_name.toLowerCase().includes(search.toLowerCase());
+    const matchRole = roleFilter === 'all' || r.signer_role === roleFilter;
+    return matchSearch && matchRole;
+  });
 
   return (
     <div className="p-6 space-y-6 max-w-6xl mx-auto">
