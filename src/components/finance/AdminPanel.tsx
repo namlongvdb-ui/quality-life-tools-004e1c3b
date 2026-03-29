@@ -12,7 +12,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { useToast } from '@/hooks/use-toast';
 import { generateRSAKeyPair, storePrivateKey } from '@/lib/crypto-utils';
-import { UserPlus, Key, Shield, Users, RotateCcw, Ban, Trash2, UserCheck } from 'lucide-react';
+import { UserPlus, Key, Shield, Users, RotateCcw, Ban, Trash2, UserCheck, RefreshCw } from 'lucide-react';
 import type { Database } from '@/integrations/supabase/types';
 
 type AppRole = Database['public']['Enums']['app_role'];
@@ -57,6 +57,10 @@ export function AdminPanel() {
   const [creating, setCreating] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<{ user_id: string; full_name: string } | null>(null);
   const [managing, setManaging] = useState(false);
+  const [roleDialogOpen, setRoleDialogOpen] = useState(false);
+  const [roleTarget, setRoleTarget] = useState<{ user_id: string; full_name: string; currentRole: AppRole } | null>(null);
+  const [selectedRole, setSelectedRole] = useState<AppRole>('ke_toan');
+  const [changingRole, setChangingRole] = useState(false);
 
   const fetchUsers = async () => {
     setLoading(true);
@@ -156,6 +160,25 @@ export function AdminPanel() {
       toast({ title: 'Lỗi', description: err.message, variant: 'destructive' });
     }
     setManaging(false);
+  };
+
+  const handleChangeRole = async () => {
+    if (!roleTarget || !selectedRole) return;
+    setChangingRole(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('admin-manage-user', {
+        body: { user_id: roleTarget.user_id, action: 'change_role', new_role: selectedRole }
+      });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      toast({ title: 'Thành công', description: `Đã đổi vai trò của ${roleTarget.full_name} thành ${ROLE_LABELS[selectedRole]}` });
+      setRoleDialogOpen(false);
+      setRoleTarget(null);
+      fetchUsers();
+    } catch (err: any) {
+      toast({ title: 'Lỗi', description: err.message, variant: 'destructive' });
+    }
+    setChangingRole(false);
   };
 
   const handleGenerateSignature = async (targetUserId: string, targetName: string) => {
@@ -299,6 +322,16 @@ export function AdminPanel() {
                           Reset MK
                         </Button>
                         {u.username !== 'admin' && (
+                          <Button size="sm" variant="outline" onClick={() => {
+                            setRoleTarget({ user_id: u.user_id, full_name: u.full_name, currentRole: u.roles[0] || 'ke_toan' });
+                            setSelectedRole(u.roles[0] || 'ke_toan');
+                            setRoleDialogOpen(true);
+                          }}>
+                            <RefreshCw className="w-3 h-3 mr-1" />
+                            Đổi vai trò
+                          </Button>
+                        )}
+                        {u.username !== 'admin' && (
                           <>
                             <Button
                               size="sm"
@@ -373,6 +406,36 @@ export function AdminPanel() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <Dialog open={roleDialogOpen} onOpenChange={setRoleDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Đổi vai trò</DialogTitle>
+            <DialogDescription>
+              Thay đổi vai trò cho: <strong>{roleTarget?.full_name}</strong>
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label>Vai trò mới</Label>
+              <Select value={selectedRole} onValueChange={v => setSelectedRole(v as AppRole)}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="admin">Quản trị viên</SelectItem>
+                  <SelectItem value="lanh_dao">Lãnh đạo</SelectItem>
+                  <SelectItem value="ke_toan_truong">Kế toán trưởng</SelectItem>
+                  <SelectItem value="ke_toan">Kế toán</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <Button onClick={handleChangeRole} disabled={changingRole} className="w-full">
+              {changingRole ? 'Đang xử lý...' : 'Xác nhận đổi vai trò'}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
