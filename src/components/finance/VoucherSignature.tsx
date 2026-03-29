@@ -113,7 +113,7 @@ export function SignVoucherButton({ transaction, voucherType, onSigned }: Vouche
   const [verifyResult, setVerifyResult] = useState<{ valid: boolean; details: string } | null>(null);
   const [verifying, setVerifying] = useState(false);
 
-  const canSign = hasRole('lanh_dao') || hasRole('ke_toan_truong');
+  const canSign = hasRole('lanh_dao');
 
   useEffect(() => {
     if (user && canSign) {

@@ -321,8 +321,8 @@ export function AdminPanel() {
                         </Button>
                         {u.username !== 'admin' && (
                           <Button size="sm" variant="outline" onClick={() => {
-                            setRoleTarget({ user_id: u.user_id, full_name: u.full_name, currentRole: u.roles[0] || 'ke_toan' });
-                            setSelectedRole(u.roles[0] || 'ke_toan');
+                            setRoleTarget({ user_id: u.user_id, full_name: u.full_name, currentRole: u.roles[0] || 'nguoi_lap' });
+                            setSelectedRole(u.roles[0] || 'nguoi_lap');
                             setRoleDialogOpen(true);
                           }}>
                             <RefreshCw className="w-3 h-3 mr-1" />
