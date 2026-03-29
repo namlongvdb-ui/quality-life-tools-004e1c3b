@@ -83,9 +83,9 @@ export function PendingVouchers() {
     setSigning(true);
 
     try {
-      const privateKey = getPrivateKey(user.id, password);
+      const privateKey = getPrivateKey(user.id);
       if (!privateKey) {
-        toast.error('Mật khẩu không đúng hoặc chưa có chữ ký số');
+        toast.error('Chưa có chữ ký số trên thiết bị này');
         setSigning(false);
         return;
       }
@@ -100,7 +100,7 @@ export function PendingVouchers() {
       });
 
       const dataHash = await hashData(dataStr);
-      const signature = await signData(dataStr, privateKey);
+      const signature = await signData(privateKey, dataStr);
 
       const { error } = await supabase.from('voucher_signatures').insert({
         voucher_id: selectedVoucher.voucher_id,
