@@ -143,7 +143,7 @@ export function PendingVouchers() {
     setSigning(false);
   };
 
-  const roleLabel = isChiefAccountant ? '(Kế toán trưởng)' : isLeader ? '(Lãnh đạo)' : '';
+  const roleLabel = isLeader ? '(Lãnh đạo)' : '';
 
   return (
     <Card className="shadow-lg border-0 ring-1 ring-border">
