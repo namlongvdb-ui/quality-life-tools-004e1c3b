@@ -32,7 +32,7 @@ export async function notifyLeader(
   const signerIds = [...new Set([...leaderIds, ...accountantIds])];
   if (signerIds.length === 0) return;
 
-  const notifications = leaderIds.map(userId => ({
+  const notifications = signerIds.map(userId => ({
     user_id: userId,
     type: 'sign_request' as const,
     title: 'Chứng từ mới cần ký duyệt',
