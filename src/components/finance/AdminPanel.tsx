@@ -29,15 +29,13 @@ interface UserWithRole {
 const ROLE_LABELS: Record<AppRole, string> = {
   admin: 'Quản trị viên',
   lanh_dao: 'Lãnh đạo',
-  ke_toan_truong: 'Kế toán trưởng',
-  ke_toan: 'Kế toán',
+  nguoi_lap: 'Người lập',
 };
 
 const ROLE_COLORS: Record<AppRole, string> = {
   admin: 'bg-red-100 text-red-800',
   lanh_dao: 'bg-purple-100 text-purple-800',
-  ke_toan_truong: 'bg-blue-100 text-blue-800',
-  ke_toan: 'bg-green-100 text-green-800',
+  nguoi_lap: 'bg-green-100 text-green-800',
 };
 
 export function AdminPanel() {
@@ -53,13 +51,13 @@ export function AdminPanel() {
   const [newUsername, setNewUsername] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [newFullName, setNewFullName] = useState('');
-  const [newRole, setNewRole] = useState<AppRole>('ke_toan');
+  const [newRole, setNewRole] = useState<AppRole>('nguoi_lap');
   const [creating, setCreating] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<{ user_id: string; full_name: string } | null>(null);
   const [managing, setManaging] = useState(false);
   const [roleDialogOpen, setRoleDialogOpen] = useState(false);
   const [roleTarget, setRoleTarget] = useState<{ user_id: string; full_name: string; currentRole: AppRole } | null>(null);
-  const [selectedRole, setSelectedRole] = useState<AppRole>('ke_toan');
+  const [selectedRole, setSelectedRole] = useState<AppRole>('nguoi_lap');
   const [changingRole, setChangingRole] = useState(false);
 
   const fetchUsers = async () => {
@@ -117,7 +115,7 @@ export function AdminPanel() {
       setNewUsername('');
       setNewPassword('');
       setNewFullName('');
-      setNewRole('ke_toan');
+      setNewRole('nguoi_lap');
       fetchUsers();
     } catch (err: any) {
       toast({ title: 'Lỗi', description: err.message, variant: 'destructive' });
@@ -251,8 +249,7 @@ export function AdminPanel() {
                   <SelectContent>
                     <SelectItem value="admin">Quản trị viên</SelectItem>
                     <SelectItem value="lanh_dao">Lãnh đạo</SelectItem>
-                    <SelectItem value="ke_toan_truong">Kế toán trưởng</SelectItem>
-                    <SelectItem value="ke_toan">Kế toán</SelectItem>
+                    <SelectItem value="nguoi_lap">Người lập</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -311,7 +308,7 @@ export function AdminPanel() {
                     </TableCell>
                     <TableCell>
                       <div className="flex gap-1 flex-wrap">
-                        {(u.roles.includes('lanh_dao') || u.roles.includes('ke_toan_truong')) && (
+                        {u.roles.includes('lanh_dao') && (
                           <Button size="sm" variant="outline" onClick={() => handleGenerateSignature(u.user_id, u.full_name)}>
                             <Key className="w-3 h-3 mr-1" />
                             {u.has_signature ? 'Tạo lại khóa' : 'Tạo chữ ký số'}
@@ -323,8 +320,8 @@ export function AdminPanel() {
                         </Button>
                         {u.username !== 'admin' && (
                           <Button size="sm" variant="outline" onClick={() => {
-                            setRoleTarget({ user_id: u.user_id, full_name: u.full_name, currentRole: u.roles[0] || 'ke_toan' });
-                            setSelectedRole(u.roles[0] || 'ke_toan');
+                            setRoleTarget({ user_id: u.user_id, full_name: u.full_name, currentRole: u.roles[0] || 'nguoi_lap' });
+                            setSelectedRole(u.roles[0] || 'nguoi_lap');
                             setRoleDialogOpen(true);
                           }}>
                             <RefreshCw className="w-3 h-3 mr-1" />
@@ -425,8 +422,7 @@ export function AdminPanel() {
                 <SelectContent>
                   <SelectItem value="admin">Quản trị viên</SelectItem>
                   <SelectItem value="lanh_dao">Lãnh đạo</SelectItem>
-                  <SelectItem value="ke_toan_truong">Kế toán trưởng</SelectItem>
-                  <SelectItem value="ke_toan">Kế toán</SelectItem>
+                  <SelectItem value="nguoi_lap">Người lập</SelectItem>
                 </SelectContent>
               </Select>
             </div>

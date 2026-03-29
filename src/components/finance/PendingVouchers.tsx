@@ -34,7 +34,6 @@ export function PendingVouchers() {
   const [password, setPassword] = useState('');
   const [signing, setSigning] = useState(false);
 
-  const isChiefAccountant = hasRole('ke_toan_truong');
   const isLeader = hasRole('lanh_dao');
 
   const fetchPending = useCallback(async () => {
@@ -56,11 +55,8 @@ export function PendingVouchers() {
     for (const v of pendingData) {
       const step = await getSigningStep(v.voucher_id);
 
-      // Kế toán trưởng sees vouchers at 'pending' step (not yet signed by anyone)
-      // Lãnh đạo sees vouchers at 'chief_signed' step (chief accountant signed, waiting for leader)
-      if (isChiefAccountant && step === 'pending') {
-        filteredVouchers.push({ ...v, voucher_data: v.voucher_data as any });
-      } else if (isLeader && step === 'chief_signed') {
+      // Lãnh đạo sees all pending vouchers
+      if (isLeader && step === 'pending') {
         filteredVouchers.push({ ...v, voucher_data: v.voucher_data as any });
       }
     }
@@ -81,7 +77,7 @@ export function PendingVouchers() {
 
     setVouchers(filteredVouchers);
     setLoading(false);
-  }, [user, isChiefAccountant, isLeader]);
+  }, [user, isLeader]);
 
   useEffect(() => { fetchPending(); }, [fetchPending]);
 
@@ -121,17 +117,8 @@ export function PendingVouchers() {
 
       const signerName = profile?.full_name || 'Người ký';
 
-      if (isChiefAccountant) {
-        // Step 2: Kế toán trưởng ký xong → thông báo lãnh đạo
-        await notifyLeader(
-          selectedVoucher.voucher_id,
-          selectedVoucher.voucher_type,
-          getVoucherLabel(selectedVoucher.voucher_type),
-          signerName
-        );
-        toast.success(`Đã ký duyệt. Đang chờ lãnh đạo ký.`);
-      } else if (isLeader) {
-        // Step 3: Lãnh đạo ký xong → đánh dấu hoàn thành + thông báo kế toán
+      if (isLeader) {
+        // Lãnh đạo ký xong → đánh dấu hoàn thành + thông báo người lập
         await supabase.from('pending_vouchers')
           .update({ status: 'signed', signed_at: new Date().toISOString() })
           .eq('id', selectedVoucher.id);
@@ -143,7 +130,7 @@ export function PendingVouchers() {
           getVoucherLabel(selectedVoucher.voucher_type),
           signerName
         );
-        toast.success(`Đã ký duyệt hoàn tất. Kế toán đã được thông báo.`);
+        toast.success(`Đã ký duyệt hoàn tất. Người lập đã được thông báo.`);
       }
 
       setSignDialogOpen(false);
@@ -156,7 +143,7 @@ export function PendingVouchers() {
     setSigning(false);
   };
 
-  const roleLabel = isChiefAccountant ? '(Kế toán trưởng)' : isLeader ? '(Lãnh đạo)' : '';
+  const roleLabel = isLeader ? '(Lãnh đạo)' : '';
 
   return (
     <Card className="shadow-lg border-0 ring-1 ring-border">
