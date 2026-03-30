@@ -147,6 +147,16 @@ export function StaffList() {
       toast.error('Vui lòng chọn tổ công đoàn đích');
       return;
     }
+    const record = {
+      staffId: transferTarget.id,
+      staffName: transferTarget.fullName,
+      fromDepartment: transferTarget.department,
+      toDepartment: transferType === 'out' ? 'Ra khỏi ngành' : transferDept,
+      type: transferType,
+      date: new Date().toISOString().split('T')[0],
+    };
+    addTransferRecord(record);
+
     if (transferType === 'out') {
       deleteStaff(transferTarget.id);
       toast.success(`Đã chuyển ${transferTarget.fullName} ra khỏi ngành`);
@@ -157,6 +167,11 @@ export function StaffList() {
     setTransferDialogOpen(false);
     setTransferTarget(null);
     reload();
+  };
+
+  const openHistory = () => {
+    setTransferHistory(getTransferHistory());
+    setHistoryOpen(true);
   };
 
   // Group by department
