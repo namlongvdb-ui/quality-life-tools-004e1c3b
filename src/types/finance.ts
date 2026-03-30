@@ -56,9 +56,9 @@ export interface StaffMember {
 }
 
 export interface StaffSettings {
-  minimumSalary: number; // Lương tối thiểu
+  minimumSalary?: number; // Deprecated - kept for backward compat
   regionalSalary: number; // Lương vùng
-  baseSalary: number; // Lương cơ sở (để tính trần đoàn phí)
+  baseSalary: number; // Lương cơ sở
 }
 
 export interface OrgSettings {

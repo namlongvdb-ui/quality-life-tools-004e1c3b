@@ -4,7 +4,6 @@ const STAFF_KEY = 'union-finance-staff';
 const STAFF_SETTINGS_KEY = 'union-finance-staff-settings';
 
 const defaultStaffSettings: StaffSettings = {
-  minimumSalary: 2340000,
   regionalSalary: 2340000,
   baseSalary: 2340000,
 };
@@ -49,7 +48,7 @@ export function calculateInsuranceSalary(
   positionCoefficient: number,
   settings: StaffSettings
 ): number {
-  return (salaryCoefficient * settings.regionalSalary) + (positionCoefficient * settings.minimumSalary);
+  return (salaryCoefficient * settings.regionalSalary) + (positionCoefficient * settings.baseSalary);
 }
 
 export function calculateUnionFee(insuranceSalary: number, baseSalary: number): number {

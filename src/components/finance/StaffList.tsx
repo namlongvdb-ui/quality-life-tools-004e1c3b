@@ -214,7 +214,7 @@ export function StaffList() {
               <DialogHeader><DialogTitle>Thông số lương chung</DialogTitle></DialogHeader>
               <div className="space-y-3 py-2">
                 {([
-                  ['minimumSalary', 'Lương tối thiểu (VNĐ)'],
+                  
                   ['regionalSalary', 'Lương vùng (VNĐ)'],
                   ['baseSalary', 'Lương cơ sở (VNĐ) - để tính trần đoàn phí'],
                 ] as const).map(([key, label]) => (
@@ -278,10 +278,9 @@ export function StaffList() {
       </div>
 
       {/* Summary cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-3 no-print">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 no-print">
         <Card><CardContent className="p-4"><p className="text-xs text-muted-foreground">Tổng đoàn viên</p><p className="text-2xl font-bold text-primary">{list.length}</p></CardContent></Card>
-        <Card><CardContent className="p-4"><p className="text-xs text-muted-foreground">Lương tối thiểu</p><p className="text-lg font-semibold text-foreground">{fmt(settings.minimumSalary)} ₫</p></CardContent></Card>
-        <Card><CardContent className="p-4"><p className="text-xs text-muted-foreground">Lương vùng</p><p className="text-lg font-semibold text-foreground">{fmt(settings.regionalSalary)} ₫</p></CardContent></Card>
+        <Card><CardContent className="p-4"><p className="text-xs text-muted-foreground">Lương vùng / Lương cơ sở</p><p className="text-lg font-semibold text-foreground">{fmt(settings.regionalSalary)} / {fmt(settings.baseSalary)} ₫</p></CardContent></Card>
         <Card><CardContent className="p-4"><p className="text-xs text-muted-foreground">Tổng đoàn phí CĐ/tháng</p><p className="text-lg font-bold text-primary">{fmt(Math.round(totalUnionFee))} ₫</p></CardContent></Card>
       </div>
 
