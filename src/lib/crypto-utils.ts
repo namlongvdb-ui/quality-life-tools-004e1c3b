@@ -71,9 +71,10 @@ export async function verifySignature(publicKeyBase64: string, signature: string
 // AES-GCM encryption of private key using a password
 async function deriveKeyFromPassword(password: string, salt: Uint8Array): Promise<CryptoKey> {
   const encoder = new TextEncoder();
+  const passwordBuffer = encoder.encode(password);
   const keyMaterial = await window.crypto.subtle.importKey(
     'raw',
-    encoder.encode(password),
+    passwordBuffer.buffer as ArrayBuffer,
     'PBKDF2',
     false,
     ['deriveKey']
