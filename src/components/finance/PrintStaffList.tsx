@@ -175,7 +175,7 @@ export function PrintMonthlyFee({ month, year }: PrintMonthlyFeeProps) {
   const deptNames = Object.keys(grouped).sort();
 
   const totalFee = list.reduce((sum, s) => {
-    const lbh = calculateInsuranceSalary(s.salaryCoefficient, s.positionCoefficient, settings);
+    const lbh = calculateInsuranceSalary(s.salaryCoefficient, s.positionCoefficient, s.regionalSalary, settings.baseSalary);
     return sum + calculateUnionFee(lbh, settings.baseSalary);
   }, 0);
 
