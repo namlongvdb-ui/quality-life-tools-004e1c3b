@@ -30,6 +30,45 @@ const emptyStaff: Omit<StaffMember, 'id'> = {
   salaryCoefficient: 0, positionCoefficient: 0, regionalSalary: 2340000,
 };
 
+function PositionCombobox({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState('');
+  const filtered = POSITION_OPTIONS.filter(p => p.toLowerCase().includes(search.toLowerCase()));
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button variant="outline" role="combobox" aria-expanded={open} className="w-full justify-between font-normal">
+          {value || 'Chọn chức vụ...'}
+          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
+        <Command shouldFilter={false}>
+          <CommandInput placeholder="Tìm hoặc nhập chức vụ..." value={search} onValueChange={setSearch} />
+          <CommandList>
+            <CommandEmpty>
+              {search.trim() ? (
+                <Button variant="ghost" className="w-full" onClick={() => { onChange(search.trim()); setOpen(false); setSearch(''); }}>
+                  Dùng "{search.trim()}"
+                </Button>
+              ) : 'Không tìm thấy'}
+            </CommandEmpty>
+            <CommandGroup>
+              {filtered.map(p => (
+                <CommandItem key={p} value={p} onSelect={() => { onChange(p); setOpen(false); setSearch(''); }}>
+                  <Check className={cn("mr-2 h-4 w-4", value === p ? "opacity-100" : "opacity-0")} />
+                  {p}
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </CommandList>
+        </Command>
+      </PopoverContent>
+    </Popover>
+  );
+}
+
 export function StaffList() {
   const [list, setList] = useState<StaffMember[]>([]);
   const [settings, setSettings] = useState<StaffSettings>(getStaffSettings());
