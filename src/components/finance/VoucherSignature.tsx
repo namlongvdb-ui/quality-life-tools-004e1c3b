@@ -352,7 +352,7 @@ export function SignVoucherButton({ transaction, voucherType, onSigned }: Vouche
               <Button variant="outline" onClick={() => setDialogOpen(false)} className="flex-1">
                 Hủy
               </Button>
-              <Button onClick={handleSign} disabled={signing} className="flex-1 bg-emerald-600 hover:bg-emerald-700">
+              <Button onClick={handleSign} disabled={signing || !signPassword} className="flex-1 bg-emerald-600 hover:bg-emerald-700">
                 {signing ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <PenTool className="w-4 h-4 mr-2" />}
                 Xác nhận ký
               </Button>
