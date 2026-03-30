@@ -152,7 +152,7 @@ export function StaffList() {
 
   const totalUnionFee = useMemo(() => {
     return list.reduce((sum, s) => {
-      const lbh = calculateInsuranceSalary(s.salaryCoefficient, s.positionCoefficient, settings);
+      const lbh = calculateInsuranceSalary(s.salaryCoefficient, s.positionCoefficient, s.regionalSalary, settings.baseSalary);
       return sum + calculateUnionFee(lbh, settings.baseSalary);
     }, 0);
   }, [list, settings]);
