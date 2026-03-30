@@ -47,7 +47,7 @@ export function StaffList() {
     if (!form.fullName.trim()) { toast.error('Vui lòng nhập họ tên'); return; }
     if (editingId) {
       updateStaff(editingId, form);
-      toast.success('Đã cập nhật cán bộ');
+      toast.success('Đã cập nhật đoàn viên');
     } else {
       addStaff(form);
       toast.success('Đã thêm cán bộ');
