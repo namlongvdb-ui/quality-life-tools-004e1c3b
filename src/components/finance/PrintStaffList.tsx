@@ -91,7 +91,7 @@ export function PrintStaffList() {
           {deptNames.map(dept => {
             const members = grouped[dept];
             const deptFee = members.reduce((sum, s) => {
-              const lbh = calculateInsuranceSalary(s.salaryCoefficient, s.positionCoefficient, settings);
+              const lbh = calculateInsuranceSalary(s.salaryCoefficient, s.positionCoefficient, s.regionalSalary, settings.baseSalary);
               return sum + calculateUnionFee(lbh, settings.baseSalary);
             }, 0);
             return (
