@@ -21,7 +21,8 @@ import {
 } from '@/lib/staff-store';
 import { getOrgSettings } from '@/lib/finance-store';
 import { TransferRecord } from '@/types/finance';
-import { Users, Plus, Trash2, Pencil, Save, Settings2, Printer, Receipt, ChevronsUpDown, Check, ArrowRightLeft, LogOut, History, FileSpreadsheet } from 'lucide-react';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Users, Plus, Trash2, Pencil, Save, Settings2, Printer, Receipt, ChevronsUpDown, Check, ArrowRightLeft, LogOut, History, FileSpreadsheet, MoreHorizontal } from 'lucide-react';
 import { toast } from 'sonner';
 import { PrintStaffList, PrintMonthlyFee } from './PrintStaffList';
 import { exportStaffListExcel } from '@/lib/export-utils';
