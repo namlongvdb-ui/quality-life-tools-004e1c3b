@@ -114,6 +114,7 @@ export function PrintStaffList() {
                       <td style={centerCell}>{s.gender === 'nam' ? 'Nam' : 'Nữ'}</td>
                       <td style={rightCell}>{s.salaryCoefficient.toFixed(2)}</td>
                       <td style={rightCell}>{s.positionCoefficient.toFixed(2)}</td>
+                      <td style={rightCell}>{fmt(s.regionalSalary)}</td>
                       <td style={rightCell}>{fmt(Math.round(lbh))}</td>
                       <td style={rightCell}>{fmt(Math.round(fee))}</td>
                     </tr>
