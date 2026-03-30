@@ -164,7 +164,7 @@ export function StaffList() {
       {/* Header */}
       <div className="flex items-center justify-between no-print">
         <h2 className="text-2xl font-bold text-primary flex items-center gap-2">
-          <Users className="h-6 w-6" /> Danh sách cán bộ
+          <Users className="h-6 w-6" /> Danh sách đoàn viên
         </h2>
         <div className="flex gap-2">
           <Button variant="outline" size="sm" onClick={() => handlePrint('staff')}>
