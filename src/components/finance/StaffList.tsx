@@ -486,11 +486,24 @@ export function StaffList() {
                       <TableCell className="text-right font-semibold">{fmt(Math.round(lbh))}</TableCell>
                       <TableCell className="text-right font-semibold text-primary">{fmt(Math.round(fee))}</TableCell>
                       <TableCell>
-                        <div className="flex gap-1">
-                          <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => handleEdit(s)} title="Sửa"><Pencil className="h-3.5 w-3.5" /></Button>
-                          <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => handleOpenTransfer(s, 'move')} title="Điều chuyển"><ArrowRightLeft className="h-3.5 w-3.5" /></Button>
-                          <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive" onClick={() => handleOpenTransfer(s, 'out')} title="Chuyển khỏi ngành"><LogOut className="h-3.5 w-3.5" /></Button>
-                        </div>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon" className="h-7 w-7">
+                              <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem onClick={() => handleEdit(s)}>
+                              <Pencil className="h-4 w-4 mr-2" /> Sửa thông tin
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleOpenTransfer(s, 'move')}>
+                              <ArrowRightLeft className="h-4 w-4 mr-2" /> Điều chuyển tổ
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleOpenTransfer(s, 'out')} className="text-destructive focus:text-destructive">
+                              <LogOut className="h-4 w-4 mr-2" /> Chuyển khỏi ngành
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                       </TableCell>
                     </TableRow>
                   );
