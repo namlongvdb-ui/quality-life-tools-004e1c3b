@@ -301,6 +301,7 @@ export function StaffList() {
                   <TableHead className="text-center">GT</TableHead>
                   <TableHead className="text-right">HS lương</TableHead>
                   <TableHead className="text-right">HS CV</TableHead>
+                  <TableHead className="text-right">Lương vùng</TableHead>
                   <TableHead className="text-right">Lương BH</TableHead>
                   <TableHead className="text-right">Đoàn phí CĐ</TableHead>
                   <TableHead className="w-20"></TableHead>
