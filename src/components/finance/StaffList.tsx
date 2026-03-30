@@ -267,6 +267,10 @@ export function StaffList() {
                   <Input type="number" step="0.01" value={form.salaryCoefficient} onChange={e => setForm(p => ({ ...p, salaryCoefficient: Number(e.target.value) || 0 }))} />
                 </div>
                 <div>
+                  <Label className="text-xs text-muted-foreground">Lương vùng (VNĐ)</Label>
+                  <Input type="number" value={form.regionalSalary} onChange={e => setForm(p => ({ ...p, regionalSalary: Number(e.target.value) || 0 }))} />
+                </div>
+                <div>
                   <Label className="text-xs text-muted-foreground">Hệ số chức vụ</Label>
                   <Input type="number" step="0.01" value={form.positionCoefficient} onChange={e => setForm(p => ({ ...p, positionCoefficient: Number(e.target.value) || 0 }))} />
                 </div>
