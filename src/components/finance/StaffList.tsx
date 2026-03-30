@@ -19,6 +19,12 @@ import { Users, Plus, Trash2, Pencil, Save, Settings2, Printer, Receipt, Chevron
 import { toast } from 'sonner';
 import { PrintStaffList, PrintMonthlyFee } from './PrintStaffList';
 
+const POSITION_OPTIONS = [
+  'Giám đốc', 'Phó Giám đốc', 'Trưởng phòng', 'Phó Trưởng phòng',
+  'Chủ tịch', 'Phó Chủ tịch', 'Ủy viên', 'Tổ trưởng', 'Tổ phó',
+  'Chuyên viên chính', 'Chuyên viên', 'Cán sự', 'Nhân viên',
+];
+
 const emptyStaff: Omit<StaffMember, 'id'> = {
   fullName: '', department: '', position: '', birthDate: '', gender: 'nam',
   salaryCoefficient: 0, positionCoefficient: 0, regionalSalary: 2340000,
