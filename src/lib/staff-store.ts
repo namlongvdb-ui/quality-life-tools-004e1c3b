@@ -48,7 +48,7 @@ export function calculateInsuranceSalary(
   positionCoefficient: number,
   settings: StaffSettings
 ): number {
-  return (salaryCoefficient * settings.regionalSalary) + (positionCoefficient * settings.minimumSalary);
+  return (salaryCoefficient * settings.regionalSalary) + (positionCoefficient * settings.baseSalary);
 }
 
 export function calculateUnionFee(insuranceSalary: number, baseSalary: number): number {

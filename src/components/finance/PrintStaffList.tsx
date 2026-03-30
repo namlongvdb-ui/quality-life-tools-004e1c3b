@@ -209,8 +209,6 @@ export function PrintMonthlyFee({ month, year }: PrintMonthlyFeeProps) {
       </div>
 
       <div style={{ marginBottom: '8px', fontSize: '11px' }}>
-        <span>Lương tối thiểu: <strong>{fmt(settings.minimumSalary)} đ</strong></span>
-        <span style={{ margin: '0 10px' }}>|</span>
         <span>Lương vùng: <strong>{fmt(settings.regionalSalary)} đ</strong></span>
         <span style={{ margin: '0 10px' }}>|</span>
         <span>Lương cơ sở: <strong>{fmt(settings.baseSalary)} đ</strong></span>
