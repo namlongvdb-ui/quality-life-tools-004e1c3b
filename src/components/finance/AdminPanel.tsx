@@ -11,7 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { useToast } from '@/hooks/use-toast';
-import { generateRSAKeyPair, storePrivateKey } from '@/lib/crypto-utils';
+import { generateRSAKeyPair, storePrivateKey, encryptPrivateKey } from '@/lib/crypto-utils';
 import { UserPlus, Key, Shield, Users, RotateCcw, Ban, Trash2, UserCheck, RefreshCw } from 'lucide-react';
 import type { Database } from '@/integrations/supabase/types';
 
@@ -61,6 +61,10 @@ export function AdminPanel() {
   const [roleTarget, setRoleTarget] = useState<{ user_id: string; full_name: string; currentRole: AppRole } | null>(null);
   const [selectedRole, setSelectedRole] = useState<AppRole>('nguoi_lap');
   const [changingRole, setChangingRole] = useState(false);
+  const [signatureDialogOpen, setSignatureDialogOpen] = useState(false);
+  const [signatureTarget, setSignatureTarget] = useState<{ user_id: string; full_name: string } | null>(null);
+  const [signaturePassword, setSignaturePassword] = useState('');
+  const [generatingSignature, setGeneratingSignature] = useState(false);
 
   const fetchUsers = async () => {
     setLoading(true);
@@ -181,30 +185,41 @@ export function AdminPanel() {
     setChangingRole(false);
   };
 
-  const handleGenerateSignature = async (targetUserId: string, targetName: string) => {
+  const handleGenerateSignature = async () => {
+    if (!signatureTarget || !signaturePassword) return;
+    setGeneratingSignature(true);
     try {
       const { publicKey, privateKey } = await generateRSAKeyPair();
+      
+      // Encrypt private key with the provided password
+      const encryptedPrivateKey = await encryptPrivateKey(privateKey, signaturePassword);
 
       const { error } = await supabase.from('digital_signatures').upsert({
-        user_id: targetUserId,
+        user_id: signatureTarget.user_id,
         public_key: publicKey,
         created_by: user!.id,
         is_active: true,
-      }, { onConflict: 'user_id' });
+        encrypted_private_key: encryptedPrivateKey,
+      } as any, { onConflict: 'user_id' });
 
       if (error) throw error;
 
-      storePrivateKey(targetUserId, privateKey);
+      // Also store locally for convenience on this device
+      storePrivateKey(signatureTarget.user_id, privateKey);
 
       toast({
         title: 'Đã tạo chữ ký số',
-        description: `Cặp khóa RSA đã được tạo cho ${targetName}. Khóa bí mật đã được lưu tạm trong trình duyệt.`,
+        description: `Cặp khóa RSA đã được tạo cho ${signatureTarget.full_name}. Khóa bí mật đã được mã hóa và lưu trên server. Người dùng có thể ký trên mọi thiết bị bằng mật khẩu ký.`,
       });
 
+      setSignatureDialogOpen(false);
+      setSignaturePassword('');
+      setSignatureTarget(null);
       fetchUsers();
     } catch (err: any) {
       toast({ title: 'Lỗi tạo chữ ký số', description: err.message, variant: 'destructive' });
     }
+    setGeneratingSignature(false);
   };
 
   return (
