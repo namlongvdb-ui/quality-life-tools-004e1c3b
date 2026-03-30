@@ -66,7 +66,7 @@ export function StaffList() {
 
   const handleDelete = (id: string) => {
     deleteStaff(id);
-    toast.success('Đã xóa cán bộ');
+    toast.success('Đã xóa đoàn viên');
     reload();
   };
 
