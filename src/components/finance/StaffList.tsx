@@ -181,6 +181,33 @@ export function StaffList() {
     setHistoryOpen(true);
   };
 
+  const handleBulkTransfer = () => {
+    if (!bulkTransferStaff) { toast.error('Vui lòng chọn đoàn viên'); return; }
+    const staff = list.find(s => s.id === bulkTransferStaff);
+    if (!staff) return;
+    if (bulkTransferType === 'move' && !bulkTransferDept) { toast.error('Vui lòng chọn tổ đích'); return; }
+    const record = {
+      staffId: staff.id,
+      staffName: staff.fullName,
+      fromDepartment: staff.department,
+      toDepartment: bulkTransferType === 'out' ? 'Ra khỏi ngành' : bulkTransferDept,
+      type: bulkTransferType,
+      date: new Date().toISOString().split('T')[0],
+    };
+    addTransferRecord(record);
+    if (bulkTransferType === 'out') {
+      deleteStaff(staff.id);
+      toast.success(`Đã chuyển ${staff.fullName} ra khỏi ngành`);
+    } else {
+      updateStaff(staff.id, { department: bulkTransferDept });
+      toast.success(`Đã chuyển ${staff.fullName} sang ${bulkTransferDept}`);
+    }
+    setBulkTransferOpen(false);
+    setBulkTransferStaff('');
+    setBulkTransferDept('');
+    reload();
+  };
+
   // Group by department
   const groupedByDept = useMemo(() => {
     const map: Record<string, StaffMember[]> = {};
