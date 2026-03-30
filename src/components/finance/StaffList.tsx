@@ -95,6 +95,10 @@ export function StaffList() {
   const [activeTab, setActiveTab] = useState('all');
   const [historyOpen, setHistoryOpen] = useState(false);
   const [transferHistory, setTransferHistory] = useState<TransferRecord[]>([]);
+  const [bulkTransferOpen, setBulkTransferOpen] = useState(false);
+  const [bulkTransferStaff, setBulkTransferStaff] = useState<string>('');
+  const [bulkTransferDept, setBulkTransferDept] = useState('');
+  const [bulkTransferType, setBulkTransferType] = useState<'move' | 'out'>('move');
   const printRef = useRef<HTMLDivElement>(null);
 
   const orgSettings = getOrgSettings();
@@ -175,6 +179,33 @@ export function StaffList() {
   const openHistory = () => {
     setTransferHistory(getTransferHistory());
     setHistoryOpen(true);
+  };
+
+  const handleBulkTransfer = () => {
+    if (!bulkTransferStaff) { toast.error('Vui lòng chọn đoàn viên'); return; }
+    const staff = list.find(s => s.id === bulkTransferStaff);
+    if (!staff) return;
+    if (bulkTransferType === 'move' && !bulkTransferDept) { toast.error('Vui lòng chọn tổ đích'); return; }
+    const record = {
+      staffId: staff.id,
+      staffName: staff.fullName,
+      fromDepartment: staff.department,
+      toDepartment: bulkTransferType === 'out' ? 'Ra khỏi ngành' : bulkTransferDept,
+      type: bulkTransferType,
+      date: new Date().toISOString().split('T')[0],
+    };
+    addTransferRecord(record);
+    if (bulkTransferType === 'out') {
+      deleteStaff(staff.id);
+      toast.success(`Đã chuyển ${staff.fullName} ra khỏi ngành`);
+    } else {
+      updateStaff(staff.id, { department: bulkTransferDept });
+      toast.success(`Đã chuyển ${staff.fullName} sang ${bulkTransferDept}`);
+    }
+    setBulkTransferOpen(false);
+    setBulkTransferStaff('');
+    setBulkTransferDept('');
+    reload();
   };
 
   // Group by department
@@ -290,6 +321,9 @@ export function StaffList() {
           <Users className="h-6 w-6" /> Danh sách đoàn viên
         </h2>
         <div className="flex gap-2 flex-wrap">
+          <Button variant="outline" size="sm" onClick={() => setBulkTransferOpen(true)}>
+            <ArrowRightLeft className="h-4 w-4 mr-1" /> Điều chuyển đoàn viên
+          </Button>
           <Button variant="outline" size="sm" onClick={openHistory}>
             <History className="h-4 w-4 mr-1" /> Lịch sử điều chuyển
           </Button>
@@ -599,7 +633,63 @@ export function StaffList() {
         </DialogContent>
       </Dialog>
 
-      {/* Formula note */}
+      {/* Bulk transfer dialog */}
+      <Dialog open={bulkTransferOpen} onOpenChange={setBulkTransferOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <ArrowRightLeft className="h-5 w-5" /> Điều chuyển đoàn viên
+            </DialogTitle>
+            <DialogDescription>Chọn đoàn viên và tổ công đoàn đích để điều chuyển</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            <div>
+              <Label className="text-xs text-muted-foreground">Chọn đoàn viên</Label>
+              <Select value={bulkTransferStaff} onValueChange={setBulkTransferStaff}>
+                <SelectTrigger><SelectValue placeholder="Chọn đoàn viên..." /></SelectTrigger>
+                <SelectContent>
+                  {list.map(s => (
+                    <SelectItem key={s.id} value={s.id}>{s.fullName} — {s.department}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label className="text-xs text-muted-foreground">Hình thức</Label>
+              <Select value={bulkTransferType} onValueChange={v => setBulkTransferType(v as 'move' | 'out')}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="move">Điều chuyển sang tổ khác</SelectItem>
+                  <SelectItem value="out">Chuyển ra khỏi ngành</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            {bulkTransferType === 'move' && (
+              <div>
+                <Label className="text-xs text-muted-foreground">Chuyển đến tổ công đoàn</Label>
+                <Select value={bulkTransferDept} onValueChange={setBulkTransferDept}>
+                  <SelectTrigger><SelectValue placeholder="Chọn tổ đích..." /></SelectTrigger>
+                  <SelectContent>
+                    {unionGroupNames.filter(n => {
+                      const staff = list.find(s => s.id === bulkTransferStaff);
+                      return n !== staff?.department;
+                    }).map(name => (
+                      <SelectItem key={name} value={name}>{name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setBulkTransferOpen(false)}>Hủy</Button>
+            <Button onClick={handleBulkTransfer} variant={bulkTransferType === 'out' ? 'destructive' : 'default'}>
+              {bulkTransferType === 'out' ? 'Xác nhận chuyển' : 'Điều chuyển'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       <Card className="bg-muted/30 no-print">
         <CardContent className="p-4 text-xs text-muted-foreground space-y-1">
           <p><strong>Công thức tính:</strong></p>
