@@ -267,11 +267,11 @@ export function PrintMonthlyFee({ month, year }: PrintMonthlyFeeProps) {
             );
           })}
           <tr>
-            <td colSpan={5} style={{ ...rightCell, fontWeight: 'bold', fontSize: '12px' }}>
+            <td colSpan={6} style={{ ...rightCell, fontWeight: 'bold', fontSize: '12px' }}>
               TỔNG CỘNG: {list.length} đoàn viên
             </td>
             <td style={{ ...rightCell, fontWeight: 'bold', fontSize: '12px' }}>
-              {fmt(Math.round(list.reduce((s, m) => s + calculateInsuranceSalary(m.salaryCoefficient, m.positionCoefficient, settings), 0)))}
+              {fmt(Math.round(list.reduce((s, m) => s + calculateInsuranceSalary(m.salaryCoefficient, m.positionCoefficient, m.regionalSalary, settings.baseSalary), 0)))}
             </td>
             <td style={{ ...rightCell, fontWeight: 'bold', fontSize: '12px' }}>{fmt(Math.round(totalFee))}</td>
             <td style={cellStyle}></td>
