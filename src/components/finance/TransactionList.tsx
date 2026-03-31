@@ -65,6 +65,14 @@ export function TransactionList({ type, title, personLabel, onChanged, refreshKe
 
   const isApproved = (voucherNo: string) => approvedVoucherIds.has(voucherNo);
 
+  const canModify = (tx: Transaction) => {
+    // Only creator can edit/delete, and only when not signed
+    if (isApproved(tx.voucherNo)) return false;
+    if (!user) return false;
+    if (!tx.createdBy) return true; // legacy data without createdBy
+    return tx.createdBy === user.id;
+  };
+
   const transactions = useMemo(() => {
     return getTransactions().filter(t => t.type === type);
   }, [type, refreshKey]);
