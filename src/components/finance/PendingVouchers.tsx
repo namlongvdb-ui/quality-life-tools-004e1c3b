@@ -85,7 +85,7 @@ export function PendingVouchers() {
 
     setVouchers(filteredVouchers);
     setLoading(false);
-  }, [user, isLeader]);
+  }, [user, isSignerRole, isAreaRep, isAccountant]);
 
   useEffect(() => { fetchPending(); }, [fetchPending]);
 
