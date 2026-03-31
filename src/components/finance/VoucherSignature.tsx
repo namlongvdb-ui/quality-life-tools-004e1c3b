@@ -21,7 +21,7 @@ interface SignatureInfo {
 
 interface VoucherSignatureProps {
   transaction: Transaction;
-  voucherType: 'thu' | 'chi';
+  voucherType: 'thu' | 'chi' | 'tham-hoi' | 'de-nghi';
   compact?: boolean; // for table row display
 }
 
@@ -95,7 +95,7 @@ export function VoucherSignatureStatus({ transaction, voucherType }: VoucherSign
           key={sig.signer_id}
           variant="outline"
           className="text-xs bg-green-50 text-green-700 border-green-200"
-          title={`${sig.signer_name} - ${sig.role === 'lanh_dao' ? 'Lãnh đạo' : sig.role === 'ke_toan' ? 'Kế toán' : sig.role === 'nguoi_lap' ? 'Người lập' : sig.role}`}
+          title={`${sig.signer_name} - ${sig.role === 'lanh_dao' ? 'Lãnh đạo' : sig.role === 'ke_toan' ? 'Kế toán' : sig.role === 'phu_trach_dia_ban' ? 'Phụ trách địa bàn' : sig.role === 'nguoi_lap' ? 'Người lập' : sig.role}`}
         >
           <ShieldCheck className="w-3 h-3 mr-1" />
           {sig.signer_name}
@@ -114,7 +114,12 @@ export function SignVoucherButton({ transaction, voucherType, onSigned }: Vouche
   const [verifying, setVerifying] = useState(false);
   const [signPassword, setSignPassword] = useState('');
 
-  const canSign = hasRole('lanh_dao') || hasRole('ke_toan');
+  // Signing permissions depend on voucher type:
+  // - tham-hoi: only lanh_dao or phu_trach_dia_ban can sign (not ke_toan)
+  // - thu/chi/de-nghi: only lanh_dao and ke_toan can sign (not phu_trach_dia_ban)
+  const canSign = voucherType === 'tham-hoi'
+    ? (hasRole('lanh_dao') || hasRole('phu_trach_dia_ban'))
+    : (hasRole('lanh_dao') || hasRole('ke_toan'));
 
   useEffect(() => {
     if (user && canSign) {

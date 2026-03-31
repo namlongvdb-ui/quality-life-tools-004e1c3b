@@ -34,7 +34,9 @@ export function PendingVouchers() {
   const [password, setPassword] = useState('');
   const [signing, setSigning] = useState(false);
 
-  const isLeader = hasRole('lanh_dao') || hasRole('ke_toan');
+  const isSignerRole = hasRole('lanh_dao') || hasRole('ke_toan') || hasRole('phu_trach_dia_ban');
+  const isAreaRep = hasRole('phu_trach_dia_ban');
+  const isAccountant = hasRole('ke_toan');
 
   const fetchPending = useCallback(async () => {
     setLoading(true);
@@ -55,9 +57,15 @@ export function PendingVouchers() {
     for (const v of pendingData) {
       const step = await getSigningStep(v.voucher_id);
 
-      // Lãnh đạo sees all pending vouchers
-      if (isLeader && step === 'pending') {
-        filteredVouchers.push({ ...v, voucher_data: v.voucher_data as any });
+      if (step === 'pending') {
+        // Phụ trách địa bàn chỉ thấy phiếu thăm hỏi
+        if (isAreaRep && !hasRole('lanh_dao') && v.voucher_type !== 'tham-hoi') continue;
+        // Kế toán không thấy phiếu thăm hỏi
+        if (isAccountant && !hasRole('lanh_dao') && v.voucher_type === 'tham-hoi') continue;
+        
+        if (isSignerRole) {
+          filteredVouchers.push({ ...v, voucher_data: v.voucher_data as any });
+        }
       }
     }
 
@@ -77,7 +85,7 @@ export function PendingVouchers() {
 
     setVouchers(filteredVouchers);
     setLoading(false);
-  }, [user, isLeader]);
+  }, [user, isSignerRole, isAreaRep, isAccountant]);
 
   useEffect(() => { fetchPending(); }, [fetchPending]);
 
@@ -121,7 +129,7 @@ export function PendingVouchers() {
 
       const signerName = profile?.full_name || 'Người ký';
 
-      if (isLeader) {
+      if (isSignerRole) {
         // Lãnh đạo ký xong → đánh dấu hoàn thành + thông báo người lập
         await supabase.from('pending_vouchers')
           .update({ status: 'signed', signed_at: new Date().toISOString() })
@@ -147,7 +155,7 @@ export function PendingVouchers() {
     setSigning(false);
   };
 
-  const roleLabel = hasRole('lanh_dao') ? '(Lãnh đạo)' : hasRole('ke_toan') ? '(Kế toán)' : '';
+  const roleLabel = hasRole('lanh_dao') ? '(Lãnh đạo)' : hasRole('ke_toan') ? '(Kế toán)' : hasRole('phu_trach_dia_ban') ? '(Phụ trách địa bàn)' : '';
 
   return (
     <Card className="shadow-lg border-0 ring-1 ring-border">

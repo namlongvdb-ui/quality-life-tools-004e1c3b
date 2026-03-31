@@ -1,11 +1,11 @@
 import { supabase } from '@/integrations/supabase/client';
 
 // Get user IDs by role
-export async function getUserIdsByRole(role: 'admin' | 'lanh_dao' | 'ke_toan' | 'nguoi_lap'): Promise<string[]> {
+export async function getUserIdsByRole(role: string): Promise<string[]> {
   const { data } = await supabase
     .from('user_roles')
     .select('user_id')
-    .eq('role', role);
+    .eq('role', role as any);
   return data ? data.map(d => d.user_id) : [];
 }
 
@@ -18,18 +18,31 @@ export async function getSignerUserIds(): Promise<string[]> {
   return data ? [...new Set(data.map(d => d.user_id))] : [];
 }
 
-// Người lập tạo chứng từ → thông báo lãnh đạo
+// Người lập tạo chứng từ → thông báo người ký phù hợp theo loại chứng từ
 export async function notifyLeader(
   voucherId: string,
   voucherType: string,
   voucherLabel: string,
   creatorName: string
 ) {
-  const [leaderIds, accountantIds] = await Promise.all([
-    getUserIdsByRole('lanh_dao'),
-    getUserIdsByRole('ke_toan'),
-  ]);
-  const signerIds = [...new Set([...leaderIds, ...accountantIds])];
+  let signerIds: string[] = [];
+
+  if (voucherType === 'tham-hoi') {
+    // Phiếu thăm hỏi: chỉ thông báo lãnh đạo và phụ trách địa bàn (không kế toán)
+    const [leaderIds, areaRepIds] = await Promise.all([
+      getUserIdsByRole('lanh_dao'),
+      getUserIdsByRole('phu_trach_dia_ban'),
+    ]);
+    signerIds = [...new Set([...leaderIds, ...areaRepIds])];
+  } else {
+    // Thu/chi/đề nghị: chỉ thông báo lãnh đạo và kế toán (không phụ trách địa bàn)
+    const [leaderIds, accountantIds] = await Promise.all([
+      getUserIdsByRole('lanh_dao'),
+      getUserIdsByRole('ke_toan'),
+    ]);
+    signerIds = [...new Set([...leaderIds, ...accountantIds])];
+  }
+
   if (signerIds.length === 0) return;
 
   const notifications = signerIds.map(userId => ({
@@ -97,11 +110,12 @@ export async function getSigningStep(voucherId: string): Promise<'pending' | 'fu
   if (!sigs || sigs.length === 0) return 'pending';
 
   const signerIdsSet = new Set(sigs.map(s => s.signer_id));
-  const [leaderIds, accountantIds] = await Promise.all([
+  const [leaderIds, accountantIds, areaRepIds] = await Promise.all([
     getUserIdsByRole('lanh_dao'),
     getUserIdsByRole('ke_toan'),
+    getUserIdsByRole('phu_trach_dia_ban'),
   ]);
-  const allSignerRoleIds = [...leaderIds, ...accountantIds];
+  const allSignerRoleIds = [...leaderIds, ...accountantIds, ...areaRepIds];
   const signerSigned = allSignerRoleIds.some(id => signerIdsSet.has(id));
 
   if (signerSigned) return 'fully_signed';

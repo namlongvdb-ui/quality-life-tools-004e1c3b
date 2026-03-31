@@ -18,7 +18,7 @@ function formatDate(d: string) {
 export function CashBook({ refreshKey }: { refreshKey?: number }) {
   const settings = getOrgSettings();
   const data = useMemo(() => {
-    const txs = getTransactions();
+    const txs = getTransactions().filter(tx => tx.type === 'thu' || tx.type === 'chi');
     const opening = getOpeningBalance();
     let balance = opening;
 
