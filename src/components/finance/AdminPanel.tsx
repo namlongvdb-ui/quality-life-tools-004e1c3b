@@ -59,6 +59,7 @@ export function AdminPanel() {
   const [newFullName, setNewFullName] = useState('');
   const [newRole, setNewRole] = useState<AppRole>('nguoi_lap');
   const [creating, setCreating] = useState(false);
+  const [newAssignedArea, setNewAssignedArea] = useState('');
   const [deleteTarget, setDeleteTarget] = useState<{ user_id: string; full_name: string } | null>(null);
   const [managing, setManaging] = useState(false);
   const [roleDialogOpen, setRoleDialogOpen] = useState(false);
