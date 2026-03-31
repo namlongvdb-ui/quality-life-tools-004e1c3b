@@ -89,6 +89,7 @@ export function AdminPanel() {
           roles: [],
           has_signature: false,
           is_banned: false,
+          assigned_area: p.assigned_area,
         });
       });
 
