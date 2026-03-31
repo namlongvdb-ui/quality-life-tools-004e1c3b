@@ -114,7 +114,12 @@ export function SignVoucherButton({ transaction, voucherType, onSigned }: Vouche
   const [verifying, setVerifying] = useState(false);
   const [signPassword, setSignPassword] = useState('');
 
-  const canSign = hasRole('lanh_dao') || hasRole('ke_toan');
+  // Signing permissions depend on voucher type:
+  // - tham-hoi: only lanh_dao or phu_trach_dia_ban can sign (not ke_toan)
+  // - thu/chi/de-nghi: only lanh_dao and ke_toan can sign (not phu_trach_dia_ban)
+  const canSign = voucherType === 'tham-hoi'
+    ? (hasRole('lanh_dao') || hasRole('phu_trach_dia_ban'))
+    : (hasRole('lanh_dao') || hasRole('ke_toan'));
 
   useEffect(() => {
     if (user && canSign) {

@@ -38,7 +38,7 @@ export function DetailLedger({ refreshKey, onSaved }: DetailLedgerProps) {
   const [deleteTxId, setDeleteTxId] = useState<string | null>(null);
 
   const rows = useMemo(() => {
-    return getTransactions().sort((a, b) => a.date.localeCompare(b.date));
+    return getTransactions().filter(tx => tx.type === 'thu' || tx.type === 'chi').sort((a, b) => a.date.localeCompare(b.date));
   }, [refreshKey, localRefresh]);
 
   const handleRefresh = () => {
