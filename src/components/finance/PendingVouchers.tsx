@@ -37,6 +37,8 @@ export function PendingVouchers() {
   const [selectedVoucher, setSelectedVoucher] = useState<PendingVoucher | null>(null);
   const [password, setPassword] = useState('');
   const [signing, setSigning] = useState(false);
+  const [dateFrom, setDateFrom] = useState<Date | undefined>(undefined);
+  const [dateTo, setDateTo] = useState<Date | undefined>(undefined);
 
   const isLeader = hasRole('lanh_dao');
   const isAccountant = hasRole('ke_toan');
