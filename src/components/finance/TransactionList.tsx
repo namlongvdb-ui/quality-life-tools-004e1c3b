@@ -41,6 +41,8 @@ export function TransactionList({ type, title, personLabel, onChanged, refreshKe
   const [isOpen, setIsOpen] = useState(false);
   const [sigRefreshKey, setSigRefreshKey] = useState(0);
   const [approvedVoucherIds, setApprovedVoucherIds] = useState<Set<string>>(new Set());
+  const [previewTx, setPreviewTx] = useState<Transaction | null>(null);
+  const { user } = useAuth();
 
   const isVoucher = type === 'thu' || type === 'chi';
 
