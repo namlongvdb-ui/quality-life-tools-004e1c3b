@@ -111,6 +111,19 @@ export function PendingVouchers() {
 
   useEffect(() => { fetchPending(); }, [fetchPending]);
 
+  const filteredVouchers = useMemo(() => {
+    if (!dateFrom && !dateTo) return vouchers;
+    return vouchers.filter(v => {
+      const vDate = new Date(v.voucher_data?.date || v.created_at);
+      if (dateFrom && dateTo) {
+        return isWithinInterval(vDate, { start: startOfDay(dateFrom), end: endOfDay(dateTo) });
+      }
+      if (dateFrom) return vDate >= startOfDay(dateFrom);
+      if (dateTo) return vDate <= endOfDay(dateTo);
+      return true;
+    });
+  }, [vouchers, dateFrom, dateTo]);
+
   const handleSign = async () => {
     if (!selectedVoucher || !user || !password) return;
     setSigning(true);
