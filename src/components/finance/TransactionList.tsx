@@ -92,8 +92,8 @@ export function TransactionList({ type, title, personLabel, onChanged, refreshKe
   const totalAmount = useMemo(() => filtered.reduce((s, t) => s + t.amount, 0), [filtered]);
 
   const handleDelete = (tx: Transaction) => {
-    if (isApproved(tx.voucherNo)) {
-      toast.error('Chứng từ đã được duyệt, không thể xóa');
+    if (!canModify(tx)) {
+      toast.error('Bạn không có quyền xóa chứng từ này');
       return;
     }
     deleteTransaction(tx.id);
@@ -102,8 +102,8 @@ export function TransactionList({ type, title, personLabel, onChanged, refreshKe
   };
 
   const handleEdit = (tx: Transaction) => {
-    if (isApproved(tx.voucherNo)) {
-      toast.error('Chứng từ đã được duyệt, không thể sửa');
+    if (!canModify(tx)) {
+      toast.error('Bạn không có quyền sửa chứng từ này');
       return;
     }
     onSelectForEdit?.(tx);
