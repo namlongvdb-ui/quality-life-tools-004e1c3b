@@ -129,7 +129,7 @@ export function PendingVouchers() {
 
       const signerName = profile?.full_name || 'Người ký';
 
-      if (isLeader) {
+      if (isSignerRole) {
         // Lãnh đạo ký xong → đánh dấu hoàn thành + thông báo người lập
         await supabase.from('pending_vouchers')
           .update({ status: 'signed', signed_at: new Date().toISOString() })
