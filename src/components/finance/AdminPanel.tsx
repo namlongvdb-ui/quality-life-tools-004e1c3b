@@ -292,6 +292,21 @@ export function AdminPanel() {
                   </SelectContent>
                 </Select>
               </div>
+              {newRole === 'phu_trach_dia_ban' && (
+                <div className="space-y-2">
+                  <Label>Địa bàn phụ trách</Label>
+                  <Select value={newAssignedArea} onValueChange={setNewAssignedArea}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Chọn địa bàn..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {orgSettings.unionGroups.map(g => (
+                        <SelectItem key={g.name} value={g.name}>{g.name}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
               <Button onClick={handleCreateUser} disabled={creating} className="w-full">
                 {creating ? 'Đang tạo...' : 'Tạo tài khoản'}
               </Button>
