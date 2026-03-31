@@ -21,7 +21,7 @@ interface SignatureInfo {
 
 interface VoucherSignatureProps {
   transaction: Transaction;
-  voucherType: 'thu' | 'chi';
+  voucherType: 'thu' | 'chi' | 'tham-hoi' | 'de-nghi';
   compact?: boolean; // for table row display
 }
 
