@@ -22,10 +22,12 @@ export async function getAreaRepsByArea(areaName: string): Promise<string[]> {
     .in('user_id', areaRepIds)
     .not('assigned_area', 'is', null);
 
-  // Filter: union group name contains the rep's assigned_area
-  const filtered = (profiles || []).filter(p => 
-    p.assigned_area && areaName.includes(p.assigned_area)
-  );
+  // Filter: union group name contains any of the rep's assigned areas (comma-separated)
+  const filtered = (profiles || []).filter(p => {
+    if (!p.assigned_area) return false;
+    const areas = p.assigned_area.split(',').map(a => a.trim());
+    return areas.some(area => areaName.includes(area));
+  });
 
   return filtered.map(p => p.user_id);
 }

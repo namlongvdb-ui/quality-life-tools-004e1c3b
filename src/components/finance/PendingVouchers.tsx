@@ -67,10 +67,13 @@ export function PendingVouchers() {
         if (v.voucher_type === 'tham-hoi') {
           if (!isAreaRep) continue; // chỉ phụ trách địa bàn thấy
           // Chỉ phụ trách của đúng địa bàn mới thấy phiếu thăm hỏi
-          // Lọc theo địa bàn (areaName trong cài đặt), không phải tổ công đoàn
-          // Tên tổ CĐ chứa tên địa bàn, VD: "Tổ CĐ BP Kế toán – Hành chính, PGD Cao Bằng" chứa "PGD Cao Bằng"
+          // Lọc theo địa bàn: assigned_area có thể chứa nhiều địa bàn (comma-separated)
           const voucherUnionGroup = (v.voucher_data as any)?.department || (v.voucher_data as any)?.unionGroupName || '';
-          if (userAssignedArea && voucherUnionGroup && !voucherUnionGroup.includes(userAssignedArea)) continue;
+          if (userAssignedArea && voucherUnionGroup) {
+            const userAreas = userAssignedArea.split(',').map(a => a.trim());
+            const matched = userAreas.some(area => voucherUnionGroup.includes(area));
+            if (!matched) continue;
+          }
         } else {
           if (!isAccountant) continue; // chỉ kế toán thấy
         }
