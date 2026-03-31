@@ -31,6 +31,7 @@ const ROLE_LABELS: Record<AppRole, string> = {
   lanh_dao: 'Lãnh đạo',
   ke_toan: 'Kế toán',
   nguoi_lap: 'Người lập',
+  phu_trach_dia_ban: 'Phụ trách địa bàn',
 };
 
 const ROLE_COLORS: Record<AppRole, string> = {
@@ -38,6 +39,7 @@ const ROLE_COLORS: Record<AppRole, string> = {
   lanh_dao: 'bg-purple-100 text-purple-800',
   ke_toan: 'bg-blue-100 text-blue-800',
   nguoi_lap: 'bg-green-100 text-green-800',
+  phu_trach_dia_ban: 'bg-teal-100 text-teal-800',
 };
 
 export function AdminPanel() {
