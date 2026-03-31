@@ -38,10 +38,31 @@ export function DetailLedger({ refreshKey, onSaved }: DetailLedgerProps) {
   const [localRefresh, setLocalRefresh] = useState(0);
   const [editTx, setEditTx] = useState<Transaction | null>(null);
   const [deleteTxId, setDeleteTxId] = useState<string | null>(null);
+  const { user } = useAuth();
+  const [approvedIds, setApprovedIds] = useState<Set<string>>(new Set());
 
   const rows = useMemo(() => {
     return getTransactions().filter(tx => tx.type === 'thu' || tx.type === 'chi').sort((a, b) => a.date.localeCompare(b.date));
   }, [refreshKey, localRefresh]);
+
+  // Fetch approved voucher IDs
+  useMemo(() => {
+    supabase
+      .from('pending_vouchers')
+      .select('voucher_id')
+      .in('voucher_type', ['thu', 'chi'])
+      .in('status', ['signed', 'printed'])
+      .then(({ data }) => {
+        if (data) setApprovedIds(new Set(data.map(v => v.voucher_id)));
+      });
+  }, [refreshKey, localRefresh]);
+
+  const canModify = (tx: Transaction) => {
+    if (approvedIds.has(tx.voucherNo)) return false;
+    if (!user) return false;
+    if (!tx.createdBy) return true;
+    return tx.createdBy === user.id;
+  };
 
   const handleRefresh = () => {
     setLocalRefresh(k => k + 1);
