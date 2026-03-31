@@ -10,6 +10,8 @@ import { toast } from 'sonner';
 import { PrintDetailLedger } from './PrintDetailLedger';
 import { EditTransactionDialog } from './EditTransactionDialog';
 import { exportDetailLedgerExcel } from '@/lib/export-utils';
+import { useAuth } from '@/hooks/useAuth';
+import { supabase } from '@/integrations/supabase/client';
 
 function formatCurrency(n: number) {
   return n.toLocaleString('vi-VN');
