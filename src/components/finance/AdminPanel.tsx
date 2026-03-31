@@ -247,6 +247,23 @@ export function AdminPanel() {
     setGeneratingSignature(false);
   };
 
+  const handleSaveAreas = async () => {
+    if (!areaTarget) return;
+    setSavingAreas(true);
+    try {
+      await supabase.from('profiles')
+        .update({ assigned_area: editAreas.length > 0 ? editAreas.join(',') : null })
+        .eq('user_id', areaTarget.user_id);
+      toast({ title: 'Thành công', description: `Đã cập nhật địa bàn cho ${areaTarget.full_name}` });
+      setAreaDialogOpen(false);
+      setAreaTarget(null);
+      fetchUsers();
+    } catch (err: any) {
+      toast({ title: 'Lỗi', description: err.message, variant: 'destructive' });
+    }
+    setSavingAreas(false);
+  };
+
   return (
     <div className="p-6 space-y-6 max-w-6xl mx-auto">
       <div className="flex items-center justify-between">
