@@ -74,7 +74,7 @@ export function AdminPanel() {
   const fetchUsers = async () => {
     setLoading(true);
     const [profilesRes, rolesRes, sigsRes] = await Promise.all([
-      supabase.from('profiles').select('user_id, full_name, username'),
+      supabase.from('profiles').select('user_id, full_name, username, assigned_area'),
       supabase.from('user_roles').select('user_id, role'),
       supabase.from('digital_signatures').select('user_id').eq('is_active', true),
     ]);
