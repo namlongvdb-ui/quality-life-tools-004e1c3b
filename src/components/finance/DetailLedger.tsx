@@ -10,6 +10,8 @@ import { toast } from 'sonner';
 import { PrintDetailLedger } from './PrintDetailLedger';
 import { EditTransactionDialog } from './EditTransactionDialog';
 import { exportDetailLedgerExcel } from '@/lib/export-utils';
+import { useAuth } from '@/hooks/useAuth';
+import { supabase } from '@/integrations/supabase/client';
 
 function formatCurrency(n: number) {
   return n.toLocaleString('vi-VN');
@@ -36,10 +38,31 @@ export function DetailLedger({ refreshKey, onSaved }: DetailLedgerProps) {
   const [localRefresh, setLocalRefresh] = useState(0);
   const [editTx, setEditTx] = useState<Transaction | null>(null);
   const [deleteTxId, setDeleteTxId] = useState<string | null>(null);
+  const { user } = useAuth();
+  const [approvedIds, setApprovedIds] = useState<Set<string>>(new Set());
 
   const rows = useMemo(() => {
     return getTransactions().filter(tx => tx.type === 'thu' || tx.type === 'chi').sort((a, b) => a.date.localeCompare(b.date));
   }, [refreshKey, localRefresh]);
+
+  // Fetch approved voucher IDs
+  useMemo(() => {
+    supabase
+      .from('pending_vouchers')
+      .select('voucher_id')
+      .in('voucher_type', ['thu', 'chi'])
+      .in('status', ['signed', 'printed'])
+      .then(({ data }) => {
+        if (data) setApprovedIds(new Set(data.map(v => v.voucher_id)));
+      });
+  }, [refreshKey, localRefresh]);
+
+  const canModify = (tx: Transaction) => {
+    if (approvedIds.has(tx.voucherNo)) return false;
+    if (!user) return false;
+    if (!tx.createdBy) return true;
+    return tx.createdBy === user.id;
+  };
 
   const handleRefresh = () => {
     setLocalRefresh(k => k + 1);
@@ -108,6 +131,7 @@ export function DetailLedger({ refreshKey, onSaved }: DetailLedgerProps) {
                       <TableCell className="text-sm">{row.personName}</TableCell>
                       <TableCell className="text-sm truncate max-w-[10rem]">{row.department}</TableCell>
                       <TableCell>
+                        {canModify(row) ? (
                         <div className="flex items-center justify-center gap-1">
                           <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => setEditTx(row)}>
                             <Pencil className="h-3.5 w-3.5 text-muted-foreground" />
@@ -116,6 +140,7 @@ export function DetailLedger({ refreshKey, onSaved }: DetailLedgerProps) {
                             <Trash2 className="h-3.5 w-3.5 text-destructive" />
                           </Button>
                         </div>
+                        ) : null}
                       </TableCell>
                     </TableRow>
                   );
