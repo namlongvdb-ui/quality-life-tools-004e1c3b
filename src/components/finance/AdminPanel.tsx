@@ -119,8 +119,8 @@ export function AdminPanel() {
 
   const handleCreateUser = async () => {
     if (!newUsername || !newPassword || !newFullName || !newRole) return;
-    if (newRole === 'phu_trach_dia_ban' && !newAssignedArea) {
-      toast({ title: 'Lỗi', description: 'Vui lòng chọn địa bàn phụ trách', variant: 'destructive' });
+    if (newRole === 'phu_trach_dia_ban' && newAssignedAreas.length === 0) {
+      toast({ title: 'Lỗi', description: 'Vui lòng chọn ít nhất một địa bàn phụ trách', variant: 'destructive' });
       return;
     }
     setCreating(true);
@@ -133,10 +133,10 @@ export function AdminPanel() {
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
 
-      // Update assigned_area for phu_trach_dia_ban
-      if (newRole === 'phu_trach_dia_ban' && newAssignedArea && data?.user?.id) {
+      // Update assigned_area for phu_trach_dia_ban (comma-separated)
+      if (newRole === 'phu_trach_dia_ban' && newAssignedAreas.length > 0 && data?.user?.id) {
         await supabase.from('profiles')
-          .update({ assigned_area: newAssignedArea })
+          .update({ assigned_area: newAssignedAreas.join(',') })
           .eq('user_id', data.user.id);
       }
 
@@ -146,7 +146,7 @@ export function AdminPanel() {
       setNewPassword('');
       setNewFullName('');
       setNewRole('nguoi_lap');
-      setNewAssignedArea('');
+      setNewAssignedAreas([]);
       fetchUsers();
     } catch (err: any) {
       toast({ title: 'Lỗi', description: err.message, variant: 'destructive' });
