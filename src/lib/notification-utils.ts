@@ -9,6 +9,20 @@ export async function getUserIdsByRole(role: string): Promise<string[]> {
   return data ? data.map(d => d.user_id) : [];
 }
 
+// Get area rep user IDs for a specific area
+export async function getAreaRepsByArea(areaName: string): Promise<string[]> {
+  const areaRepIds = await getUserIdsByRole('phu_trach_dia_ban');
+  if (areaRepIds.length === 0) return [];
+
+  const { data: profiles } = await supabase
+    .from('profiles')
+    .select('user_id')
+    .in('user_id', areaRepIds)
+    .eq('assigned_area', areaName);
+
+  return profiles ? profiles.map(p => p.user_id) : [];
+}
+
 export async function getSignerUserIds(): Promise<string[]> {
   const { data } = await supabase
     .from('digital_signatures')
