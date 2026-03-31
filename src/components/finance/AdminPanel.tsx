@@ -60,7 +60,7 @@ export function AdminPanel() {
   const [newFullName, setNewFullName] = useState('');
   const [newRole, setNewRole] = useState<AppRole>('nguoi_lap');
   const [creating, setCreating] = useState(false);
-  const [newAssignedArea, setNewAssignedArea] = useState('');
+  const [newAssignedAreas, setNewAssignedAreas] = useState<string[]>([]);
   const [deleteTarget, setDeleteTarget] = useState<{ user_id: string; full_name: string } | null>(null);
   const [managing, setManaging] = useState(false);
   const [roleDialogOpen, setRoleDialogOpen] = useState(false);
@@ -71,6 +71,10 @@ export function AdminPanel() {
   const [signatureTarget, setSignatureTarget] = useState<{ user_id: string; full_name: string } | null>(null);
   const [signaturePassword, setSignaturePassword] = useState('');
   const [generatingSignature, setGeneratingSignature] = useState(false);
+  const [areaDialogOpen, setAreaDialogOpen] = useState(false);
+  const [areaTarget, setAreaTarget] = useState<{ user_id: string; full_name: string } | null>(null);
+  const [editAreas, setEditAreas] = useState<string[]>([]);
+  const [savingAreas, setSavingAreas] = useState(false);
 
   const fetchUsers = async () => {
     setLoading(true);
