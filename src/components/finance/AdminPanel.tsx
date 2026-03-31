@@ -573,6 +573,42 @@ export function AdminPanel() {
           </div>
         </DialogContent>
       </Dialog>
+
+      <Dialog open={areaDialogOpen} onOpenChange={setAreaDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Gán địa bàn phụ trách</DialogTitle>
+            <DialogDescription>
+              Chọn các địa bàn cho: <strong>{areaTarget?.full_name}</strong>
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-2 max-h-60 overflow-y-auto border rounded-md p-3">
+              {orgSettings.areaRepresentatives.length === 0 ? (
+                <p className="text-xs text-muted-foreground">Chưa có địa bàn nào. Vui lòng thêm địa bàn trong Cài đặt.</p>
+              ) : (
+                orgSettings.areaRepresentatives.map(area => (
+                  <div key={area.areaName} className="flex items-center space-x-2">
+                    <Checkbox
+                      id={`edit-area-${area.areaName}`}
+                      checked={editAreas.includes(area.areaName)}
+                      onCheckedChange={(checked) => {
+                        setEditAreas(prev =>
+                          checked ? [...prev, area.areaName] : prev.filter(a => a !== area.areaName)
+                        );
+                      }}
+                    />
+                    <label htmlFor={`edit-area-${area.areaName}`} className="text-sm cursor-pointer">{area.areaName}</label>
+                  </div>
+                ))
+              )}
+            </div>
+            <Button onClick={handleSaveAreas} disabled={savingAreas} className="w-full">
+              {savingAreas ? 'Đang lưu...' : 'Lưu địa bàn'}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
