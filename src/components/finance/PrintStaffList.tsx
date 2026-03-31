@@ -146,7 +146,7 @@ export function PrintStaffList() {
 
       <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '30px', fontSize: '12px' }}>
         <div style={{ textAlign: 'center', width: '45%' }}>
-          <p style={{ fontWeight: 'bold' }}>KẾ TOÁN</p>
+          <p style={{ fontWeight: 'bold' }}>NGƯỜI LẬP</p>
           <p style={{ fontStyle: 'italic', fontSize: '10px' }}>(Ký, họ tên)</p>
           <div style={{ height: '50px' }}></div>
           <p style={{ fontWeight: 'bold' }}>{orgSettings.accountantName}</p>
