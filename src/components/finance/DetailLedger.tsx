@@ -131,6 +131,7 @@ export function DetailLedger({ refreshKey, onSaved }: DetailLedgerProps) {
                       <TableCell className="text-sm">{row.personName}</TableCell>
                       <TableCell className="text-sm truncate max-w-[10rem]">{row.department}</TableCell>
                       <TableCell>
+                        {canModify(row) ? (
                         <div className="flex items-center justify-center gap-1">
                           <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => setEditTx(row)}>
                             <Pencil className="h-3.5 w-3.5 text-muted-foreground" />
@@ -139,6 +140,7 @@ export function DetailLedger({ refreshKey, onSaved }: DetailLedgerProps) {
                             <Trash2 className="h-3.5 w-3.5 text-destructive" />
                           </Button>
                         </div>
+                        ) : null}
                       </TableCell>
                     </TableRow>
                   );
