@@ -11,9 +11,10 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
+import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
 import { generateRSAKeyPair, storePrivateKey, encryptPrivateKey } from '@/lib/crypto-utils';
-import { UserPlus, Key, Shield, Users, RotateCcw, Ban, Trash2, UserCheck, RefreshCw } from 'lucide-react';
+import { UserPlus, Key, Shield, Users, RotateCcw, Ban, Trash2, UserCheck, RefreshCw, MapPin } from 'lucide-react';
 import type { Database } from '@/integrations/supabase/types';
 
 type AppRole = Database['public']['Enums']['app_role'];
@@ -59,7 +60,7 @@ export function AdminPanel() {
   const [newFullName, setNewFullName] = useState('');
   const [newRole, setNewRole] = useState<AppRole>('nguoi_lap');
   const [creating, setCreating] = useState(false);
-  const [newAssignedArea, setNewAssignedArea] = useState('');
+  const [newAssignedAreas, setNewAssignedAreas] = useState<string[]>([]);
   const [deleteTarget, setDeleteTarget] = useState<{ user_id: string; full_name: string } | null>(null);
   const [managing, setManaging] = useState(false);
   const [roleDialogOpen, setRoleDialogOpen] = useState(false);
@@ -70,6 +71,10 @@ export function AdminPanel() {
   const [signatureTarget, setSignatureTarget] = useState<{ user_id: string; full_name: string } | null>(null);
   const [signaturePassword, setSignaturePassword] = useState('');
   const [generatingSignature, setGeneratingSignature] = useState(false);
+  const [areaDialogOpen, setAreaDialogOpen] = useState(false);
+  const [areaTarget, setAreaTarget] = useState<{ user_id: string; full_name: string } | null>(null);
+  const [editAreas, setEditAreas] = useState<string[]>([]);
+  const [savingAreas, setSavingAreas] = useState(false);
 
   const fetchUsers = async () => {
     setLoading(true);
@@ -114,8 +119,8 @@ export function AdminPanel() {
 
   const handleCreateUser = async () => {
     if (!newUsername || !newPassword || !newFullName || !newRole) return;
-    if (newRole === 'phu_trach_dia_ban' && !newAssignedArea) {
-      toast({ title: 'Lỗi', description: 'Vui lòng chọn địa bàn phụ trách', variant: 'destructive' });
+    if (newRole === 'phu_trach_dia_ban' && newAssignedAreas.length === 0) {
+      toast({ title: 'Lỗi', description: 'Vui lòng chọn ít nhất một địa bàn phụ trách', variant: 'destructive' });
       return;
     }
     setCreating(true);
@@ -128,10 +133,10 @@ export function AdminPanel() {
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
 
-      // Update assigned_area for phu_trach_dia_ban
-      if (newRole === 'phu_trach_dia_ban' && newAssignedArea && data?.user?.id) {
+      // Update assigned_area for phu_trach_dia_ban (comma-separated)
+      if (newRole === 'phu_trach_dia_ban' && newAssignedAreas.length > 0 && data?.user?.id) {
         await supabase.from('profiles')
-          .update({ assigned_area: newAssignedArea })
+          .update({ assigned_area: newAssignedAreas.join(',') })
           .eq('user_id', data.user.id);
       }
 
@@ -141,7 +146,7 @@ export function AdminPanel() {
       setNewPassword('');
       setNewFullName('');
       setNewRole('nguoi_lap');
-      setNewAssignedArea('');
+      setNewAssignedAreas([]);
       fetchUsers();
     } catch (err: any) {
       toast({ title: 'Lỗi', description: err.message, variant: 'destructive' });
@@ -242,6 +247,23 @@ export function AdminPanel() {
     setGeneratingSignature(false);
   };
 
+  const handleSaveAreas = async () => {
+    if (!areaTarget) return;
+    setSavingAreas(true);
+    try {
+      await supabase.from('profiles')
+        .update({ assigned_area: editAreas.length > 0 ? editAreas.join(',') : null })
+        .eq('user_id', areaTarget.user_id);
+      toast({ title: 'Thành công', description: `Đã cập nhật địa bàn cho ${areaTarget.full_name}` });
+      setAreaDialogOpen(false);
+      setAreaTarget(null);
+      fetchUsers();
+    } catch (err: any) {
+      toast({ title: 'Lỗi', description: err.message, variant: 'destructive' });
+    }
+    setSavingAreas(false);
+  };
+
   return (
     <div className="p-6 space-y-6 max-w-6xl mx-auto">
       <div className="flex items-center justify-between">
@@ -294,17 +316,27 @@ export function AdminPanel() {
               </div>
               {newRole === 'phu_trach_dia_ban' && (
                 <div className="space-y-2">
-                  <Label>Địa bàn phụ trách</Label>
-                  <Select value={newAssignedArea} onValueChange={setNewAssignedArea}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Chọn địa bàn..." />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {orgSettings.unionGroups.map(g => (
-                        <SelectItem key={g.name} value={g.name}>{g.name}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <Label>Địa bàn phụ trách (chọn nhiều)</Label>
+                  <div className="space-y-2 max-h-40 overflow-y-auto border rounded-md p-3">
+                    {orgSettings.areaRepresentatives.length === 0 ? (
+                      <p className="text-xs text-muted-foreground">Chưa có địa bàn nào. Vui lòng thêm địa bàn trong Cài đặt.</p>
+                    ) : (
+                      orgSettings.areaRepresentatives.map(area => (
+                        <div key={area.areaName} className="flex items-center space-x-2">
+                          <Checkbox
+                            id={`new-area-${area.areaName}`}
+                            checked={newAssignedAreas.includes(area.areaName)}
+                            onCheckedChange={(checked) => {
+                              setNewAssignedAreas(prev =>
+                                checked ? [...prev, area.areaName] : prev.filter(a => a !== area.areaName)
+                              );
+                            }}
+                          />
+                          <label htmlFor={`new-area-${area.areaName}`} className="text-sm cursor-pointer">{area.areaName}</label>
+                        </div>
+                      ))
+                    )}
+                  </div>
                 </div>
               )}
               <Button onClick={handleCreateUser} disabled={creating} className="w-full">
@@ -354,12 +386,25 @@ export function AdminPanel() {
                     </TableCell>
                     <TableCell>
                       {u.assigned_area ? (
-                        <Badge variant="outline" className="bg-teal-50 text-teal-700 border-teal-200">
-                          {u.assigned_area}
-                        </Badge>
+                        <div className="flex flex-wrap gap-1">
+                          {u.assigned_area.split(',').map(area => (
+                            <Badge key={area} variant="outline" className="bg-teal-50 text-teal-700 border-teal-200 text-xs">
+                              {area.trim()}
+                            </Badge>
+                          ))}
+                        </div>
                       ) : u.roles.includes('phu_trach_dia_ban') ? (
                         <span className="text-xs text-muted-foreground">Chưa gán</span>
                       ) : '—'}
+                      {u.roles.includes('phu_trach_dia_ban') && (
+                        <Button size="sm" variant="ghost" className="ml-1 h-6 px-1" onClick={() => {
+                          setAreaTarget({ user_id: u.user_id, full_name: u.full_name });
+                          setEditAreas(u.assigned_area ? u.assigned_area.split(',').map(a => a.trim()) : []);
+                          setAreaDialogOpen(true);
+                        }}>
+                          <MapPin className="w-3 h-3" />
+                        </Button>
+                      )}
                     </TableCell>
                     <TableCell>
                       {u.has_signature ? (
@@ -524,6 +569,42 @@ export function AdminPanel() {
             </div>
             <Button onClick={handleGenerateSignature} disabled={generatingSignature || !signaturePassword} className="w-full">
               {generatingSignature ? 'Đang tạo...' : 'Tạo chữ ký số'}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={areaDialogOpen} onOpenChange={setAreaDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Gán địa bàn phụ trách</DialogTitle>
+            <DialogDescription>
+              Chọn các địa bàn cho: <strong>{areaTarget?.full_name}</strong>
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-2 max-h-60 overflow-y-auto border rounded-md p-3">
+              {orgSettings.areaRepresentatives.length === 0 ? (
+                <p className="text-xs text-muted-foreground">Chưa có địa bàn nào. Vui lòng thêm địa bàn trong Cài đặt.</p>
+              ) : (
+                orgSettings.areaRepresentatives.map(area => (
+                  <div key={area.areaName} className="flex items-center space-x-2">
+                    <Checkbox
+                      id={`edit-area-${area.areaName}`}
+                      checked={editAreas.includes(area.areaName)}
+                      onCheckedChange={(checked) => {
+                        setEditAreas(prev =>
+                          checked ? [...prev, area.areaName] : prev.filter(a => a !== area.areaName)
+                        );
+                      }}
+                    />
+                    <label htmlFor={`edit-area-${area.areaName}`} className="text-sm cursor-pointer">{area.areaName}</label>
+                  </div>
+                ))
+              )}
+            </div>
+            <Button onClick={handleSaveAreas} disabled={savingAreas} className="w-full">
+              {savingAreas ? 'Đang lưu...' : 'Lưu địa bàn'}
             </Button>
           </div>
         </DialogContent>
