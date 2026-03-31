@@ -329,7 +329,7 @@ export function AdminPanel() {
                     </TableCell>
                     <TableCell>
                       <div className="flex gap-1 flex-wrap">
-                        {(u.roles.includes('lanh_dao') || u.roles.includes('ke_toan')) && (
+                        {(u.roles.includes('lanh_dao') || u.roles.includes('ke_toan') || u.roles.includes('phu_trach_dia_ban')) && (
                           <Button size="sm" variant="outline" onClick={() => { setSignatureTarget({ user_id: u.user_id, full_name: u.full_name }); setSignaturePassword(''); setSignatureDialogOpen(true); }}>
                             <Key className="w-3 h-3 mr-1" />
                             {u.has_signature ? 'Tạo lại khóa' : 'Tạo chữ ký số'}
