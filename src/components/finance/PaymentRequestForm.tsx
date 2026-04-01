@@ -10,6 +10,7 @@ import { Transaction } from '@/types/finance';
 import { FileText, Printer, Save, X, DollarSign, User, Building2, CreditCard } from 'lucide-react';
 import { toast } from 'sonner';
 import { PrintPaymentRequest } from './PrintPaymentRequest';
+import { PrintPreview } from './PrintPreview';
 import { TransactionList } from './TransactionList';
 import { useAuth } from '@/hooks/useAuth';
 import { submitVoucherForSigning, notifySigners, getVoucherLabel } from '@/lib/notification-utils';
@@ -39,6 +40,7 @@ export function PaymentRequestForm({ onSaved, refreshKey }: PaymentRequestFormPr
   const settings = getOrgSettings();
   const [form, setForm] = useState(() => emptyForm(settings));
   const [editingTx, setEditingTx] = useState<Transaction | null>(null);
+  const [showPreview, setShowPreview] = useState(false);
 
   const amount = parseInt(form.amount) || 0;
 
@@ -122,6 +124,26 @@ export function PaymentRequestForm({ onSaved, refreshKey }: PaymentRequestFormPr
     onSaved?.();
   };
 
+  if (showPreview) {
+    return (
+      <PrintPreview onBack={() => setShowPreview(false)}>
+        <PrintPaymentRequest data={{
+          date: form.date,
+          requestNo: form.requestNo,
+          requesterName: form.requesterName,
+          department: form.department,
+          content: form.content,
+          amount,
+          times: form.times,
+          bankAccount: form.bankAccount,
+          bankAccountName: form.bankAccountName,
+          bankName: form.bankName,
+          attachments: form.attachments,
+        }} />
+      </PrintPreview>
+    );
+  }
+
   return (
     <>
       <Card className="max-w-3xl mx-auto shadow-lg no-print overflow-hidden border-0 ring-1 ring-border">
@@ -133,7 +155,7 @@ export function PaymentRequestForm({ onSaved, refreshKey }: PaymentRequestFormPr
                 <X className="h-4 w-4 mr-1" /> Hủy sửa
               </Button>
             )}
-            <Button type="button" variant="outline" size="sm" onClick={() => window.print()} className="bg-background/80 backdrop-blur-sm">
+            <Button type="button" variant="outline" size="sm" onClick={() => setShowPreview(true)} className="bg-background/80 backdrop-blur-sm">
               <Printer className="h-4 w-4 mr-1" /> In giấy
             </Button>
           </div>
@@ -271,21 +293,6 @@ export function PaymentRequestForm({ onSaved, refreshKey }: PaymentRequestFormPr
         </CardContent>
       </Card>
 
-      <div className="print-only hidden">
-        <PrintPaymentRequest data={{
-          date: form.date,
-          requestNo: form.requestNo,
-          requesterName: form.requesterName,
-          department: form.department,
-          content: form.content,
-          amount,
-          times: form.times,
-          bankAccount: form.bankAccount,
-          bankAccountName: form.bankAccountName,
-          bankName: form.bankName,
-          attachments: form.attachments,
-        }} />
-      </div>
 
       <TransactionList
         type="de-nghi"
