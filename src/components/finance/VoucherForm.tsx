@@ -10,6 +10,7 @@ import { FileText, Save, Printer, X, DollarSign, User, Building2, Hash } from 'l
 import { AccountCodeInput } from './AccountCodeInput';
 import { toast } from 'sonner';
 import { PrintVoucher } from './PrintVoucher';
+import { PrintPreview } from './PrintPreview';
 import { VoucherList } from './VoucherList';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
