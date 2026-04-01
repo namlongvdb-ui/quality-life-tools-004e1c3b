@@ -10,7 +10,6 @@ import { Transaction } from '@/types/finance';
 import { Heart, Printer, Save, X, DollarSign, User, Users } from 'lucide-react';
 import { toast } from 'sonner';
 import { PrintVisitVoucher } from './PrintVisitVoucher';
-import { PrintPreview } from './PrintPreview';
 import { TransactionList } from './TransactionList';
 import { useAuth } from '@/hooks/useAuth';
 import { submitVoucherForSigning, notifySigners, getVoucherLabel } from '@/lib/notification-utils';
@@ -35,7 +34,6 @@ export function VisitVoucherForm({ onSaved, refreshKey }: VisitVoucherFormProps)
   const settings = getOrgSettings();
   const [form, setForm] = useState(() => emptyForm(settings));
   const [editingTx, setEditingTx] = useState<Transaction | null>(null);
-  const [showPreview, setShowPreview] = useState(false);
 
   const amount = parseInt(form.amount) || 0;
 
@@ -109,21 +107,6 @@ export function VisitVoucherForm({ onSaved, refreshKey }: VisitVoucherFormProps)
     onSaved?.();
   };
 
-  if (showPreview) {
-    return (
-      <PrintPreview onBack={() => setShowPreview(false)}>
-        <PrintVisitVoucher data={{
-          date: form.date,
-          visitorDepartment: form.visitorDepartment,
-          recipientName: form.recipientName,
-          reason: form.reason,
-          amount,
-          unionGroupName: form.unionGroupName,
-        }} />
-      </PrintPreview>
-    );
-  }
-
   return (
     <>
       <Card className="max-w-3xl mx-auto shadow-lg no-print overflow-hidden border-0 ring-1 ring-border">
@@ -135,7 +118,7 @@ export function VisitVoucherForm({ onSaved, refreshKey }: VisitVoucherFormProps)
                 <X className="h-4 w-4 mr-1" /> Hủy sửa
               </Button>
             )}
-            <Button type="button" variant="outline" size="sm" onClick={() => setShowPreview(true)} className="bg-background/80 backdrop-blur-sm">
+            <Button type="button" variant="outline" size="sm" onClick={() => window.print()} className="bg-background/80 backdrop-blur-sm">
               <Printer className="h-4 w-4 mr-1" /> In phiếu
             </Button>
           </div>
@@ -224,6 +207,16 @@ export function VisitVoucherForm({ onSaved, refreshKey }: VisitVoucherFormProps)
         </CardContent>
       </Card>
 
+      <div className="print-only hidden">
+        <PrintVisitVoucher data={{
+          date: form.date,
+          visitorDepartment: form.visitorDepartment,
+          recipientName: form.recipientName,
+          reason: form.reason,
+          amount,
+          unionGroupName: form.unionGroupName,
+        }} />
+      </div>
 
       <TransactionList
         type="tham-hoi"

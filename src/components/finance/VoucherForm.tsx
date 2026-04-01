@@ -10,7 +10,6 @@ import { FileText, Save, Printer, X, DollarSign, User, Building2, Hash } from 'l
 import { AccountCodeInput } from './AccountCodeInput';
 import { toast } from 'sonner';
 import { PrintVoucher } from './PrintVoucher';
-import { PrintPreview } from './PrintPreview';
 import { VoucherList } from './VoucherList';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
@@ -73,7 +72,6 @@ export function VoucherForm({ type, onSaved, refreshKey }: VoucherFormProps) {
   const [form, setForm] = useState(() => emptyForm(type, settings));
   const [editingTx, setEditingTx] = useState<Transaction | null>(null);
   const [printSignatures, setPrintSignatures] = useState<{ signer_name: string; role: string; signed_at: string }[]>([]);
-  const [showPreview, setShowPreview] = useState(false);
 
   const amount = parseInt(form.amount) || 0;
 
@@ -185,28 +183,6 @@ export function VoucherForm({ type, onSaved, refreshKey }: VoucherFormProps) {
 
   const isThu = type === 'thu';
 
-  if (showPreview) {
-    return (
-      <PrintPreview onBack={() => setShowPreview(false)}>
-        <PrintVoucher
-          type={type}
-          data={{
-            date: form.date,
-            voucherNo: form.voucherNo,
-            amount,
-            description: form.description,
-            personName: form.personName,
-            department: form.department,
-            accountCode: form.accountCode,
-            approver: form.approver,
-            attachments: form.attachments,
-          }}
-          signatures={printSignatures}
-        />
-      </PrintPreview>
-    );
-  }
-
   return (
     <>
       <Card className="max-w-3xl mx-auto shadow-lg no-print overflow-hidden border-0 ring-1 ring-border">
@@ -220,7 +196,7 @@ export function VoucherForm({ type, onSaved, refreshKey }: VoucherFormProps) {
             )}
             <Button type="button" variant="outline" size="sm" onClick={async () => {
               await fetchSignaturesForPrint(form.voucherNo);
-              setShowPreview(true);
+              setTimeout(() => window.print(), 200);
             }} className="bg-background/80 backdrop-blur-sm">
               <Printer className="h-4 w-4 mr-1" /> In phiếu
             </Button>
@@ -317,6 +293,23 @@ export function VoucherForm({ type, onSaved, refreshKey }: VoucherFormProps) {
         </CardContent>
       </Card>
 
+      <div className="print-only hidden">
+        <PrintVoucher
+          type={type}
+          data={{
+            date: form.date,
+            voucherNo: form.voucherNo,
+            amount,
+            description: form.description,
+            personName: form.personName,
+            department: form.department,
+            accountCode: form.accountCode,
+            approver: form.approver,
+            attachments: form.attachments,
+          }}
+          signatures={printSignatures}
+        />
+      </div>
 
       <VoucherList type={type} onChanged={onSaved} refreshKey={refreshKey} onSelectForEdit={handleSelectForEdit} />
     </>
