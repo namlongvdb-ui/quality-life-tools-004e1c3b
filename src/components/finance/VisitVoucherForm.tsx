@@ -224,16 +224,6 @@ export function VisitVoucherForm({ onSaved, refreshKey }: VisitVoucherFormProps)
         </CardContent>
       </Card>
 
-      <div className="print-only hidden">
-        <PrintVisitVoucher data={{
-          date: form.date,
-          visitorDepartment: form.visitorDepartment,
-          recipientName: form.recipientName,
-          reason: form.reason,
-          amount,
-          unionGroupName: form.unionGroupName,
-        }} />
-      </div>
 
       <TransactionList
         type="tham-hoi"

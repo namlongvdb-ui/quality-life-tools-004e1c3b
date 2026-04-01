@@ -293,21 +293,6 @@ export function PaymentRequestForm({ onSaved, refreshKey }: PaymentRequestFormPr
         </CardContent>
       </Card>
 
-      <div className="print-only hidden">
-        <PrintPaymentRequest data={{
-          date: form.date,
-          requestNo: form.requestNo,
-          requesterName: form.requesterName,
-          department: form.department,
-          content: form.content,
-          amount,
-          times: form.times,
-          bankAccount: form.bankAccount,
-          bankAccountName: form.bankAccountName,
-          bankName: form.bankName,
-          attachments: form.attachments,
-        }} />
-      </div>
 
       <TransactionList
         type="de-nghi"

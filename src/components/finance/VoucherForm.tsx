@@ -317,23 +317,6 @@ export function VoucherForm({ type, onSaved, refreshKey }: VoucherFormProps) {
         </CardContent>
       </Card>
 
-      <div className="print-only hidden">
-        <PrintVoucher
-          type={type}
-          data={{
-            date: form.date,
-            voucherNo: form.voucherNo,
-            amount,
-            description: form.description,
-            personName: form.personName,
-            department: form.department,
-            accountCode: form.accountCode,
-            approver: form.approver,
-            attachments: form.attachments,
-          }}
-          signatures={printSignatures}
-        />
-      </div>
 
       <VoucherList type={type} onChanged={onSaved} refreshKey={refreshKey} onSelectForEdit={handleSelectForEdit} />
     </>
