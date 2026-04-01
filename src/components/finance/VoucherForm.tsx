@@ -185,6 +185,28 @@ export function VoucherForm({ type, onSaved, refreshKey }: VoucherFormProps) {
 
   const isThu = type === 'thu';
 
+  if (showPreview) {
+    return (
+      <PrintPreview onBack={() => setShowPreview(false)}>
+        <PrintVoucher
+          type={type}
+          data={{
+            date: form.date,
+            voucherNo: form.voucherNo,
+            amount,
+            description: form.description,
+            personName: form.personName,
+            department: form.department,
+            accountCode: form.accountCode,
+            approver: form.approver,
+            attachments: form.attachments,
+          }}
+          signatures={printSignatures}
+        />
+      </PrintPreview>
+    );
+  }
+
   return (
     <>
       <Card className="max-w-3xl mx-auto shadow-lg no-print overflow-hidden border-0 ring-1 ring-border">
