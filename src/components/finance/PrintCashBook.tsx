@@ -33,7 +33,7 @@ export function PrintCashBook({ refreshKey }: { refreshKey?: number }) {
   const rightCell: React.CSSProperties = { ...cellStyle, textAlign: 'right' };
 
   return (
-    <div style={{ fontFamily: 'Times New Roman, serif', fontSize: '13px', color: '#000', padding: '25px 35px' }}>
+    <div className="print-voucher" style={{ fontFamily: 'Times New Roman, serif', fontSize: '13px', color: '#000', padding: '25px 35px' }}>
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
         <div style={{ textAlign: 'center', width: '60%' }}>
