@@ -106,8 +106,15 @@ All colors MUST be HSL.
 
 /* Print styles: only show .print-voucher content when printing */
 @media print {
+  /* Hide everything */
   body * {
     visibility: hidden !important;
+  }
+
+  /* Show print-only containers */
+  .print-only {
+    display: block !important;
+    visibility: visible !important;
   }
 
   .print-voucher,
@@ -126,6 +133,11 @@ All colors MUST be HSL.
     background: #fff !important;
     color: #000 !important;
     font-size: 14px !important;
+  }
+
+  /* Hide form/UI elements */
+  .no-print {
+    display: none !important;
   }
 
   @page {
