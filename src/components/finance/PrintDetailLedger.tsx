@@ -28,7 +28,7 @@ export function PrintDetailLedger({ refreshKey }: { refreshKey?: number }) {
   const centerCell: React.CSSProperties = { ...cellStyle, textAlign: 'center', whiteSpace: 'nowrap' };
 
   return (
-    <div style={{ fontFamily: 'Times New Roman, serif', fontSize: '12px', color: '#000', padding: '20px 25px' }}>
+    <div className="print-voucher" style={{ fontFamily: 'Times New Roman, serif', fontSize: '12px', color: '#000', padding: '20px 25px' }}>
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
         <div style={{ textAlign: 'center', width: '60%' }}>
