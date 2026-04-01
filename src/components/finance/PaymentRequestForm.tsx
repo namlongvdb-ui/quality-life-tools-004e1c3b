@@ -10,6 +10,7 @@ import { Transaction } from '@/types/finance';
 import { FileText, Printer, Save, X, DollarSign, User, Building2, CreditCard } from 'lucide-react';
 import { toast } from 'sonner';
 import { PrintPaymentRequest } from './PrintPaymentRequest';
+import { PrintPreview } from './PrintPreview';
 import { TransactionList } from './TransactionList';
 import { useAuth } from '@/hooks/useAuth';
 import { submitVoucherForSigning, notifySigners, getVoucherLabel } from '@/lib/notification-utils';
